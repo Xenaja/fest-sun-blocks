@@ -44,9 +44,14 @@ fest-sun.ru (фестиваль «Энергия Солнца»), fest-sun.ru/re
 
 ```html
 <div class="fs-block" data-block="text" data-name="about" data-event="energiya-solntsa" data-audience="new"></div>
-<div class="fs-block" data-block="text" data-name="program" data-event="energiya-solntsa" data-audience="new" data-variant="soft"></div>
+<div class="fs-block" data-block="text" data-name="benefits" data-event="energiya-solntsa" data-audience="new" data-variant="soft"></div>
+<div class="fs-block" data-block="text" data-name="program" data-event="energiya-solntsa" data-audience="new"></div>
+<div class="fs-block" data-block="text" data-name="kids" data-event="energiya-solntsa" data-audience="new" data-variant="soft"></div>
 <div class="fs-block" data-block="text" data-name="business" data-event="energiya-solntsa" data-audience="new" data-variant="dark"></div>
+<div class="fs-block" data-block="text" data-name="food" data-event="energiya-solntsa" data-audience="new"></div>
 ```
+
+Тексты `about`, `benefits`, `program`, `kids` (в `events/energiya-solntsa/content/`) и `food` (в `shared/content/`) – черновики заказчика, правятся только по его просьбе.
 
 **prices** – оргвзнос по волнам. Без `data-audience` показывает обе колонки:
 
@@ -185,8 +190,8 @@ events/<event-id>/
 ## Что пока заглушки
 
 - Цены и номера в `shared/center.json`, фото номеров (`shared/img/rooms/placeholder-*.svg`).
-- Даты «Энергии Солнца», строка про базовый пакет Full Energy (`fee.new_note`).
-- Тексты: about, benefits, faq, food, route, описания спецпрограмм, тексты Юры Ра и Андрея Захаревича.
+- Даты «Энергии Солнца».
+- Тексты: faq, route, описания спецпрограмм, тексты Юры Ра и Андрея Захаревича.
 - Всё у «Круга мастеров», кроме дат: тексты, цены, тема.
 
 ## Проверка локально

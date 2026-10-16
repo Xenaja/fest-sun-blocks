@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.16-2';
+  var VERSION = '2026.10.16-3';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
