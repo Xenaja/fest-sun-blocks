@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.16-1';
+  var VERSION = '2026.10.16-2';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -650,7 +650,7 @@
       /* markdown */
       '.fs-md{font-size:17px;line-height:1.65}',
       '.fs-md>p,.fs-md>.fs-list,.fs-md>.fs-h3,.fs-md>.fs-quote{max-width:760px;margin-left:auto;margin-right:auto}',
-      '.fs-md p{margin:0 0 16px}.fs-md>.fs-title+p:has(+.fs-cards){text-align:center}',
+      '.fs-md p{margin-top:0;margin-bottom:16px}.fs-md>.fs-title+p:has(+.fs-cards){text-align:center}',
       '.fs-md strong{font-weight:600}.fs-md a{color:inherit;text-decoration:underline;text-underline-offset:3px}',
       '.fs-h3{font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:clamp(22px,2.6vw,28px);line-height:1.25;color:var(--fs-title);margin:32px auto 12px}',
       '.fs-list{list-style:none;padding:0;margin:0 0 18px}',
