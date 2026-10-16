@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.16-8';
+  var VERSION = '2026.10.16-9';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -293,9 +293,39 @@
   BLOCKS.text = function (c) {
     var name = (c.el.getAttribute('data-name') || 'about').replace(/[^a-z0-9_-]/gi, '');
     return loadContent(c.ev, 'content/' + name + '.md').then(function (src) {
-      return section(md(src, c.aud), 'fs-text');
+      var meta = frontMatter(src);
+      var html = md(meta.body, c.aud);
+      if (meta.layout === 'split') return section(splitLayout(html), 'fs-text fs-text--split');
+      return section(html, 'fs-text');
     });
   };
+
+  // Настройки в начале .md:  ---\nlayout: split\n---
+  function frontMatter(src) {
+    var m = (src || '').replace(/\r/g, '').match(/^---\n([\s\S]*?)\n---\n?/);
+    var meta = { body: m ? src.replace(/\r/g, '').slice(m[0].length) : src || '' };
+    if (m) m[1].split('\n').forEach(function (l) {
+      var kv = l.match(/^\s*([\w-]+)\s*:\s*(.*?)\s*$/);
+      if (kv) meta[kv[1]] = kv[2];
+    });
+    return meta;
+  }
+
+  // layout: split – слева заголовок и вводная фраза, справа остальной текст
+  function splitLayout(html) {
+    var box = document.createElement('div');
+    box.innerHTML = html;
+    var mdEl = box.firstChild;
+    var head = mdEl.querySelector(':scope > .fs-title');
+    var leadEl = mdEl.querySelector(':scope > .fs-lead-p');
+    var left = '', right = '';
+    [].forEach.call(mdEl.children, function (ch) {
+      if (ch === head || ch === leadEl) return;
+      right += ch.outerHTML;
+    });
+    left = (head ? head.outerHTML : '') + '<span class="fs-split__bar" aria-hidden="true"></span>' + (leadEl ? leadEl.outerHTML : '');
+    return '<div class="fs-md fs-split"><div class="fs-split__left">' + left + '</div><div class="fs-split__right">' + right + '</div></div>';
+  }
 
   function faqItems(src, aud) {
     if (!src) return [];
@@ -709,6 +739,17 @@
       '.fs-callout::after{bottom:0;right:0;border-bottom-width:3px;border-right-width:3px}',
       '.fs-callout>:last-child{margin-bottom:0}',
       '.fs-callout .fs-h3,.fs-callout .fs-title{color:var(--fs-card-title);margin-top:0}',
+      '.fs-split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:56px;align-items:start;max-width:var(--fs-width);margin:0 auto}',
+      '.fs-split__left{position:sticky;top:24px}',
+      '.fs-split .fs-title{text-align:left;margin-bottom:22px}',
+      '.fs-split__bar{display:block;width:64px;height:3px;background:var(--fs-highlight);margin:0 0 24px}',
+      '.fs-split .fs-lead-p{font-family:var(--fs-font-head);font-size:clamp(21px,2.2vw,25px);line-height:1.5;color:var(--fs-title);text-align:left;max-width:none;margin:0}',
+      '.fs-split__right{padding-top:8px;font-size:17px;line-height:1.75}',
+      '.fs-split__right>*{max-width:none!important;margin-left:0!important;margin-right:0!important}',
+      '.fs-split .fs-cols{column-count:1!important}',
+      '.fs-split .fs-callout{background:none;color:inherit;box-shadow:none;border-radius:0;padding:22px 0 0;margin-top:26px;border-top:1px solid var(--fs-line);font-size:16px;line-height:1.65}',
+      '.fs-split .fs-callout::before,.fs-split .fs-callout::after{display:none}',
+      '.fs-split .fs-callout .fs-h3{font-size:20px;color:var(--fs-title);margin:0 0 8px}',
       '.fs-md strong{font-weight:600}.fs-md a{color:inherit;text-decoration:underline;text-underline-offset:3px}',
       '.fs-h3{font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:clamp(22px,2.6vw,28px);line-height:1.25;color:var(--fs-title);margin:32px auto 12px}',
       '.fs-list{list-style:none;padding:0;margin:0 0 18px}',
@@ -848,6 +889,8 @@
         '.fs-md,.fs-lead{font-size:16px}',
         '.fs-md .fs-lead-p{font-size:17px;margin-bottom:22px}',
         '.fs-text .fs-cols{column-count:1}',
+        '.fs-split{grid-template-columns:minmax(0,1fr);gap:24px}.fs-split__left{position:static}',
+        '.fs-split__right{font-size:16px;padding-top:0}.fs-split .fs-lead-p{font-size:20px}',
         '.fs-callout{padding:26px 20px;font-size:16px}',
         '.fs-modal{padding:0}.fs-modal__box{max-height:100%;height:100%;border-radius:0}',
         '.fs-modal__photo{height:280px}.fs-modal__body{padding:32px 20px 40px}.fs-modal__name{font-size:28px}',
