@@ -40,6 +40,7 @@
   --fs-font-head: 'Forum', Georgia, serif;
   --fs-font-body: 'Montserrat', Arial, sans-serif;
   --fs-head-weight: 400;
+  --fs-title-size: clamp(26px, 3vw, 34px);
 
   --fs-width: 1040px;
   --fs-pad-y: 72px;

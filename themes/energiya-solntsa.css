@@ -46,6 +46,7 @@
   --fs-font-head: 'Philosopher', Georgia, serif;
   --fs-font-body: 'Montserrat', Arial, sans-serif;
   --fs-head-weight: 700;
+  --fs-title-size: clamp(26px, 3vw, 32px);   /* заголовки блоков: 32px на десктопе, как на сайте */
 
   /* размеры */
   --fs-width: 1100px;
