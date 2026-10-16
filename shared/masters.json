@@ -1,0 +1,41 @@
+[
+  {
+    "id": "valeeva",
+    "name": "Татьяна Валеева",
+    "regalia": "Врач, психолог, тренер тренеров",
+    "short": "Соединяет медицину, психологию, энергетические практики и бизнес. Ученица Джо Диспензы.",
+    "photo": "img/masters/valeeva.webp",
+    "photo_full": "img/masters/full/valeeva.webp",
+    "pos": "50% 38%",
+    "zoom": 1.35
+  },
+  {
+    "id": "pavitra",
+    "name": "Павитра",
+    "regalia": "Создатель фестиваля «Энергия Солнца»",
+    "short": "Проводник Три йоги, Парной йоги и Тантры, гонг-медитации. Более 20 лет практики.",
+    "photo": "img/masters/pavitra.webp",
+    "photo_full": "img/masters/full/pavitra.webp",
+    "pos": "36% 50%"
+  },
+  {
+    "id": "yura-ra",
+    "name": "Юра Ра",
+    "regalia": "Заглушка: регалии",
+    "short": "Заглушка: короткое описание появится позже.",
+    "photo": "img/masters/yura-ra.webp",
+    "photo_full": "img/masters/full/yura-ra.webp",
+    "pos": "30% 12%",
+    "zoom": 1.3
+  },
+  {
+    "id": "zakharevich",
+    "name": "Андрей Захаревич",
+    "regalia": "Заглушка: регалии",
+    "short": "Заглушка: короткое описание появится позже.",
+    "photo": "img/masters/zakharevich.webp",
+    "photo_full": "img/masters/full/zakharevich.webp",
+    "pos": "46% 36%",
+    "zoom": 1.7
+  }
+]

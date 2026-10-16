@@ -1,0 +1,47 @@
+/* Тема «Круг мастеров» – ЗАГЛУШКА. Нужна, чтобы показать: смена темы меняет
+   оформление без правки кода блоков. Настоящие цвета и шрифты – второй этап. */
+@import url('https://fonts.googleapis.com/css2?family=Forum&family=Montserrat:wght@300;400;500;600&display=swap');
+
+.fs-theme-krug-masterov {
+  --fs-bg: #f6f1e7;
+  --fs-bg-soft: #efe7d6;
+  --fs-fg: #2b2320;
+  --fs-title: #5a2e22;
+  --fs-muted: rgba(43, 35, 32, .65);
+  --fs-line: rgba(90, 46, 34, .18);
+
+  --fs-dark-bg: #3a2622;
+  --fs-dark-fg: #f6f1e7;
+  --fs-dark-title: #f6f1e7;
+  --fs-dark-muted: rgba(246, 241, 231, .7);
+  --fs-dark-line: rgba(246, 241, 231, .16);
+  --fs-dark-card-bg: #4a322c;
+
+  --fs-card-bg: #5a2e22;
+  --fs-card-fg: #f6f1e7;
+  --fs-card-title: #e0b46a;
+  --fs-card-line: rgba(246, 241, 231, .16);
+  --fs-accent: #5a2e22;
+  --fs-gold: #e0b46a;
+  --fs-highlight: #e0b46a;
+  --fs-highlight-fg: #2b2320;
+  --fs-ray: #b5653f;
+  --fs-ring: #a08a6a;
+  --fs-past: rgba(43, 35, 32, .4);
+
+  --fs-btn-bg: #5a2e22;
+  --fs-btn-fg: #f6f1e7;
+  --fs-btn-bg-hover: #74402f;
+
+  --fs-radius: 14px;
+  --fs-btn-radius: 10px;
+  --fs-shadow: 0 6px 24px rgba(58, 38, 34, .12);
+
+  --fs-font-head: 'Forum', Georgia, serif;
+  --fs-font-body: 'Montserrat', Arial, sans-serif;
+  --fs-head-weight: 400;
+
+  --fs-width: 1040px;
+  --fs-pad-y: 72px;
+  --fs-pad-y-mobile: 52px;
+}

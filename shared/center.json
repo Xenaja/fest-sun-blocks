@@ -1,0 +1,30 @@
+{
+  "name": "Ретрит-центр «Энергия Солнца»",
+  "_placeholder": "Цены и номера – заглушки, реальные придут позже",
+  "rooms_title": "Проживание с питанием",
+  "rooms_note": "Цена за одного человека за весь срок, проживание с питанием (завтрак и обед).",
+  "people": [1, 2, 3, 4],
+  "rooms": [
+    {
+      "id": "standard",
+      "name": "Стандарт",
+      "building": "Главный корпус",
+      "per_day": { "1": 5000, "2": 4500, "3": null, "4": null },
+      "photos": ["img/rooms/placeholder-1.svg", "img/rooms/placeholder-2.svg", "img/rooms/placeholder-3.svg"]
+    },
+    {
+      "id": "comfort",
+      "name": "Комфорт",
+      "building": "Главный корпус",
+      "per_day": { "1": 6000, "2": 5000, "3": 4500, "4": null },
+      "photos": ["img/rooms/placeholder-2.svg", "img/rooms/placeholder-3.svg", "img/rooms/placeholder-1.svg"]
+    },
+    {
+      "id": "family",
+      "name": "Семейный",
+      "building": "Гостевой дом",
+      "per_day": { "1": null, "2": 5000, "3": 4500, "4": 4000 },
+      "photos": ["img/rooms/placeholder-3.svg", "img/rooms/placeholder-1.svg", "img/rooms/placeholder-2.svg"]
+    }
+  ]
+}

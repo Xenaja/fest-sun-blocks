@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>fest-sun-blocks – демо</title>
+  <style>
+    /* Стили только для демо-страницы, к блокам отношения не имеют */
+    body { margin: 0; font-family: Arial, sans-serif; background: #e8e6ee; color: #222; }
+    .demo-nav { position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 16px; background: #222; }
+    .demo-nav a { color: #fff; font-size: 14px; text-decoration: none; padding: 6px 12px; border: 1px solid #555; border-radius: 4px; }
+    .demo-nav a:hover { background: #444; }
+    .demo-h { margin: 0; padding: 40px 16px 12px; font-size: 22px; max-width: 1100px; margin-inline: auto; }
+    .demo-h small { display: block; font-size: 14px; font-weight: 400; color: #555; margin-top: 4px; }
+    .demo-label { max-width: 1100px; margin: 18px auto 6px; padding: 0 16px; font: 12px/1.4 monospace; color: #555; }
+    .demo-tilda { text-align: center; padding: 24px 16px; background: #fff; }
+    .demo-tilda a { display: inline-block; padding: 14px 32px; background: #fcc200; color: #1f1d45; border-radius: 40px; text-decoration: none; font-weight: 700; }
+    .demo-tilda p { margin: 10px 0 0; font: 12px/1.4 monospace; color: #666; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <nav class="demo-nav">
+    <a href="#es-new">Энергия Солнца – гости</a>
+    <a href="#es-partner">Энергия Солнца – партнёры</a>
+    <a href="#km">Круг мастеров (тема-заглушка)</a>
+  </nav>
+
+  <!-- ===================== Энергия Солнца · new ===================== -->
+  <h2 class="demo-h" id="es-new">Энергия Солнца · data-audience="new"<small>Страница для гостей</small></h2>
+
+  <div class="demo-label">reflinks – кнопка ниже сделана как в Тильде (href="#popup:myform"), скрипт заменяет ссылку на бота</div>
+  <div class="demo-tilda">
+    <a href="#popup:myform" class="t-btn">Участвую</a>
+    <p class="js-href"></p>
+  </div>
+  <div class="fs-block" data-block="reflinks" data-event="energiya-solntsa"></div>
+
+  <div class="demo-label">text · data-name="about"</div>
+  <div class="fs-block" data-block="text" data-name="about" data-event="energiya-solntsa" data-audience="new"></div>
+
+  <div class="demo-label">text · data-name="program" · data-variant="soft"</div>
+  <div class="fs-block" data-block="text" data-name="program" data-event="energiya-solntsa" data-audience="new" data-variant="soft"></div>
+
+  <div class="demo-label">text · data-name="business" · data-variant="dark"</div>
+  <div class="fs-block" data-block="text" data-name="business" data-event="energiya-solntsa" data-audience="new" data-variant="dark"></div>
+
+  <div class="demo-label">masters</div>
+  <div class="fs-block" data-block="masters" data-event="energiya-solntsa" data-audience="new"></div>
+
+  <div class="demo-label">prices</div>
+  <div class="fs-block" data-block="prices" data-event="energiya-solntsa" data-audience="new" id="prices"></div>
+
+  <div class="demo-label">rooms</div>
+  <div class="fs-block" data-block="rooms" data-event="energiya-solntsa" data-audience="new"></div>
+
+  <div class="demo-label">specials</div>
+  <div class="fs-block" data-block="specials" data-event="energiya-solntsa" data-audience="new"></div>
+
+  <div class="demo-label">alumni</div>
+  <div class="fs-block" data-block="alumni" data-event="energiya-solntsa" data-audience="new"></div>
+
+  <div class="demo-label">faq</div>
+  <div class="fs-block" data-block="faq" data-event="energiya-solntsa" data-audience="new"></div>
+
+  <!-- ===================== Энергия Солнца · partner ===================== -->
+  <h2 class="demo-h" id="es-partner">Энергия Солнца · data-audience="partner"<small>Страница для партнёров Full Energy</small></h2>
+
+  <div class="demo-label">text · data-name="about"</div>
+  <div class="fs-block" data-block="text" data-name="about" data-event="energiya-solntsa" data-audience="partner"></div>
+
+  <div class="demo-label">prices</div>
+  <div class="fs-block" data-block="prices" data-event="energiya-solntsa" data-audience="partner"></div>
+
+  <div class="demo-label">masters (у Татьяны Валеевой в «Подробнее» есть раздел только для партнёров)</div>
+  <div class="fs-block" data-block="masters" data-event="energiya-solntsa" data-audience="partner"></div>
+
+  <div class="demo-label">prices без data-audience – обе колонки</div>
+  <div class="fs-block" data-block="prices" data-event="energiya-solntsa"></div>
+
+  <!-- ===================== Круг мастеров ===================== -->
+  <h2 class="demo-h" id="km">Круг мастеров · тема-заглушка<small>Те же блоки, другой data-event – другие данные и оформление</small></h2>
+
+  <div class="demo-label">text · data-name="about"</div>
+  <div class="fs-block" data-block="text" data-name="about" data-event="krug-masterov" data-audience="new"></div>
+
+  <div class="demo-label">masters</div>
+  <div class="fs-block" data-block="masters" data-event="krug-masterov" data-audience="new"></div>
+
+  <div class="demo-label">prices</div>
+  <div class="fs-block" data-block="prices" data-event="krug-masterov" data-audience="new"></div>
+
+  <div class="demo-label">rooms (одна длительность)</div>
+  <div class="fs-block" data-block="rooms" data-event="krug-masterov" data-audience="new"></div>
+
+  <div class="demo-label">faq (вопросов события нет – показаны общие)</div>
+  <div class="fs-block" data-block="faq" data-event="krug-masterov" data-audience="new"></div>
+
+  <div class="demo-label">ошибка: несуществующее событие – блок скрывается, страница не ломается</div>
+  <div class="fs-block" data-block="prices" data-event="net-takogo"></div>
+  <div class="demo-label">↑ здесь пусто, это правильно</div>
+
+  <script src="fs.js"></script>
+  <script>
+    // Демо: показать, на что заменилась ссылка кнопки
+    setTimeout(function () {
+      document.querySelector('.js-href').textContent = 'href сейчас: ' + document.querySelector('.demo-tilda a').getAttribute('href');
+    }, 1500);
+  </script>
+</body>
+</html>

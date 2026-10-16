@@ -1,0 +1,25 @@
+{
+  "id": "krug-masterov",
+  "title": "Ретрит «Круг мастеров»",
+  "theme": "krug-masterov",
+  "dates": { "start": "2026-11-20", "end": "2026-11-28", "label": "20–28 ноября" },
+  "durations": [7],
+
+  "bot": { "telegram": "https://t.me/fest_sun_bot", "start": "e_masters" },
+
+  "fee": {
+    "title": "Стоимость",
+    "lead": ["Заглушка: условия участия в ретрите появятся позже."],
+    "labels": { "partner": "Партнёрам Full Energy", "new": "Гостям" },
+    "waves": [
+      { "label": "Ранняя регистрация", "short": "Рано", "partner": 10000, "new": 15000 },
+      { "label": "Основная регистрация", "short": "Основная", "partner": 15000, "new": 20000 }
+    ],
+    "current_wave": 1,
+    "installment": "Заглушка: условия рассрочки.",
+    "button": "Участвую"
+  },
+
+  "masters_block": { "title": "Мастера ретрита" },
+  "masters": ["pavitra", "valeeva"]
+}

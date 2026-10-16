@@ -1,0 +1,46 @@
+{
+  "id": "energiya-solntsa",
+  "title": "Фестиваль «Энергия Солнца»",
+  "theme": "energiya-solntsa",
+  "dates": { "start": null, "end": null, "label": "Даты уточняются" },
+  "durations": [7, 10],
+
+  "bot": { "telegram": "https://t.me/fest_sun_bot", "start": "e_fest" },
+
+  "fee": {
+    "title": "Стоимость",
+    "lead": [
+      "**Для регистрации обязательна оплата проживания и питания.**",
+      "Стоимость участия в программе зависит от скорости принятия решения. Успевай быть первым!"
+    ],
+    "labels": { "partner": "Партнёрам Full Energy", "new": "Гостям" },
+    "waves": [
+      { "label": "Первые 50 мест", "short": "1-я волна", "partner": 0, "new": 10000 },
+      { "label": "Вторые 50 мест", "short": "2-я волна", "partner": 10000, "new": 20000 },
+      { "label": "Третьи 50 мест", "short": "3-я волна", "partner": 20000, "new": 30000 }
+    ],
+    "current_wave": 1,
+    "gift": "Первым 10 оплатившим – Ночь гонга в подарок",
+    "new_note": "Заглушка: строка про базовый пакет Full Energy.",
+    "installment": "Возможна рассрочка на 3 или 6 месяцев.",
+    "button": "Участвую"
+  },
+
+  "specials": {
+    "title": "Спецпрограммы",
+    "items": ["gong-night", "sound-mystery", "banya", "hikes"],
+    "prices": [5000, 7000, 8000]
+  },
+
+  "masters_block": {
+    "title": "Артисты и мастера",
+    "lead": "Прямо сейчас мы создаём для вас яркую насыщенную программу со звездным составом."
+  },
+  "masters": [
+    "valeeva",
+    { "id": "pavitra", "audience": "all" },
+    "yura-ra",
+    "zakharevich"
+  ],
+  "alumni": ["pavitra", "zakharevich", "yura-ra"]
+}
