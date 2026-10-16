@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.16-4';
+  var VERSION = '2026.10.16-5';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -99,61 +99,108 @@
   }
 
   var CARDS_OPEN = '\u0000cards', CARDS_CLOSE = '\u0000/cards';
+  var CALLOUT_OPEN = '\u0000callout', CALLOUT_CLOSE = '\u0000/callout';
+  var LIST_LINE = /^\s*([-*]|\d+[.)])\s+/;
 
-  // ::: partner / ::: new – только для своей аудитории; ::: cards – сетка карточек
+  // ::: partner / ::: new – только для своей аудитории (абзацы выделяются карточкой,
+  // одиночные пункты списка просто продолжают список); ::: cards – сетка карточек
   function fences(src, aud) {
-    var out = [], stack = [];
+    var root = [], stack = [];
+    function target() {
+      for (var i = stack.length - 1; i >= 0; i--) if (stack[i].buf) return stack[i].buf;
+      return root;
+    }
+    function release(f) {
+      var t = target();
+      var onlyList = f.buf.every(function (l) { return !l.trim() || LIST_LINE.test(l); });
+      if (!onlyList) t.push(CALLOUT_OPEN);
+      Array.prototype.push.apply(t, f.buf);
+      if (!onlyList) t.push(CALLOUT_CLOSE);
+    }
     src.replace(/\r/g, '').split('\n').forEach(function (line) {
       var open = line.match(/^:::\s*([\w-]+)\s*$/);
       var hidden = stack.some(function (f) { return f.hide; });
       if (open) {
         var kind = open[1];
         if (kind === 'cards') {
+          if (!hidden) target().push(CARDS_OPEN);
           stack.push({ kind: kind, hide: false });
-          if (!hidden) out.push(CARDS_OPEN);
         } else {
-          stack.push({ kind: kind, hide: aud !== kind });
+          var hide = hidden || aud !== kind;
+          stack.push({ kind: kind, hide: hide, buf: hide ? null : [] });
         }
         return;
       }
       if (/^:::\s*$/.test(line)) {
         var f = stack.pop();
-        if (f && f.kind === 'cards' && !hidden) out.push(CARDS_CLOSE);
+        if (!f) return;
+        if (f.kind === 'cards') { if (!hidden) target().push(CARDS_CLOSE); }
+        else if (f.buf) release(f);
         return;
       }
-      if (!hidden) out.push(line);
+      if (!hidden) target().push(line);
     });
-    return out;
+    while (stack.length) { var rest = stack.pop(); if (rest.buf) release(rest); }
+    return root;
   }
 
   function blocks(lines) {
-    var html = '', para = [], list = null, quote = [], inCards = false, inCard = false;
-    function flushPara() { if (para.length) { html += '<p>' + inline(para.join(' ')) + '</p>'; para = []; } }
-    function flushList() {
-      if (list) {
-        html += '<' + list.tag + ' class="fs-list">' + list.items.map(function (i) { return '<li>' + inline(i) + '</li>'; }).join('') + '</' + list.tag + '>';
-        list = null;
-      }
+    var html = '', para = [], list = null, quote = [], run = [], nest = [], inCard = false, afterTitle = false;
+    function flushRun() {
+      if (!run.length) return;
+      html += run.length > 1 ? '<div class="fs-cols">' + run.join('') + '</div>' : run[0];
+      run = [];
     }
-    function flushQuote() { if (quote.length) { html += '<blockquote class="fs-quote">' + blocks(quote) + '</blockquote>'; quote = []; } }
+    function out(x) { flushRun(); html += x; }
+    function flushPara() {
+      if (!para.length) return;
+      var text = inline(para.join(' '));
+      para = [];
+      if (afterTitle) { out('<p class="fs-lead-p">' + text + '</p>'); afterTitle = false; }
+      else if (nest.length) out('<p>' + text + '</p>');
+      else run.push('<p>' + text + '</p>');
+    }
+    function flushList() {
+      if (!list) return;
+      out('<' + list.tag + ' class="fs-list">' + list.items.map(function (i) { return '<li>' + inline(i) + '</li>'; }).join('') + '</' + list.tag + '>');
+      list = null;
+      afterTitle = false;
+    }
+    function flushQuote() { if (quote.length) { out('<blockquote class="fs-quote">' + blocks(quote) + '</blockquote>'); quote = []; afterTitle = false; } }
     function flush() { flushPara(); flushList(); flushQuote(); }
+    function closeCard() { if (inCard) { html += '</div>'; inCard = false; } }
 
     lines.forEach(function (line) {
       var m;
-      if (line === CARDS_OPEN) { flush(); html += '<div class="fs-cards">'; inCards = true; return; }
-      if (line === CARDS_CLOSE) { flush(); if (inCard) html += '</div>'; html += '</div>'; inCards = inCard = false; return; }
+      if (line === CARDS_OPEN || line === CALLOUT_OPEN) {
+        flush();
+        out(line === CARDS_OPEN ? '<div class="fs-cards">' : '<div class="fs-callout">');
+        nest.push(line === CARDS_OPEN ? 'cards' : 'callout');
+        afterTitle = false;
+        return;
+      }
+      if (line === CARDS_CLOSE || line === CALLOUT_CLOSE) {
+        flush();
+        if (line === CARDS_CLOSE) closeCard();
+        out('</div>');
+        nest.pop();
+        return;
+      }
       if (/^>/.test(line)) { flushPara(); flushList(); quote.push(line.replace(/^>\s?/, '')); return; }
       flushQuote();
       if ((m = line.match(/^(#{2,3})\s+(.+)$/))) {
         flush();
-        if (inCards && m[1] === '###') {
-          if (inCard) html += '</div>';
-          html += '<div class="fs-card"><h3 class="fs-card__title">' + inline(m[2]) + '</h3>';
+        if (nest[nest.length - 1] === 'cards' && m[1] === '###') {
+          closeCard();
+          out('<div class="fs-card"><h3 class="fs-card__title">' + inline(m[2]) + '</h3>');
           inCard = true;
+          afterTitle = false;
         } else if (m[1] === '##') {
-          html += '<h2 class="fs-title">' + inline(m[2]) + '</h2>';
+          out('<h2 class="fs-title">' + inline(m[2]) + '</h2>');
+          afterTitle = !nest.length;
         } else {
-          html += '<h3 class="fs-h3">' + inline(m[2]) + '</h3>';
+          out('<h3 class="fs-h3">' + inline(m[2]) + '</h3>');
+          afterTitle = false;
         }
         return;
       }
@@ -164,8 +211,9 @@
       para.push(line.trim());
     });
     flush();
-    if (inCard) html += '</div>';
-    if (inCards) html += '</div>';
+    flushRun();
+    closeCard();
+    while (nest.length) { html += '</div>'; nest.pop(); }
     return html;
   }
 
@@ -650,7 +698,17 @@
       /* markdown */
       '.fs-md{font-size:17px;line-height:1.65}',
       '.fs-md>p,.fs-md>.fs-list,.fs-md>.fs-h3,.fs-md>.fs-quote{max-width:760px;margin-left:auto;margin-right:auto}',
-      '.fs-md p{margin-top:0;margin-bottom:16px}.fs-md>.fs-title+p:has(+.fs-cards){text-align:center}',
+      '.fs-md p{margin-top:0;margin-bottom:16px}',
+      '.fs-md .fs-lead-p{font-size:20px;line-height:1.65;text-align:center;max-width:820px;margin:0 auto 30px}',
+      '.fs-md>.fs-cols{max-width:980px;margin:0 auto}',
+      '.fs-text .fs-cols{column-count:2;column-gap:56px}',
+      '.fs-cols p{break-inside:avoid}',
+      '.fs-callout{position:relative;max-width:860px;margin:30px auto 8px;padding:30px 36px;background:var(--fs-card-bg);color:var(--fs-card-fg);border-radius:var(--fs-radius);box-shadow:var(--fs-shadow);font-size:17px}',
+      '.fs-callout::before,.fs-callout::after{content:"";position:absolute;width:24px;height:24px;border:0 solid var(--fs-highlight)}',
+      '.fs-callout::before{top:0;left:0;border-top-width:3px;border-left-width:3px}',
+      '.fs-callout::after{bottom:0;right:0;border-bottom-width:3px;border-right-width:3px}',
+      '.fs-callout>:last-child{margin-bottom:0}',
+      '.fs-callout .fs-h3,.fs-callout .fs-title{color:var(--fs-card-title);margin-top:0}',
       '.fs-md strong{font-weight:600}.fs-md a{color:inherit;text-decoration:underline;text-underline-offset:3px}',
       '.fs-h3{font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:clamp(22px,2.6vw,28px);line-height:1.25;color:var(--fs-title);margin:32px auto 12px}',
       '.fs-list{list-style:none;padding:0;margin:0 0 18px}',
@@ -788,6 +846,9 @@
         '.fs-plans{grid-template-columns:minmax(0,1fr);gap:18px}',
         '.fs-plan{padding:30px 20px 20px}.fs-plan__who{font-size:24px}.fs-sum{font-size:24px}',
         '.fs-md,.fs-lead{font-size:16px}',
+        '.fs-md .fs-lead-p{font-size:17px;margin-bottom:22px}',
+        '.fs-text .fs-cols{column-count:1}',
+        '.fs-callout{padding:26px 20px;font-size:16px}',
         '.fs-modal{padding:0}.fs-modal__box{max-height:100%;height:100%;border-radius:0}',
         '.fs-modal__photo{height:280px}.fs-modal__body{padding:32px 20px 40px}.fs-modal__name{font-size:28px}',
       '}',
