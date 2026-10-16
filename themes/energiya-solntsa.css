@@ -44,6 +44,7 @@
   --fs-btn-case: uppercase;
   --fs-btn-spacing: 0;
   --fs-btn-pad: 13px 44px;
+  --fs-btn-shadow: 0 10px 22px rgba(31, 29, 69, .35);
 
   /* формы */
   --fs-radius: 0px;
