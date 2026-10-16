@@ -59,6 +59,12 @@ fest-sun.ru (фестиваль «Энергия Солнца»), fest-sun.ru/re
 <div class="fs-block" data-block="prices" data-event="energiya-solntsa" data-audience="new" id="prices"></div>
 ```
 
+**invite** – «Приглашайте на фестиваль новичков», только для партнёров. Ставится на странице партнёров сразу после prices; на странице гостей скрывается сам:
+
+```html
+<div class="fs-block" data-block="text" data-name="invite" data-event="energiya-solntsa" data-audience="partner"></div>
+```
+
 **rooms** – проживание с питанием, переключатель длительностей, галереи номеров:
 
 ```html
@@ -149,6 +155,19 @@ layout: split
 ```
 
 Так оформлен `about.md`. Первый абзац после заголовка всегда становится вводным; абзацы внутри `::: new` / `::: partner` выделяются отдельно.
+
+Оформление блока на плашке – `layout: plate` в начале файла (как в `invite.md`). Внутри можно сделать карточки-преимущества и шаги:
+
+```
+::: features
+- **Заголовок карточки.** Текст.
+:::
+
+::: steps
+1. Первый шаг
+2. Второй шаг
+:::
+```
 
 Абзац по центру:
 

@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.16-11';
+  var VERSION = '2026.10.16-12';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -101,6 +101,7 @@
   var CARDS_OPEN = '\u0000cards', CARDS_CLOSE = '\u0000/cards';
   var CALLOUT_OPEN = '\u0000callout', CALLOUT_CLOSE = '\u0000/callout';
   var LIST_LINE = /^\s*([-*]|\d+[.)])\s+/;
+  var STRUCT = /^(cards|center|features|steps)$/;
 
   // ::: partner / ::: new – только для своей аудитории (абзацы выделяются карточкой,
   // одиночные пункты списка просто продолжают список); ::: cards – сетка карточек
@@ -113,16 +114,18 @@
     function release(f) {
       var t = target();
       var onlyList = f.buf.every(function (l) { return !l.trim() || LIST_LINE.test(l); });
-      if (!onlyList) t.push(CALLOUT_OPEN);
+      var whole = f.buf.some(function (l) { return /^##\s/.test(l); });
+      var box = !onlyList && !whole;
+      if (box) t.push(CALLOUT_OPEN);
       Array.prototype.push.apply(t, f.buf);
-      if (!onlyList) t.push(CALLOUT_CLOSE);
+      if (box) t.push(CALLOUT_CLOSE);
     }
     src.replace(/\r/g, '').split('\n').forEach(function (line) {
       var open = line.match(/^:::\s*([\w-]+)\s*$/);
       var hidden = stack.some(function (f) { return f.hide; });
       if (open) {
         var kind = open[1];
-        if (kind === 'cards' || kind === 'center') {
+        if (STRUCT.test(kind)) {
           if (!hidden) target().push('\u0000' + kind);
           stack.push({ kind: kind, hide: false });
         } else {
@@ -134,7 +137,7 @@
       if (/^:::\s*$/.test(line)) {
         var f = stack.pop();
         if (!f) return;
-        if (f.kind === 'cards' || f.kind === 'center') { if (!hidden) target().push('\u0000/' + f.kind); }
+        if (STRUCT.test(f.kind)) { if (!hidden) target().push('\u0000/' + f.kind); }
         else if (f.buf) release(f);
         return;
       }
@@ -172,7 +175,7 @@
 
     lines.forEach(function (line) {
       var m;
-      var mk = line.match(/^\u0000(cards|callout|center)$/);
+      var mk = line.match(/^\u0000(cards|callout|center|features|steps)$/);
       if (mk) {
         flush();
         out('<div class="fs-' + mk[1] + '">');
@@ -180,7 +183,7 @@
         afterTitle = false;
         return;
       }
-      if (/^\u0000\/(cards|callout|center)$/.test(line)) {
+      if (/^\u0000\/(cards|callout|center|features|steps)$/.test(line)) {
         flush();
         if (line === CARDS_CLOSE) closeCard();
         out('</div>');
@@ -296,7 +299,12 @@
     return loadContent(c.ev, 'content/' + name + '.md').then(function (src) {
       var meta = frontMatter(src);
       var html = md(meta.body, c.aud);
+      if (html === '<div class="fs-md"></div>') {
+        // Весь текст – для другой аудитории: блок просто не показываем
+        return { html: '', after: function (el) { el.style.display = 'none'; } };
+      }
       if (meta.layout === 'split') return section(splitLayout(html), 'fs-text fs-text--split');
+      if (meta.layout === 'plate') return section('<div class="fs-plate">' + html + '</div>', 'fs-text fs-text--plate');
       return section(html, 'fs-text');
     });
   };
@@ -744,6 +752,21 @@
       '.fs-callout>:last-child{margin-bottom:0}',
       '.fs-callout .fs-h3,.fs-callout .fs-title{color:var(--fs-card-title);margin-top:0}',
       '.fs-center{text-align:center;max-width:760px;margin:0 auto}',
+      '.fs-plate{position:relative;background:var(--fs-bg-soft);border-radius:var(--fs-radius);box-shadow:var(--fs-shadow);padding:60px 56px 52px}',
+      '.fs-plate::before,.fs-plate::after{content:"";position:absolute;width:30px;height:30px;border:0 solid var(--fs-highlight)}',
+      '.fs-plate::before{top:0;left:0;border-top-width:3px;border-left-width:3px}',
+      '.fs-plate::after{bottom:0;right:0;border-bottom-width:3px;border-right-width:3px}',
+      '.fs-plate .fs-h3{text-align:center;margin-top:44px;margin-bottom:22px}',
+      '.fs-features>.fs-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:none;margin:0}',
+      '.fs-features>.fs-list>li{margin:0;padding:24px 26px;background:var(--fs-bg);border:1px solid var(--fs-line);border-top:3px solid var(--fs-highlight);border-radius:var(--fs-radius);font-size:16px;line-height:1.6}',
+      '.fs-features>.fs-list>li::before{display:none}',
+      '.fs-features>.fs-list>li>strong:first-child{display:block;font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:21px;line-height:1.3;color:var(--fs-title);margin-bottom:8px}',
+      '.fs-steps>ol.fs-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;max-width:none;margin:0;counter-reset:fs}',
+      '.fs-steps>ol.fs-list>li{margin:0;padding:64px 0 0;font-size:16px;line-height:1.6;position:relative}',
+      '.fs-steps>ol.fs-list>li::before{content:counter(fs);top:0;left:0;width:46px;height:46px;border-radius:50%;background:var(--fs-card-bg);color:var(--fs-highlight);display:flex;align-items:center;justify-content:center;font-family:var(--fs-font-head);font-size:22px;font-weight:700}',
+      '.fs-steps>ol.fs-list>li::after{content:"";position:absolute;top:23px;left:58px;right:-16px;height:1px;background:var(--fs-line)}',
+      '.fs-steps>ol.fs-list>li:last-child::after{display:none}',
+      '.fs-plate .fs-center{margin-top:40px}',
       '.fs-split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:56px;align-items:start;max-width:var(--fs-width);margin:0 auto}',
       '.fs-split__left{position:sticky;top:24px}',
       '.fs-split .fs-title{text-align:left;margin-bottom:22px}',
@@ -896,6 +919,12 @@
         '.fs-text .fs-cols{column-count:1}',
         '.fs-split{grid-template-columns:minmax(0,1fr);gap:24px}.fs-split__left{position:static}',
         '.fs-split__right{font-size:16px;padding-top:0}.fs-split .fs-lead-p{font-size:20px}',
+        '.fs-plate{padding:44px 20px 36px}',
+        '.fs-features>.fs-list{grid-template-columns:minmax(0,1fr);gap:12px}',
+        '.fs-features>.fs-list>li{padding:20px 18px}',
+        '.fs-steps>ol.fs-list{grid-template-columns:minmax(0,1fr);gap:18px}',
+        '.fs-steps>ol.fs-list>li{padding:8px 0 0 62px;min-height:46px}',
+        '.fs-steps>ol.fs-list>li::after{display:none}',
         '.fs-callout{padding:26px 20px;font-size:16px}',
         '.fs-modal{padding:0}.fs-modal__box{max-height:100%;height:100%;border-radius:0}',
         '.fs-modal__photo{height:280px}.fs-modal__body{padding:32px 20px 40px}.fs-modal__name{font-size:28px}',
