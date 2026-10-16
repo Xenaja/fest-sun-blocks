@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.16-14';
+  var VERSION = '2026.10.16-15';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -728,6 +728,7 @@
       '.fs-root.fs-variant-soft{--fs-bg:var(--fs-bg-soft)}',
       '.fs-root,.fs-root *,.fs-root *::before,.fs-root *::after{box-sizing:border-box}',
       '.fs-root{display:block;max-width:100%;overflow-x:hidden}',
+      '.fs-block[id]{scroll-margin-top:var(--fs-anchor-offset,80px)}',
       '.fs-section{background:var(--fs-bg);color:var(--fs-fg);font-family:var(--fs-font-body);padding:var(--fs-pad-y) 16px;-webkit-text-size-adjust:100%}',
       '.fs-inner{max-width:var(--fs-width);margin:0 auto}',
       '.fs-section.fs-notitle{padding-top:16px}',
@@ -943,6 +944,20 @@
     st.textContent = css;
     document.head.appendChild(st);
   }
+
+  // Ссылки на якоря блоков (кнопка меню «Участвую» → href="#prices"): плавная прокрутка
+  // с отступом под закреплённое меню Тильды. Остальные обработчики Тильды не трогаем.
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = a.getAttribute('href').slice(1);
+    if (!/^[\w-]+$/.test(id)) return;
+    var target = document.getElementById(id);
+    if (!target || !target.classList.contains('fs-block')) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    try { history.replaceState(null, '', '#' + id); } catch (err) { /* ок */ }
+  });
 
   window.FestSun = { scan: scan, version: VERSION };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scan);

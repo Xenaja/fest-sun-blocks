@@ -65,6 +65,8 @@ fest-sun.ru (фестиваль «Энергия Солнца»), fest-sun.ru/re
 <div class="fs-block" data-block="text" data-name="invite" data-event="energiya-solntsa" data-audience="partner"></div>
 ```
 
+**Кнопка меню «Участвую» → к стоимости.** В настройках меню Тильды поставьте кнопке ссылку `#prices` (у блока prices в сниппете есть `id="prices"`). Скрипт плавно прокрутит к блоку с отступом под закреплённое меню (80 px; меняется переменной темы `--fs-anchor-offset`). Ссылки `#prices` reflinks не трогает.
+
 **rooms** – проживание с питанием, переключатель длительностей, галереи номеров:
 
 ```html
