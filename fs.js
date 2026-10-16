@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.16-9';
+  var VERSION = '2026.10.16-10';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -122,8 +122,8 @@
       var hidden = stack.some(function (f) { return f.hide; });
       if (open) {
         var kind = open[1];
-        if (kind === 'cards') {
-          if (!hidden) target().push(CARDS_OPEN);
+        if (kind === 'cards' || kind === 'center') {
+          if (!hidden) target().push('\u0000' + kind);
           stack.push({ kind: kind, hide: false });
         } else {
           var hide = hidden || aud !== kind;
@@ -134,7 +134,7 @@
       if (/^:::\s*$/.test(line)) {
         var f = stack.pop();
         if (!f) return;
-        if (f.kind === 'cards') { if (!hidden) target().push(CARDS_CLOSE); }
+        if (f.kind === 'cards' || f.kind === 'center') { if (!hidden) target().push('\u0000/' + f.kind); }
         else if (f.buf) release(f);
         return;
       }
@@ -172,14 +172,15 @@
 
     lines.forEach(function (line) {
       var m;
-      if (line === CARDS_OPEN || line === CALLOUT_OPEN) {
+      var mk = line.match(/^\u0000(cards|callout|center)$/);
+      if (mk) {
         flush();
-        out(line === CARDS_OPEN ? '<div class="fs-cards">' : '<div class="fs-callout">');
-        nest.push(line === CARDS_OPEN ? 'cards' : 'callout');
+        out('<div class="fs-' + mk[1] + '">');
+        nest.push(mk[1]);
         afterTitle = false;
         return;
       }
-      if (line === CARDS_CLOSE || line === CALLOUT_CLOSE) {
+      if (/^\u0000\/(cards|callout|center)$/.test(line)) {
         flush();
         if (line === CARDS_CLOSE) closeCard();
         out('</div>');
@@ -739,6 +740,7 @@
       '.fs-callout::after{bottom:0;right:0;border-bottom-width:3px;border-right-width:3px}',
       '.fs-callout>:last-child{margin-bottom:0}',
       '.fs-callout .fs-h3,.fs-callout .fs-title{color:var(--fs-card-title);margin-top:0}',
+      '.fs-center{text-align:center;max-width:760px;margin:0 auto}',
       '.fs-split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:56px;align-items:start;max-width:var(--fs-width);margin:0 auto}',
       '.fs-split__left{position:sticky;top:24px}',
       '.fs-split .fs-title{text-align:left;margin-bottom:22px}',
