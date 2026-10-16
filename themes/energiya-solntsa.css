@@ -36,6 +36,14 @@
   --fs-btn-bg: #fcc200;
   --fs-btn-fg: #1f1d45;
   --fs-btn-bg-hover: #f2cf4a;
+  /* как кнопки Тильды на сайте: жёлтая, белая обводка, шрифт заголовков */
+  --fs-btn-border: 3px solid #ffffff;
+  --fs-btn-font: 'Philosopher', Georgia, serif;
+  --fs-btn-weight: 700;
+  --fs-btn-size: 18px;
+  --fs-btn-case: uppercase;
+  --fs-btn-spacing: 0;
+  --fs-btn-pad: 13px 44px;
 
   /* формы */
   --fs-radius: 0px;
