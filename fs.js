@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.16-10';
+  var VERSION = '2026.10.16-11';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -401,6 +401,8 @@
         var base = byId[id] || { name: id };
         return { name: base.name, desc: base.desc, prices: (typeof it === 'object' && it.prices) || sp.prices || [] };
       });
+      // "title": "" в event.json – без заголовка (если он уже есть на странице Тильды)
+      var spTitle = c.el.getAttribute('data-title') || ('title' in sp ? sp.title : 'Спецпрограммы');
       var cols = items.reduce(function (n, it) { return Math.max(n, it.prices.length); }, 0);
       function waveName(i) { return (waves[i] && (waves[i].short || waves[i].label)) || (i + 1) + '-я волна'; }
       function cls(i) { return i + 1 < cur ? ' is-past' : i + 1 === cur ? ' is-current' : ''; }
@@ -424,9 +426,9 @@
       }).join('');
 
       return section(
-        title(c.el.getAttribute('data-title') || sp.title || 'Спецпрограммы') + lead(sp.lead) +
+        title(spTitle) + lead(sp.lead) +
         '<div class="fs-table-wrap fs-sp-table"><table class="fs-table">' + '<thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>' +
-        '<div class="fs-sp-cards">' + mobile + '</div>', 'fs-specials');
+        '<div class="fs-sp-cards">' + mobile + '</div>', 'fs-specials' + (spTitle ? '' : ' fs-notitle'));
     });
   };
 
@@ -720,6 +722,7 @@
       '.fs-root{display:block;max-width:100%;overflow-x:hidden}',
       '.fs-section{background:var(--fs-bg);color:var(--fs-fg);font-family:var(--fs-font-body);padding:var(--fs-pad-y) 16px;-webkit-text-size-adjust:100%}',
       '.fs-inner{max-width:var(--fs-width);margin:0 auto}',
+      '.fs-section.fs-notitle{padding-top:16px}',
       '.fs-title{font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:clamp(26px,4vw,46px);line-height:1.15;text-transform:uppercase;text-align:center;color:var(--fs-title);margin:0 0 20px;text-wrap:balance;overflow-wrap:break-word}',
       '.fs-lead{max-width:720px;margin:0 auto 40px;text-align:center;font-size:17px;line-height:1.6}',
       '.fs-lead p{margin:0 0 8px}.fs-lead strong{font-weight:600}',
