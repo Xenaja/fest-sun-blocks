@@ -94,6 +94,28 @@ fest-sun.ru (фестиваль «Энергия Солнца»), fest-sun.ru/re
 
 На странице для партнёров во всех сниппетах `data-audience="partner"`. Для «Круга мастеров» – `data-event="krug-masterov"`.
 
+### Сниппеты для «Круга мастеров» (fest-sun.ru/retreatmaster)
+
+Демо всего лендинга: **https://xenaja.github.io/fest-sun-blocks/krug.html**. Основа страницы – блоки на коде; блоки с иллюстрациями и иконками делаются в Тильде и ставятся между ними.
+
+```html
+<div class="fs-block" data-block="reflinks" data-event="krug-masterov"></div>
+<div class="fs-block" data-block="hero" data-event="krug-masterov"></div>
+<div class="fs-block" data-block="text" data-name="about" data-event="krug-masterov" id="about"></div>
+<div class="fs-block" data-block="text" data-name="program" data-event="krug-masterov" data-variant="soft" id="program"></div>
+<div class="fs-block" data-block="text" data-name="formats" data-event="krug-masterov"></div>
+<div class="fs-block" data-block="text" data-name="fair" data-event="krug-masterov" data-variant="soft"></div>
+<div class="fs-block" data-block="masters" data-event="krug-masterov" id="masters"></div>
+<div class="fs-block" data-block="text" data-name="masters-offer" data-event="krug-masterov" data-variant="dark"></div>
+<div class="fs-block" data-block="rooms" data-event="krug-masterov"></div>
+<div class="fs-block" data-block="text" data-name="join" data-event="krug-masterov" data-variant="soft" id="join"></div>
+<div class="fs-block" data-block="faq" data-event="krug-masterov"></div>
+```
+
+Для мастеров два варианта текста: `masters-offer` (список возможностей) и `masters-offer-2` («почему выгодно», с Full Energy). На странице ставится один.
+
+**hero** – первый экран, данные в `event.json` → `hero`: `eyebrow` (надзаголовок), `kicker` и `title` (заголовок H1 в две строки), `lead`, `dates`, `buttons`, `image`. Иллюстрацию положите в `events/<id>/img/` и впишите путь: `"image": "img/hero.jpg"` – поверх неё ляжет затемнение для читаемости (`--fs-hero-overlay` в теме). Пока картинки нет – фон из градиента темы (`--fs-hero-bg`).
+
 ## Как устроены данные
 
 ```
@@ -171,6 +193,17 @@ layout: split
 :::
 ```
 
+Кнопки внутри текста (ведут в бота события; `bot:master` – с меткой «мастер», её видно в карточке заявки):
+
+```
+::: buttons
+[[Зарегистрироваться как участник]](bot)
+[[Подать заявку как мастер]](bot:master)
+:::
+```
+
+Вторая кнопка в ряду – контурная. Карточки сеткой 2×2 – `::: cards-2` (как `::: cards`).
+
 Абзац по центру:
 
 ```
@@ -233,7 +266,7 @@ layout: split
 - Цены и номера в `shared/center.json`, фото номеров (`shared/img/rooms/placeholder-*.svg`).
 - Даты «Энергии Солнца».
 - Тексты: faq, route, описания спецпрограмм, тексты Юры Ра и Андрея Захаревича.
-- Всё у «Круга мастеров», кроме дат: тексты, цены, тема.
+- «Круг мастеров»: иллюстрация первого экрана, цены (оргвзнос), вопросы события, тексты мастеров.
 
 ## Проверка локально
 

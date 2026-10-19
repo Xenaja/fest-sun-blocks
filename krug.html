@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Круг мастеров – лендинг на блоках</title>
+  <style>
+    /* Только для демо: подписи между блоками */
+    body { margin: 0; background: #ece8ef; font-family: Arial, sans-serif; }
+    .demo-label { max-width: 1100px; margin: 0 auto; padding: 10px 16px; font: 12px/1.4 monospace; color: #5b5266; }
+    .demo-label b { color: #2f171f; }
+  </style>
+</head>
+<body>
+  <div class="fs-block" data-block="reflinks" data-event="krug-masterov"></div>
+
+  <div class="demo-label"><b>hero</b> · первый экран. Иллюстрация подставится в event.json → hero.image</div>
+  <div class="fs-block" data-block="hero" data-event="krug-masterov"></div>
+
+  <div class="demo-label"><b>text · about</b></div>
+  <div class="fs-block" data-block="text" data-name="about" data-event="krug-masterov" id="about"></div>
+
+  <div class="demo-label"><b>text · program</b> · data-variant="soft"</div>
+  <div class="fs-block" data-block="text" data-name="program" data-event="krug-masterov" data-variant="soft" id="program"></div>
+
+  <div class="demo-label"><b>text · formats</b> – специальные форматы</div>
+  <div class="fs-block" data-block="text" data-name="formats" data-event="krug-masterov"></div>
+
+  <div class="demo-label"><b>text · fair</b> – эко-ярмарка · data-variant="soft"</div>
+  <div class="fs-block" data-block="text" data-name="fair" data-event="krug-masterov" data-variant="soft"></div>
+
+  <div class="demo-label"><b>masters</b></div>
+  <div class="fs-block" data-block="masters" data-event="krug-masterov" id="masters"></div>
+
+  <div class="demo-label"><b>text · masters-offer</b> – для мастеров, ВАРИАНТ 1 · data-variant="dark"</div>
+  <div class="fs-block" data-block="text" data-name="masters-offer" data-event="krug-masterov" data-variant="dark"></div>
+
+  <div class="demo-label"><b>text · masters-offer-2</b> – для мастеров, ВАРИАНТ 2</div>
+  <div class="fs-block" data-block="text" data-name="masters-offer-2" data-event="krug-masterov"></div>
+
+  <div class="demo-label"><b>rooms</b> – проживание (общие данные центра, цены – заглушки)</div>
+  <div class="fs-block" data-block="rooms" data-event="krug-masterov"></div>
+
+  <div class="demo-label"><b>text · join</b> – связка с Full Energy и кнопки · data-variant="soft"</div>
+  <div class="fs-block" data-block="text" data-name="join" data-event="krug-masterov" data-variant="soft" id="join"></div>
+
+  <div class="demo-label"><b>faq</b></div>
+  <div class="fs-block" data-block="faq" data-event="krug-masterov"></div>
+
+  <script src="fs.js"></script>
+</body>
+</html>

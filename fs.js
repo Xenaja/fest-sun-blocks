@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.16-16';
+  var VERSION = '2026.10.19-3';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -91,6 +91,9 @@
 
   function inline(s) {
     return esc(s)
+      .replace(/\[\[([^\]]+)\]\]\(([^)\s]+)\)/g, function (_, t, u) {
+        return '<a class="fs-btn" href="#" data-fs-link="' + u + '">' + t + '</a>';
+      })
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
       .replace(/\[([^\]]+)\]\(((?:https?:\/\/|\/|#|mailto:|tel:)[^\s)]+)\)/g, function (_, t, u) {
         var ext = /^https?:/.test(u);
@@ -101,7 +104,7 @@
   var CARDS_OPEN = '\u0000cards', CARDS_CLOSE = '\u0000/cards';
   var CALLOUT_OPEN = '\u0000callout', CALLOUT_CLOSE = '\u0000/callout';
   var LIST_LINE = /^\s*([-*]|\d+[.)])\s+/;
-  var STRUCT = /^(cards|center|features|steps)$/;
+  var STRUCT = /^(cards|cards-2|center|features|steps|buttons)$/;
 
   // ::: partner / ::: new – только для своей аудитории (абзацы выделяются карточкой,
   // одиночные пункты списка просто продолжают список); ::: cards – сетка карточек
@@ -175,17 +178,17 @@
 
     lines.forEach(function (line) {
       var m;
-      var mk = line.match(/^\u0000(cards|callout|center|features|steps)$/);
+      var mk = line.match(/^\u0000(cards|cards-2|callout|center|features|steps|buttons)$/);
       if (mk) {
         flush();
-        out('<div class="fs-' + mk[1] + '">');
+        out('<div class="' + (mk[1] === 'cards-2' ? 'fs-cards fs-cards--2' : 'fs-' + mk[1]) + '">');
         nest.push(mk[1]);
         afterTitle = false;
         return;
       }
-      if (/^\u0000\/(cards|callout|center|features|steps)$/.test(line)) {
+      if (/^\u0000\/(cards|cards-2|callout|center|features|steps|buttons)$/.test(line)) {
         flush();
-        if (line === CARDS_CLOSE) closeCard();
+        if (/^\u0000\/cards/.test(line)) closeCard();
         out('</div>');
         nest.pop();
         return;
@@ -194,7 +197,7 @@
       flushQuote();
       if ((m = line.match(/^(#{2,3})\s+(.+)$/))) {
         flush();
-        if (nest[nest.length - 1] === 'cards' && m[1] === '###') {
+        if (/^cards/.test(nest[nest.length - 1] || '') && m[1] === '###') {
           closeCard();
           out('<div class="fs-card"><h3 class="fs-card__title">' + inline(m[2]) + '</h3>');
           inCard = true;
@@ -239,11 +242,11 @@
   }
 
   // t.me/<бот>?start=e_fest  или  e_fest__s_<ref> (формат бота sun-reg-bot)
-  function botLink(ev) {
+  function botLink(ev, tag) {
     if (!ev.bot || !ev.bot.telegram) return null;
     var start = ev.bot.start || '';
-    var ref = getRef();
-    if (ref && start) start = (start + '__s_' + ref).slice(0, 64);
+    var source = [tag, getRef()].filter(Boolean).join('-');
+    if (source && start) start = (start + '__s_' + source).slice(0, 64);
     return ev.bot.telegram + (start ? '?start=' + encodeURIComponent(start) : '');
   }
 
@@ -290,9 +293,41 @@
 
   // ------------------------------------------------------------ блоки
 
-  var DEFAULT_VARIANT = { masters: 'dark', alumni: 'dark' };
-
   var BLOCKS = {};
+
+  var DEFAULT_VARIANT = { masters: 'dark', alumni: 'dark', hero: 'dark' };
+
+  // data-fs-link у кнопок: bot / bot:master → ссылка на бота события, остальное как есть
+  function resolveLinks(el, ev) {
+    [].forEach.call(el.querySelectorAll('[data-fs-link]'), function (a) {
+      var t = a.getAttribute('data-fs-link');
+      var m = t.match(/^bot(?::([\w-]+))?$/);
+      var url = m ? botLink(ev, m[1]) : t;
+      if (!url) return;
+      a.setAttribute('href', url);
+      if (/^https?:/.test(url)) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
+    });
+  }
+
+  // Первый экран: event.json → hero
+  BLOCKS.hero = function (c) {
+    var h = c.ev.hero;
+    if (!h) throw new Error('нет hero в event.json');
+    var bg = h.image ? ' style="--fs-hero-img:url(\'' + esc(asset(c.ev._dir, h.image)) + '\')"' : '';
+    var dates = (h.dates || []).map(function (d) { return '<li>' + inline(d) + '</li>'; }).join('');
+    var btns = (h.buttons || []).map(function (b) {
+      return '<a class="fs-btn" href="#" data-fs-link="' + esc(b.link || 'bot') + '">' + esc(b.text) + '</a>';
+    }).join('');
+    return '<section class="fs-section fs-hero' + (h.image ? ' fs-hero--img' : '') + '"' + bg + '><div class="fs-inner fs-hero__inner">' +
+      (h.eyebrow ? '<p class="fs-hero__eyebrow">' + inline(h.eyebrow) + '</p>' : '') +
+      '<h1 class="fs-hero__title">' + (h.kicker ? '<span class="fs-hero__kicker">' + inline(h.kicker) + '</span> ' : '') +
+        '<span class="fs-hero__main">' + inline(h.title) + '</span></h1>' +
+      (h.lead ? '<p class="fs-hero__lead">' + inline(h.lead) + '</p>' : '') +
+      (dates ? '<ul class="fs-hero__dates">' + dates + '</ul>' : '') +
+      (btns ? '<div class="fs-buttons fs-hero__btns">' + btns + '</div>' : '') +
+    '</div></section>';
+  };
+
 
   BLOCKS.text = function (c) {
     var name = (c.el.getAttribute('data-name') || 'about').replace(/[^a-z0-9_-]/gi, '');
@@ -702,6 +737,7 @@
       if (type === 'reflinks') return;
       var res = typeof out === 'string' ? { html: out } : out;
       el.innerHTML = res.html;
+      resolveLinks(el, ctx.ev);
       if (res.after) res.after(el);
     }).then(null, function (err) { fail(el, err); });
   }
@@ -753,6 +789,22 @@
       '.fs-callout>:last-child{margin-bottom:0}',
       '.fs-callout .fs-h3,.fs-callout .fs-title{color:var(--fs-card-title);margin-top:0}',
       '.fs-center{text-align:center;max-width:760px;margin:0 auto}',
+      '.fs-cards.fs-cards--2{grid-template-columns:repeat(2,minmax(0,1fr))}','.fs-md a.fs-btn{text-decoration:none}','.fs-features+.fs-center,.fs-steps+.fs-center{margin-top:26px}',
+      '.fs-buttons{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:18px;margin:30px auto 6px}',
+      '.fs-buttons p{display:contents}',
+      '.fs-buttons .fs-btn~.fs-btn{background:transparent;color:inherit;border-color:var(--fs-btn-bg);box-shadow:none}',
+      '.fs-buttons .fs-btn~.fs-btn:hover{background:var(--fs-btn-bg);color:var(--fs-btn-fg)}',
+      '.fs-hero{position:relative;background:var(--fs-hero-bg,var(--fs-bg));padding-top:calc(var(--fs-pad-y) + 70px);padding-bottom:calc(var(--fs-pad-y) + 30px);text-align:center;overflow:hidden}',
+      '.fs-hero--img{background:linear-gradient(var(--fs-hero-overlay,rgba(0,0,0,.45)),var(--fs-hero-overlay,rgba(0,0,0,.45))),var(--fs-hero-img) center/cover no-repeat}',
+      '.fs-hero__inner{position:relative;max-width:900px}',
+      '.fs-hero__eyebrow{margin:0 auto 26px;max-width:760px;font-size:13px;font-weight:600;letter-spacing:.16em;line-height:1.6;text-transform:uppercase;color:var(--fs-gold)}',
+      '.fs-hero__title{margin:0;font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);color:var(--fs-title);text-wrap:balance}',
+      '.fs-hero__kicker{display:block;font-size:clamp(20px,2.4vw,26px);line-height:1.3;color:var(--fs-gold);margin-bottom:14px;text-transform:uppercase;letter-spacing:.04em}',
+      '.fs-hero__main{display:block;font-size:clamp(32px,4.6vw,54px);line-height:1.15}',
+      '.fs-hero__lead{max-width:760px;margin:26px auto 0;font-size:18px;line-height:1.65;opacity:.92}',
+      '.fs-hero__dates{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:34px 0 0;padding:0}',
+      '.fs-hero__dates li{padding:9px 18px;border:1px solid var(--fs-line);border-radius:40px;font-size:15px;font-weight:500;white-space:nowrap}',
+      '.fs-hero__btns{margin-top:38px}',
       '.fs-plate{position:relative;background:var(--fs-bg-soft);border-radius:var(--fs-radius);box-shadow:var(--fs-shadow);padding:60px 56px 52px}',
       '.fs-plate::before,.fs-plate::after{content:"";position:absolute;width:30px;height:30px;border:0 solid var(--fs-highlight)}',
       '.fs-plate::before{top:0;left:0;border-top-width:3px;border-left-width:3px}',
@@ -921,6 +973,10 @@
         '.fs-split{grid-template-columns:minmax(0,1fr);gap:24px}.fs-split__left{position:static}',
         '.fs-split__right{font-size:16px;padding-top:0}.fs-split .fs-lead-p{font-size:20px}',
         '.fs-plate{padding:44px 20px 36px}',
+        '.fs-cards.fs-cards--2{grid-template-columns:minmax(0,1fr)}',
+        '.fs-buttons{flex-direction:column;align-items:stretch}.fs-buttons .fs-btn{text-align:center}',
+        '.fs-hero{padding-top:calc(var(--fs-pad-y-mobile) + 60px);padding-bottom:var(--fs-pad-y-mobile)}',
+        '.fs-hero__lead{font-size:16px}',
         '.fs-features>.fs-list{grid-template-columns:minmax(0,1fr);gap:12px}',
         '.fs-features>.fs-list>li{padding:20px 18px}',
         '.fs-steps>ol.fs-list{grid-template-columns:minmax(0,1fr);gap:18px}',

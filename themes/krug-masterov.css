@@ -1,48 +1,68 @@
-/* Тема «Круг мастеров» – ЗАГЛУШКА. Нужна, чтобы показать: смена темы меняет
-   оформление без правки кода блоков. Настоящие цвета и шрифты – второй этап. */
-@import url('https://fonts.googleapis.com/css2?family=Forum&family=Montserrat:wght@300;400;500;600&display=swap');
+/* Тема «Круг мастеров»: цвета и шрифты страницы fest-sun.ru/retreatmaster.
+   Фиолетовый #66457a, персиковый #ffbf6f, кремовый #fef5e4, розоватый #f5eaee,
+   тёмный винный #2f171f (меню сайта), жёлтые кнопки. Все переменные --fs-* – в README. */
+@import url('https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap');
 
 .fs-theme-krug-masterov {
-  --fs-bg: #f6f1e7;
-  --fs-bg-soft: #efe7d6;
-  --fs-fg: #2b2320;
-  --fs-title: #5a2e22;
-  --fs-muted: rgba(43, 35, 32, .65);
-  --fs-line: rgba(90, 46, 34, .18);
+  /* светлая секция */
+  --fs-bg: #ffffff;
+  --fs-bg-soft: #fef5e4;
+  --fs-fg: #222222;
+  --fs-title: #66457a;
+  --fs-muted: rgba(34, 34, 34, .62);
+  --fs-line: rgba(102, 69, 122, .2);
 
-  --fs-dark-bg: #3a2622;
-  --fs-dark-fg: #f6f1e7;
-  --fs-dark-title: #f6f1e7;
-  --fs-dark-muted: rgba(246, 241, 231, .7);
-  --fs-dark-line: rgba(246, 241, 231, .16);
-  --fs-dark-card-bg: #4a322c;
+  /* тёмная секция (data-variant="dark") */
+  --fs-dark-bg: #66457a;
+  --fs-dark-fg: #ffffff;
+  --fs-dark-title: #ffffff;
+  --fs-dark-muted: rgba(255, 255, 255, .72);
+  --fs-dark-line: rgba(255, 255, 255, .2);
+  --fs-dark-card-bg: #573a69;
 
-  --fs-card-bg: #5a2e22;
-  --fs-card-fg: #f6f1e7;
-  --fs-card-title: #e0b46a;
-  --fs-card-line: rgba(246, 241, 231, .16);
-  --fs-accent: #5a2e22;
-  --fs-gold: #e0b46a;
-  --fs-highlight: #e0b46a;
-  --fs-highlight-fg: #2b2320;
-  --fs-ray: #b5653f;
-  --fs-ring: #a08a6a;
-  --fs-past: rgba(43, 35, 32, .4);
+  /* карточки и акценты */
+  --fs-card-bg: #66457a;
+  --fs-card-fg: #ffffff;
+  --fs-card-title: #ffbf6f;
+  --fs-card-line: rgba(255, 255, 255, .16);
+  --fs-accent: #66457a;
+  --fs-gold: #ffbf6f;
+  --fs-highlight: #ffc305;
+  --fs-highlight-fg: #2f171f;
+  --fs-ray: #ff8562;
+  --fs-ring: #c9a7b8;
+  --fs-past: rgba(34, 34, 34, .4);
 
-  --fs-btn-bg: #5a2e22;
-  --fs-btn-fg: #f6f1e7;
-  --fs-btn-bg-hover: #74402f;
+  /* первый экран: пока без иллюстрации – градиент из цветов сайта */
+  --fs-hero-bg: linear-gradient(160deg, #2f171f 0%, #4a2c55 45%, #66457a 100%);
+  --fs-hero-overlay: rgba(47, 23, 31, .5);
 
-  --fs-radius: 14px;
-  --fs-btn-radius: 10px;
-  --fs-shadow: 0 6px 24px rgba(58, 38, 34, .12);
+  /* кнопка – как на сайте: жёлтая, белая обводка, шрифт заголовков */
+  --fs-btn-bg: #ffc305;
+  --fs-btn-fg: #2f171f;
+  --fs-btn-bg-hover: #ffd23f;
+  --fs-btn-border: 3px solid #ffffff;
+  --fs-btn-font: 'Philosopher', Georgia, serif;
+  --fs-btn-weight: 700;
+  --fs-btn-size: 17px;
+  --fs-btn-case: uppercase;
+  --fs-btn-spacing: 0;
+  --fs-btn-pad: 13px 40px;
+  --fs-btn-shadow: 0 10px 22px rgba(47, 23, 31, .3);
 
-  --fs-font-head: 'Forum', Georgia, serif;
+  /* формы */
+  --fs-radius: 0px;
+  --fs-btn-radius: 40px;
+  --fs-shadow: none;
+
+  /* шрифты */
+  --fs-font-head: 'Philosopher', Georgia, serif;
   --fs-font-body: 'Montserrat', Arial, sans-serif;
-  --fs-head-weight: 400;
-  --fs-title-size: clamp(26px, 3vw, 34px);
+  --fs-head-weight: 700;
+  --fs-title-size: clamp(26px, 3vw, 32px);
 
-  --fs-width: 1040px;
-  --fs-pad-y: 72px;
-  --fs-pad-y-mobile: 52px;
+  /* размеры */
+  --fs-width: 1100px;
+  --fs-pad-y: 80px;
+  --fs-pad-y-mobile: 56px;
 }
