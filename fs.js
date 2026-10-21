@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.21-2';
+  var VERSION = '2026.10.21-3';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -847,6 +847,7 @@
       '.fs-quote{margin:28px auto;padding:4px 0 4px 22px;border-left:3px solid var(--fs-gold);font-size:18px}',
       '.fs-quote p:last-child{margin-bottom:0}',
       '.fs-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:20px;margin:28px 0}',
+      '.fs-cards:has(>.fs-card:nth-child(3):last-child){grid-template-columns:repeat(3,minmax(0,1fr))}',
       '.fs-card{position:relative;min-width:0;background:var(--fs-card-bg);color:var(--fs-card-fg);border-radius:var(--fs-radius);box-shadow:var(--fs-shadow);padding:34px 26px 20px}',
       '.fs-card::before{content:"";position:absolute;top:0;left:26px;border:9px solid transparent;border-top:12px solid var(--fs-gold)}',
       '.fs-card__title{font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:24px;line-height:1.2;color:var(--fs-card-title);margin:0 0 12px}',
@@ -984,7 +985,9 @@
         '.fs-buttons{flex-direction:column;align-items:stretch}.fs-buttons .fs-btn{text-align:center}',
         '.fs-hero{padding-top:calc(var(--fs-pad-y-mobile) + 60px);padding-bottom:var(--fs-pad-y-mobile)}',
         '.fs-hero__lead{font-size:16px}',
-        '.fs-bar>.fs-list>li{font-size:12px}.fs-bar>.fs-list>li+li::before{margin:0 10px}',
+        '.fs-cards:has(>.fs-card:nth-child(3):last-child){grid-template-columns:minmax(0,1fr)}',
+        '.fs-bar>.fs-list{gap:8px}.fs-bar>.fs-list>li{font-size:12px;padding:6px 12px;border:1px solid var(--fs-gold);border-radius:var(--fs-btn-radius)}',
+        '.fs-bar>.fs-list>li+li::before{display:none}',
         '.fs-features>.fs-list{grid-template-columns:minmax(0,1fr);gap:12px}',
         '.fs-features>.fs-list>li{padding:20px 18px}',
         '.fs-steps>ol.fs-list{grid-template-columns:minmax(0,1fr);gap:18px}',
