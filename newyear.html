@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Новогодняя Мистерия – лендинг на блоках</title>
+  <style>
+    /* Только для демо: подписи между блоками */
+    body { margin: 0; background: #e6e6e6; font-family: Arial, sans-serif; }
+    .demo-label { max-width: 1100px; margin: 0 auto; padding: 10px 16px; font: 12px/1.4 monospace; color: #555; }
+    .demo-label b { color: #1f1f1f; }
+  </style>
+</head>
+<body>
+  <div class="demo-label"><b>hero</b> · первый экран вместо Zero-блока Тильды. Фон – картинка с сайта (event.json → hero.image)</div>
+  <div class="fs-block" data-block="hero" data-event="novogodnyaya-misteriya"></div>
+
+  <div class="demo-label"><b>text · about</b> – вступление</div>
+  <div class="fs-block" data-block="text" data-name="about" data-event="novogodnyaya-misteriya" id="about"></div>
+
+  <div class="demo-label"><b>text · benefits</b> – «Что дадут вам эти четыре дня» · data-variant="soft"</div>
+  <div class="fs-block" data-block="text" data-name="benefits" data-event="novogodnyaya-misteriya" data-variant="soft"></div>
+
+  <div class="demo-label"><b>text · audience</b> – «Для кого» · data-variant="dark"</div>
+  <div class="fs-block" data-block="text" data-name="audience" data-event="novogodnyaya-misteriya" data-variant="dark"></div>
+
+  <div class="demo-label"><b>text · program</b> – программа без расписания по часам</div>
+  <div class="fs-block" data-block="text" data-name="program" data-event="novogodnyaya-misteriya" id="prog"></div>
+
+  <script src="fs.js"></script>
+</body>
+</html>

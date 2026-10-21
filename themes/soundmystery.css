@@ -1,0 +1,71 @@
+/* Тема soundmystery.ru: страницы Мистерий (Новогодняя Мистерия – soundmystery.ru/newyear).
+   Космический тёмный #1f1f1f, золотисто-кремовый #ffd589, персиковый #febf6f (кнопки),
+   коралловый #ff8562, серый фон программы #f1f2f2. Все переменные --fs-* – в README. */
+@import url('https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap');
+
+.fs-theme-soundmystery {
+  /* светлая секция */
+  --fs-bg: #ffffff;
+  --fs-bg-soft: #f1f2f2;
+  --fs-fg: #1f1f1f;
+  --fs-title: #242424;
+  --fs-muted: rgba(31, 31, 31, .62);
+  --fs-line: rgba(31, 31, 31, .14);
+
+  /* тёмная секция (data-variant="dark") */
+  --fs-dark-bg: #1f1f1f;
+  --fs-dark-fg: #ffffff;
+  --fs-dark-title: #ffffff;
+  --fs-dark-muted: rgba(255, 255, 255, .7);
+  --fs-dark-line: rgba(255, 255, 255, .18);
+  --fs-dark-card-bg: #2b2a28;
+
+  /* карточки и акценты */
+  --fs-card-bg: #1f1f1f;
+  --fs-card-fg: #ffffff;
+  --fs-card-title: #ffd589;
+  --fs-card-line: rgba(255, 255, 255, .14);
+  --fs-accent: #1f1f1f;
+  --fs-gold: #febf6f;
+  --fs-highlight: #febf6f;
+  --fs-highlight-fg: #1f1f1f;
+  --fs-ray: #ff8562;
+  --fs-ring: #ffd589;
+  --fs-past: rgba(31, 31, 31, .4);
+
+  /* первый экран: космос с гонгом, как на сайте */
+  --fs-hero-bg: radial-gradient(ellipse at 50% 35%, #3a3125 0%, #1f1f1f 55%, #0f0f12 100%);
+  --fs-hero-overlay: rgba(12, 12, 16, .62);
+  --fs-hero-kicker-color: #ffd589;
+  --fs-hero-kicker-size: clamp(34px, 5.4vw, 60px);
+  --fs-hero-main-size: clamp(20px, 2.4vw, 28px);
+
+  /* кнопка – как «Да, это для меня!»: персиковая пилюля с белой обводкой */
+  --fs-btn-bg: #febf6f;
+  --fs-btn-fg: #000000;
+  --fs-btn-bg-hover: #ffd589;
+  --fs-btn-border: 2px solid #ffffff;
+  --fs-btn-font: 'Philosopher', Georgia, serif;
+  --fs-btn-weight: 700;
+  --fs-btn-size: 16px;
+  --fs-btn-case: uppercase;
+  --fs-btn-spacing: 0;
+  --fs-btn-pad: 17px 45px;
+  --fs-btn-shadow: 0 0 10px rgba(0, 0, 0, .3);
+
+  /* формы */
+  --fs-radius: 0px;
+  --fs-btn-radius: 100px;
+  --fs-shadow: none;
+
+  /* шрифты */
+  --fs-font-head: 'Philosopher', Georgia, serif;
+  --fs-font-body: 'Montserrat', Arial, sans-serif;
+  --fs-head-weight: 700;
+  --fs-title-size: clamp(28px, 3.4vw, 38px);
+
+  /* размеры */
+  --fs-width: 1100px;
+  --fs-pad-y: 80px;
+  --fs-pad-y-mobile: 56px;
+}

@@ -1,7 +1,8 @@
 # fest-sun-blocks
 
 Встраиваемые блоки для лендингов событий ретрит-центра «Энергия Солнца» на Тильде:
-fest-sun.ru (фестиваль «Энергия Солнца»), fest-sun.ru/retreatmaster (ретрит «Круг мастеров») и следующие события.
+fest-sun.ru (фестиваль «Энергия Солнца»), fest-sun.ru/retreatmaster (ретрит «Круг мастеров»),
+soundmystery.ru/newyear («Новогодняя Мистерия») и следующие события.
 
 Хостинг – GitHub Pages: **https://xenaja.github.io/fest-sun-blocks/**
 Демо всех блоков: **https://xenaja.github.io/fest-sun-blocks/index.html**
@@ -115,6 +116,20 @@ fest-sun.ru (фестиваль «Энергия Солнца»), fest-sun.ru/re
 Для мастеров два варианта текста: `masters-offer` (список возможностей) и `masters-offer-2` («почему выгодно», с Full Energy). На странице ставится один.
 
 **hero** – первый экран, данные в `event.json` → `hero`: `eyebrow` (надзаголовок), `kicker` и `title` (заголовок H1 в две строки), `lead`, `dates`, `buttons`, `image`. Иллюстрацию положите в `events/<id>/img/` и впишите путь: `"image": "img/hero.jpg"` – поверх неё ляжет затемнение для читаемости (`--fs-hero-overlay` в теме). Пока картинки нет – фон из градиента темы (`--fs-hero-bg`).
+
+### Сниппеты для «Новогодней Мистерии» (soundmystery.ru/newyear)
+
+Демо: **https://xenaja.github.io/fest-sun-blocks/newyear.html**. Тема `soundmystery` – цвета и кнопки сайта soundmystery.ru. Основа страницы остаётся в Тильде (мастера, стоимость, проживание, галереи, отзывы, контакты), блоки на коде заменяют текстовые секции. Кнопки «Участвую» ведут на `#popup:myform` – попап-форму Тильды, бота у события нет, поэтому reflinks не ставится.
+
+```html
+<div class="fs-block" data-block="hero" data-event="novogodnyaya-misteriya"></div>
+<div class="fs-block" data-block="text" data-name="about" data-event="novogodnyaya-misteriya" id="about"></div>
+<div class="fs-block" data-block="text" data-name="benefits" data-event="novogodnyaya-misteriya" data-variant="soft"></div>
+<div class="fs-block" data-block="text" data-name="audience" data-event="novogodnyaya-misteriya" data-variant="dark"></div>
+<div class="fs-block" data-block="text" data-name="program" data-event="novogodnyaya-misteriya" id="prog"></div>
+```
+
+`id="about"` и `id="prog"` – якоря пунктов меню сайта «О мистерии» и «Программа». Расписание по часам пока скрыто: в Тильде скрыт старый блок программы (на одну ночь).
 
 ## Как устроены данные
 
@@ -251,6 +266,7 @@ layout: split
 | `--fs-card-bg`, `--fs-card-fg`, `--fs-card-title`, `--fs-card-line` | карточки, акцентная колонка цены |
 | `--fs-accent`, `--fs-gold`, `--fs-highlight`, `--fs-highlight-fg`, `--fs-ray`, `--fs-ring`, `--fs-past` | акценты, рамка мастеров, «сейчас», прошедшие волны |
 | `--fs-btn-bg`, `--fs-btn-fg`, `--fs-btn-bg-hover` | кнопка |
+| `--fs-hero-bg`, `--fs-hero-overlay`, `--fs-hero-kicker-size`, `--fs-hero-kicker-color`, `--fs-hero-main-size` | первый экран: фон, затемнение картинки, размеры и цвет двух строк H1 |
 | `--fs-radius`, `--fs-btn-radius`, `--fs-shadow` | скругления и тени |
 | `--fs-font-head`, `--fs-font-body`, `--fs-head-weight` | шрифты (по умолчанию наследуются от Тильды) |
 | `--fs-width`, `--fs-pad-y`, `--fs-pad-y-mobile` | ширина и отступы секций |

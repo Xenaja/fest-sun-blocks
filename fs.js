@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.19-3';
+  var VERSION = '2026.10.21-1';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -799,8 +799,8 @@
       '.fs-hero__inner{position:relative;max-width:900px}',
       '.fs-hero__eyebrow{margin:0 auto 26px;max-width:760px;font-size:13px;font-weight:600;letter-spacing:.16em;line-height:1.6;text-transform:uppercase;color:var(--fs-gold)}',
       '.fs-hero__title{margin:0;font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);color:var(--fs-title);text-wrap:balance}',
-      '.fs-hero__kicker{display:block;font-size:clamp(20px,2.4vw,26px);line-height:1.3;color:var(--fs-gold);margin-bottom:14px;text-transform:uppercase;letter-spacing:.04em}',
-      '.fs-hero__main{display:block;font-size:clamp(32px,4.6vw,54px);line-height:1.15}',
+      '.fs-hero__kicker{display:block;font-size:var(--fs-hero-kicker-size,clamp(20px,2.4vw,26px));line-height:1.3;color:var(--fs-hero-kicker-color,var(--fs-gold));margin-bottom:14px;text-transform:uppercase;letter-spacing:.04em}',
+      '.fs-hero__main{display:block;font-size:var(--fs-hero-main-size,clamp(32px,4.6vw,54px));line-height:1.15}',
       '.fs-hero__lead{max-width:760px;margin:26px auto 0;font-size:18px;line-height:1.65;opacity:.92}',
       '.fs-hero__dates{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:34px 0 0;padding:0}',
       '.fs-hero__dates li{padding:9px 18px;border:1px solid var(--fs-line);border-radius:40px;font-size:15px;font-weight:500;white-space:nowrap}',
