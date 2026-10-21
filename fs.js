@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.21-7';
+  var VERSION = '2026.10.21-8';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -1008,7 +1008,14 @@
       '}',
       '@media (max-width:600px){',
         '.fs-sp-table{display:none}.fs-sp-cards{display:block}',
-        '.fs-masters{--fs-cols:1 !important;max-width:340px}',
+        '.fs-masters{--fs-cols:1 !important;max-width:none;gap:40px;margin-top:32px}',
+        '.fs-master{display:grid;grid-template-columns:120px minmax(0,1fr);column-gap:18px;align-items:center}',
+        '.fs-master__frame{grid-row:1/span 2;width:120px;margin:0}',
+        '.fs-master__name{margin:0;font-size:20px;align-self:end;overflow-wrap:anywhere}',
+        '.fs-master__reg{margin:4px 0 0;align-self:start}',
+        '.fs-master__name:last-child{grid-row:1/span 2;align-self:center}',
+        '.fs-master__short,.fs-master__line,.fs-master__more{grid-column:1/-1}',
+        '.fs-master__short{margin-top:16px}.fs-master__line{margin:14px 0 10px}.fs-master__more{justify-self:start}',
         '.fs-table{font-size:14px}.fs-table th,.fs-table td{padding:12px 8px}',
         '.fs-rooms-section .fs-table-wrap{display:none}.fs-room-cards{display:block;border-top:1px solid var(--fs-line)}',
         '.fs-faq__q{font-size:16px}',
