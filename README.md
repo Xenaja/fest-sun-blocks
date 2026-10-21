@@ -126,10 +126,13 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 <div class="fs-block" data-block="text" data-name="about" data-event="novogodnyaya-misteriya" id="about"></div>
 <div class="fs-block" data-block="text" data-name="benefits" data-event="novogodnyaya-misteriya" data-variant="soft"></div>
 <div class="fs-block" data-block="text" data-name="audience" data-event="novogodnyaya-misteriya" data-variant="dark"></div>
+<div class="fs-block" data-block="masters" data-event="novogodnyaya-misteriya" id="master"></div>
 <div class="fs-block" data-block="text" data-name="program" data-event="novogodnyaya-misteriya" id="prog"></div>
 ```
 
-`id="about"` и `id="prog"` – якоря пунктов меню сайта «О мистерии» и «Программа». Расписание по часам пока скрыто: в Тильде скрыт старый блок программы (на одну ночь).
+`id="about"`, `id="master"` и `id="prog"` – якоря пунктов меню сайта «О мистерии», «Ведущие» и «Программа». Мастера: TEYA, Павитра, Захаревич, Ноллендорф (`event.json` → `masters`).
+
+Заглушки («Заглушка: …») в `masters.json` и `content/masters/*.md` на сайт не выводятся: у мастера без описания – фото и имя, без «Подробнее». Расписание по часам пока скрыто: в Тильде скрыт старый блок программы (на одну ночь).
 
 ## Как устроены данные
 

@@ -37,5 +37,23 @@
     "photo_full": "img/masters/full/zakharevich.webp",
     "pos": "46% 36%",
     "zoom": 1.7
+  },
+  {
+    "id": "teya",
+    "name": "TEYA",
+    "regalia": "Live Ecstatic Dance",
+    "short": "Это не привычный Ecstatic Dance под диджейский сет. Это живая музыкальная волна, которую создают прямо здесь и сейчас три музыканта.",
+    "photo": "img/masters/teya.webp",
+    "photo_full": "img/masters/full/teya.webp",
+    "pos": "50% 30%"
+  },
+  {
+    "id": "nollendorf",
+    "name": "Михаил Ноллендорф",
+    "regalia": "Барабанщик-перкуссионист, выпускник краснодарской консерватории",
+    "short": "Участвует во многих известных проектах, а также выступает как соло-исполнитель.",
+    "photo": "img/masters/nollendorf.webp",
+    "photo_full": "img/masters/full/nollendorf.webp",
+    "pos": "50% 22%"
   }
 ]

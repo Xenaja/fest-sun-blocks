@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.21-6';
+  var VERSION = '2026.10.21-7';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -596,6 +596,14 @@
     return '<div class="' + cls + '"><img src="' + esc(asset('shared/', m.photo)) + '" alt="' + esc(m.name) + '" decoding="async" style="' + esc(style) + '"></div>';
   }
 
+  // «Заглушка: …» в данных мастера на сайт не выводим – пустое поле просто не показывается
+  var STUB = /^\s*Заглушка/;
+  function noStub(m) {
+    var o = {};
+    for (var k in m) o[k] = typeof m[k] === 'string' && STUB.test(m[k]) ? '' : m[k];
+    return o;
+  }
+
   function mastersFor(c, ids) {
     return load('shared/masters.json', 'json').then(function (all) {
       var byId = {};
@@ -604,7 +612,7 @@
         var id = typeof e === 'string' ? e : e.id;
         var audience = (typeof e === 'object' && e.audience) || 'all';
         if (audience !== 'all' && c.aud && audience !== c.aud) return null;
-        return byId[id] || null;
+        return byId[id] ? noStub(byId[id]) : null;
       }).filter(Boolean);
     });
   }
@@ -640,6 +648,7 @@
     load('shared/content/masters/' + m.id + '.md', 'text').then(function (src) {
       // Имя уже в шапке окна – первый заголовок ## с именем не повторяем
       src = src.replace(/^\s*##\s+.+\n/, '');
+      if (STUB.test(src)) throw new Error('заглушка');
       modal.querySelector('.fs-modal__text').innerHTML = md(src, c.aud);
     }, function () {
       modal.querySelector('.fs-modal__text').innerHTML = m.short ? '<div class="fs-md"><p>' + inline(m.short) + '</p></div>' : '';
@@ -674,8 +683,8 @@
           '<h3 class="fs-master__name">' + esc(m.name) + '</h3>' +
           (m.regalia ? '<p class="fs-master__reg">' + esc(m.regalia) + '</p>' : '') +
           (m.short ? '<p class="fs-master__short">' + inline(m.short) + '</p>' : '') +
-          '<span class="fs-master__line"></span>' +
-          '<button type="button" class="fs-master__more" data-master="' + i + '">Подробнее</button></div>';
+          (m.short ? '<span class="fs-master__line"></span>' +
+          '<button type="button" class="fs-master__more" data-master="' + i + '">Подробнее</button>' : '') + '</div>';
       }).join('');
       return {
         html: section(title(c.el.getAttribute('data-title') || mb.title || 'Мастера') + lead(mb.lead) +

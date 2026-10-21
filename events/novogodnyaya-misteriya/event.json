@@ -8,5 +8,8 @@
       { "start": "2026-12-31", "end": "2027-01-03" }
     ]
   },
-  "durations": [4]
+  "durations": [4],
+
+  "masters_block": { "title": "Мастера и артисты" },
+  "masters": ["teya", "pavitra", "zakharevich", "nollendorf"]
 }
