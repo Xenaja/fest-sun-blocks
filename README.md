@@ -119,10 +119,10 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 
 ### Сниппеты для «Новогодней Мистерии» (soundmystery.ru/newyear)
 
-Демо: **https://xenaja.github.io/fest-sun-blocks/newyear.html**. Тема `soundmystery` – цвета и кнопки сайта soundmystery.ru. Основа страницы остаётся в Тильде (мастера, стоимость, проживание, галереи, отзывы, контакты), блоки на коде заменяют текстовые секции. Кнопки «Участвую» ведут на `#popup:myform` – попап-форму Тильды, бота у события нет, поэтому reflinks не ставится.
+Демо: **https://xenaja.github.io/fest-sun-blocks/newyear.html**. Тема `soundmystery` – цвета и кнопки сайта soundmystery.ru. Основа страницы остаётся в Тильде (первый экран, мастера, стоимость, проживание, галереи, отзывы, контакты), блоки на коде заменяют текстовые секции. `intro` – статус-бар сразу под первым экраном: заголовок и пункты через точки (разметка `::: bar`). Кнопки «Участвую» ведут на `#popup:myform` – попап-форму Тильды, бота у события нет, поэтому reflinks не ставится.
 
 ```html
-<div class="fs-block" data-block="hero" data-event="novogodnyaya-misteriya"></div>
+<div class="fs-block" data-block="text" data-name="intro" data-event="novogodnyaya-misteriya"></div>
 <div class="fs-block" data-block="text" data-name="about" data-event="novogodnyaya-misteriya" id="about"></div>
 <div class="fs-block" data-block="text" data-name="benefits" data-event="novogodnyaya-misteriya" data-variant="soft"></div>
 <div class="fs-block" data-block="text" data-name="audience" data-event="novogodnyaya-misteriya" data-variant="dark"></div>
@@ -218,6 +218,16 @@ layout: split
 ```
 
 Вторая кнопка в ряду – контурная. Карточки сеткой 2×2 – `::: cards-2` (как `::: cards`).
+
+Статус-бар – заголовок без капса и пункты в строку через точки, между двумя тонкими линиями (как `intro.md` Новогодней Мистерии):
+
+```
+::: bar
+## Заголовок
+- Пункт
+- Пункт
+:::
+```
 
 Абзац по центру:
 

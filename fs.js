@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.21-1';
+  var VERSION = '2026.10.21-2';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -104,7 +104,7 @@
   var CARDS_OPEN = '\u0000cards', CARDS_CLOSE = '\u0000/cards';
   var CALLOUT_OPEN = '\u0000callout', CALLOUT_CLOSE = '\u0000/callout';
   var LIST_LINE = /^\s*([-*]|\d+[.)])\s+/;
-  var STRUCT = /^(cards|cards-2|center|features|steps|buttons)$/;
+  var STRUCT = /^(cards|cards-2|center|features|steps|buttons|bar)$/;
 
   // ::: partner / ::: new – только для своей аудитории (абзацы выделяются карточкой,
   // одиночные пункты списка просто продолжают список); ::: cards – сетка карточек
@@ -178,7 +178,7 @@
 
     lines.forEach(function (line) {
       var m;
-      var mk = line.match(/^\u0000(cards|cards-2|callout|center|features|steps|buttons)$/);
+      var mk = line.match(/^\u0000(cards|cards-2|callout|center|features|steps|buttons|bar)$/);
       if (mk) {
         flush();
         out('<div class="' + (mk[1] === 'cards-2' ? 'fs-cards fs-cards--2' : 'fs-' + mk[1]) + '">');
@@ -186,7 +186,7 @@
         afterTitle = false;
         return;
       }
-      if (/^\u0000\/(cards|cards-2|callout|center|features|steps|buttons)$/.test(line)) {
+      if (/^\u0000\/(cards|cards-2|callout|center|features|steps|buttons|bar)$/.test(line)) {
         flush();
         if (/^\u0000\/cards/.test(line)) closeCard();
         out('</div>');
@@ -805,6 +805,13 @@
       '.fs-hero__dates{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:34px 0 0;padding:0}',
       '.fs-hero__dates li{padding:9px 18px;border:1px solid var(--fs-line);border-radius:40px;font-size:15px;font-weight:500;white-space:nowrap}',
       '.fs-hero__btns{margin-top:38px}',
+      '.fs-bar{max-width:980px;margin:0 auto;padding:26px 0 24px;border-top:1px solid var(--fs-gold);border-bottom:1px solid var(--fs-gold);text-align:center}',
+      '.fs-bar .fs-title{text-transform:none;font-size:clamp(24px,2.8vw,32px);margin:0 0 16px}',
+      '.fs-bar>.fs-list{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px 0;max-width:none;margin:0}',
+      '.fs-bar>.fs-list>li{margin:0;padding:0;font-size:14px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;line-height:1.4}',
+      '.fs-bar>.fs-list>li::before{display:none}',
+      '.fs-bar>.fs-list>li+li::before{content:"";display:inline-block;position:static;width:6px;height:6px;margin:0 16px;border:0;border-radius:50%;background:var(--fs-gold);vertical-align:middle;transform:translateY(-1px)}',
+      '.fs-section.fs-text:has(>.fs-inner>.fs-md>.fs-bar:only-child){padding-top:40px;padding-bottom:40px}',
       '.fs-plate{position:relative;background:var(--fs-bg-soft);border-radius:var(--fs-radius);box-shadow:var(--fs-shadow);padding:60px 56px 52px}',
       '.fs-plate::before,.fs-plate::after{content:"";position:absolute;width:30px;height:30px;border:0 solid var(--fs-highlight)}',
       '.fs-plate::before{top:0;left:0;border-top-width:3px;border-left-width:3px}',
@@ -977,6 +984,7 @@
         '.fs-buttons{flex-direction:column;align-items:stretch}.fs-buttons .fs-btn{text-align:center}',
         '.fs-hero{padding-top:calc(var(--fs-pad-y-mobile) + 60px);padding-bottom:var(--fs-pad-y-mobile)}',
         '.fs-hero__lead{font-size:16px}',
+        '.fs-bar>.fs-list>li{font-size:12px}.fs-bar>.fs-list>li+li::before{margin:0 10px}',
         '.fs-features>.fs-list{grid-template-columns:minmax(0,1fr);gap:12px}',
         '.fs-features>.fs-list>li{padding:20px 18px}',
         '.fs-steps>ol.fs-list{grid-template-columns:minmax(0,1fr);gap:18px}',

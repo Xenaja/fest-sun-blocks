@@ -33,13 +33,6 @@
   --fs-ring: #ffd589;
   --fs-past: rgba(31, 31, 31, .4);
 
-  /* первый экран: космос с гонгом, как на сайте */
-  --fs-hero-bg: radial-gradient(ellipse at 50% 35%, #3a3125 0%, #1f1f1f 55%, #0f0f12 100%);
-  --fs-hero-overlay: rgba(12, 12, 16, .62);
-  --fs-hero-kicker-color: #ffd589;
-  --fs-hero-kicker-size: clamp(34px, 5.4vw, 60px);
-  --fs-hero-main-size: clamp(20px, 2.4vw, 28px);
-
   /* кнопка – как «Да, это для меня!»: персиковая пилюля с белой обводкой */
   --fs-btn-bg: #febf6f;
   --fs-btn-fg: #000000;
