@@ -276,6 +276,7 @@ layout: split
 | `--fs-card-bg`, `--fs-card-fg`, `--fs-card-title`, `--fs-card-line` | карточки, акцентная колонка цены |
 | `--fs-accent`, `--fs-gold`, `--fs-highlight`, `--fs-highlight-fg`, `--fs-ray`, `--fs-ring`, `--fs-past` | акценты, рамка мастеров, «сейчас», прошедшие волны |
 | `--fs-btn-bg`, `--fs-btn-fg`, `--fs-btn-bg-hover` | кнопка |
+| `--fs-feature-title-case`, `--fs-feature-title-size`, `--fs-feature-title-spacing` | подзаголовки карточек `::: features` (капс, размер, разрядка) |
 | `--fs-hero-bg`, `--fs-hero-overlay`, `--fs-hero-kicker-size`, `--fs-hero-kicker-color`, `--fs-hero-main-size` | первый экран: фон, затемнение картинки, размеры и цвет двух строк H1 |
 | `--fs-radius`, `--fs-btn-radius`, `--fs-shadow` | скругления и тени |
 | `--fs-font-head`, `--fs-font-body`, `--fs-head-weight` | шрифты (по умолчанию наследуются от Тильды) |

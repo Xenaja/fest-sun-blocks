@@ -56,6 +56,10 @@
   --fs-font-body: 'Montserrat', Arial, sans-serif;
   --fs-head-weight: 700;
   --fs-title-size: clamp(28px, 3.4vw, 38px);
+  /* подзаголовки карточек ::: features – капсом */
+  --fs-feature-title-case: uppercase;
+  --fs-feature-title-size: 19px;
+  --fs-feature-title-spacing: .03em;
 
   /* размеры */
   --fs-width: 1100px;
