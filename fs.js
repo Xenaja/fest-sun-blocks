@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.21-3';
+  var VERSION = '2026.10.21-4';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -805,7 +805,7 @@
       '.fs-hero__dates{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:34px 0 0;padding:0}',
       '.fs-hero__dates li{padding:9px 18px;border:1px solid var(--fs-line);border-radius:40px;font-size:15px;font-weight:500;white-space:nowrap}',
       '.fs-hero__btns{margin-top:38px}',
-      '.fs-bar{max-width:980px;margin:0 auto;padding:26px 0 24px;border-top:1px solid var(--fs-gold);border-bottom:1px solid var(--fs-gold);text-align:center}',
+      '.fs-bar{max-width:980px;margin:0 auto;padding:0 0 26px;border-bottom:1px solid var(--fs-gold);text-align:center}',
       '.fs-bar .fs-title{text-transform:none;font-size:clamp(24px,2.8vw,32px);margin:0 0 16px}',
       '.fs-bar>.fs-list{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px 0;max-width:none;margin:0}',
       '.fs-bar>.fs-list>li{margin:0;padding:0;font-size:14px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;line-height:1.4}',
