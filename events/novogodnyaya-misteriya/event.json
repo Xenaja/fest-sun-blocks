@@ -10,6 +10,8 @@
   },
   "durations": [4],
 
+  "bot": { "telegram": "https://t.me/fest_sun_bot", "start": "e_newyear" },
+
   "fee": {
     "title": "Стоимость",
     "lead": [

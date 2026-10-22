@@ -125,7 +125,11 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 
 ### Сниппеты для «Новогодней Мистерии» (soundmystery.ru/newyear)
 
-Демо: **https://xenaja.github.io/fest-sun-blocks/newyear.html**. Тема `soundmystery` – цвета и кнопки сайта soundmystery.ru. Основа страницы остаётся в Тильде (первый экран, мастера, стоимость, проживание, галереи, отзывы, контакты), блоки на коде заменяют текстовые секции. `intro` – статус-бар сразу под первым экраном: заголовок и пункты через точки (разметка `::: bar`). Кнопки «Участвую» ведут на `#popup:myform` – попап-форму Тильды, бота у события нет, поэтому reflinks не ставится.
+Демо: **https://xenaja.github.io/fest-sun-blocks/newyear.html**. Тема `soundmystery` – цвета и кнопки сайта soundmystery.ru. Основа страницы остаётся в Тильде (первый экран, мастера, стоимость, проживание, галереи, отзывы, контакты), блоки на коде заменяют текстовые секции. `intro` – статус-бар сразу под первым экраном: заголовок и пункты через точки (разметка `::: bar`). Заявки – в бота @fest_sun_bot (`e_newyear`): на обеих страницах (newyear и newyear_fe) ставится невидимый блок reflinks, он переводит все кнопки `#popup:myform` (и тильдовские, и в блоках) в бота, метку партнёра `?ref=` передаёт как `e_newyear__s_<ref>`:
+
+```html
+<div class="fs-block" data-block="reflinks" data-event="novogodnyaya-misteriya"></div>
+```
 
 ```html
 <div class="fs-block" data-block="text" data-name="intro" data-event="novogodnyaya-misteriya"></div>
