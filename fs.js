@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.22-18';
+  var VERSION = '2026.10.22-19';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -427,11 +427,12 @@
     if (ex && ex.items) {
       plans += '<div class="fs-plan">' + (ex.title ? '<h3 class="fs-plan__who">' + esc(ex.title) + '</h3>' : '') +
         '<ul class="fs-waves">' + ex.items.map(function (it) {
-          // price – число (сумма справа) или текст (пояснение мелко под названием)
+          // price – сумма справа («от» при from, «/ сут» при unit); note – пояснение мелко под названием
           var num = typeof it.price === 'number';
           return '<li class="fs-wave"><span class="fs-wave__label">' + inline(it.label) +
-            (!num && it.price ? '<span class="fs-wave__sub">' + inline(it.price) + '</span>' : '') + '</span>' +
-            (num ? '<span class="fs-sum">' + money(it.price) + '</span>' : '') + '</li>';
+            (it.note ? '<span class="fs-wave__sub">' + inline(it.note) + '</span>' : '') + '</span>' +
+            (num ? '<span class="fs-sum">' + (it.from ? '<small class="fs-sum__unit">от&nbsp;</small>' : '') + money(it.price) +
+              (it.unit ? '<small class="fs-sum__unit"> / ' + esc(it.unit) + '</small>' : '') + '</span>' : '') + '</li>';
         }).join('') + '</ul>' + (ex.note ? '<p class="fs-plan__note">' + inline(ex.note) + '</p>' : '') + '</div>';
     }
     var count = auds.length + (ex && ex.items ? 1 : 0);
@@ -897,6 +898,7 @@
       '.fs-plans--1{grid-template-columns:minmax(0,1fr);max-width:540px;margin:0 auto}',
       '.fs-plans--3{grid-template-columns:repeat(3,minmax(0,1fr))}',
       '.fs-wave__sub{display:block;margin-top:4px;font-size:14px;font-weight:400;opacity:.75}',
+      '.fs-sum__unit{font-size:.6em}',
       '.fs-plan{position:relative;min-width:0;padding:36px 32px 26px;border:1.5px solid var(--fs-accent);border-radius:var(--fs-radius);box-shadow:var(--fs-shadow);background:var(--fs-bg)}',
       '.fs-plan--accent{background:var(--fs-card-bg);color:var(--fs-card-fg);border-color:var(--fs-card-bg)}',
       '.fs-plan__who{font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:24px;line-height:1.2;color:var(--fs-title);margin:0 0 18px}',
