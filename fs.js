@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.22-22';
+  var VERSION = '2026.10.22-23';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -775,6 +775,7 @@
   }
 
   function scan() {
+    injectFonts();
     injectCSS();
     var list = document.querySelectorAll('.fs-block:not([data-fs-done])');
     for (var i = 0; i < list.length; i++) render(list[i]);
@@ -782,6 +783,26 @@
 
   // ------------------------------------------------------------ стили
   // Только через переменные --fs-*; значения задаёт тема (themes/<theme>.css)
+
+  // Свой Philosopher (shared/fonts, OFL) – для всей страницы, включая Zero-блоки Тильды:
+  // если Google Fonts не открывается, заголовки не падают в Arial (он шире и ломает вёрстку).
+  // Объявлен позже тильдовского – браузер берёт его.
+  function injectFonts() {
+    if (document.getElementById('fs-fonts')) return;
+    var CYR = 'U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116';
+    var LAT = 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD';
+    var css = '';
+    [400, 700].forEach(function (w) {
+      [['cyrillic', CYR], ['latin', LAT]].forEach(function (r) {
+        css += '@font-face{font-family:"Philosopher";font-style:normal;font-weight:' + w + ';font-display:swap;' +
+          'src:url("' + BASE + 'shared/fonts/philosopher-' + r[0] + '-' + w + '-normal.woff2") format("woff2");unicode-range:' + r[1] + '}';
+      });
+    });
+    var st = document.createElement('style');
+    st.id = 'fs-fonts';
+    st.textContent = css;
+    document.head.appendChild(st);
+  }
 
   function injectCSS() {
     if (document.getElementById('fs-style')) return;
