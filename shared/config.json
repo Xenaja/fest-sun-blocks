@@ -1,0 +1,8 @@
+{
+  "_comment": "Общие настройки мини-лендинга. vk_club – id сообщества ВК с ботом (число), max_bot – имя бота в MAX; пока null – кнопки ВК и MAX скрыты. bridges – включить мосты VK Bridge / MAX. api_url – учёт открытий (POST /mini/open), только после записи в политике ПД. partner_club – показывать «Клуб» на странице партнёров.",
+  "vk_club": null,
+  "max_bot": null,
+  "bridges": false,
+  "api_url": null,
+  "partner_club": false
+}

@@ -41,5 +41,56 @@
   },
 
   "masters_block": { "title": "Мастера и артисты" },
-  "masters": ["teya", "pavitra", "zakharevich", "nollendorf", "danaya", "yura-ra"]
+  "masters": ["teya", "pavitra", "zakharevich", "nollendorf", "danaya", "yura-ra"],
+
+  "hero": {
+    "eyebrow": "Ретрит-центр «Энергия Солнца» · Сочи",
+    "title": "Новогодняя Мистерия",
+    "lead": "Живая музыка · Ecstatic Dance · Ночь гонга",
+    "dates": ["31 декабря – 3 января"],
+    "image": "img/hero.webp"
+  },
+
+  "video": { "title": "Мистерия звука", "rutube": "64bffe00ab2103b0a9dad2854e417003", "cover": "img/video-cover.webp" },
+
+  "galleries": {
+    "rooms": {
+      "title": "Номера",
+      "photos": ["img/room-1.webp", "img/room-2.webp", "img/room-3.webp", "img/room-4.webp", "img/room-5.webp", "img/room-6.webp"]
+    },
+    "territory": {
+      "title": "Территория",
+      "photos": ["img/territory-1.webp", "img/territory-2.webp", "img/territory-3.webp", "img/territory-4.webp", "img/territory-5.webp", "img/territory-6.webp"]
+    },
+    "food": {
+      "title": "Питание",
+      "photos": ["img/food-1.webp", "img/food-2.webp", "img/food-3.webp", "img/food-4.webp", "img/food-5.webp"]
+    }
+  },
+
+  "mini": {
+    "main": {
+      "cta": "Оставить заявку",
+      "blocks": [
+        { "block": "hero" },
+        { "block": "text", "name": "benefits", "variant": "soft" },
+        { "block": "masters" },
+        { "block": "text", "name": "program" },
+        { "block": "prices" },
+        { "block": "text", "name": "stay" },
+        { "block": "gallery", "name": "rooms" },
+        { "block": "gallery", "name": "territory" },
+        { "block": "gallery", "name": "food" },
+        { "block": "text", "name": "gift", "variant": "soft" }
+      ]
+    },
+    "partner": {
+      "blocks": [
+        { "block": "text", "name": "invite", "show": "partner" },
+        { "block": "prices", "cols": "partner", "title": "Условия для партнёров" },
+        { "block": "text", "name": "partner-terms", "show": "partner", "variant": "soft" },
+        { "block": "text", "name": "community", "show": "partner", "if": "partner_club" }
+      ]
+    }
+  }
 }
