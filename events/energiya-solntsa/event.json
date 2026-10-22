@@ -27,7 +27,7 @@
 
   "specials": {
     "title": "",
-    "items": ["gong-night", "sound-mystery", "banya", "hikes"],
+    "items": ["gong-night", "sound-mystery"],
     "prices": [5000, 7000, 8000]
   },
 
