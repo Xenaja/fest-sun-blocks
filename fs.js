@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.23-3';
+  var VERSION = '2026.10.23-5';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -282,6 +282,25 @@
       var base = hash ? h.slice(0, h.indexOf('#')) : h;
       a.setAttribute('href', base + (base.indexOf('?') >= 0 ? '&' : '?') + 'ref=' + encodeURIComponent(ref) + hash);
     }
+    decorateBotLinks(ref);
+  }
+
+  // Кнопки Тильды, которые ведут прямо в бота (t.me/fest_sun_bot…), тоже получают код:
+  // ?start=e_newyear → e_newyear__r_<код>, без start → r_<код>. Уже с кодом – не трогаем.
+  var BOT_LINK = /^https?:\/\/t\.me\/fest_sun_bot\/?(\?|$)/i;
+  function decorateBotLinks(ref) {
+    var links = document.querySelectorAll('a[href]');
+    for (var i = 0; i < links.length; i++) {
+      var a = links[i], h = a.getAttribute('href');
+      if (!BOT_LINK.test(h)) continue;
+      var m = h.match(/[?&]start=([^&#]*)/);
+      var start = m ? decodeURIComponent(m[1]) : '';
+      if (/(^|__)r_/.test(start) || /^partner/.test(start)) continue; // вход партнёра – без чужого кода
+      var next = start ? start + '__r_' + ref : 'r_' + ref;
+      if (next.length > 64) continue;
+      a.setAttribute('href', m ? h.replace(m[0], m[0].charAt(0) + 'start=' + encodeURIComponent(next))
+        : h + (h.indexOf('?') >= 0 ? '&' : '?') + 'start=' + encodeURIComponent(next));
+    }
   }
 
   // Тильда дорисовывает блоки позже – следим за страницей, пересчитываем ссылки
@@ -458,15 +477,16 @@
           (n === cur ? ' <span class="fs-now">сейчас</span>' : '') + '</span>' + sum + '</li>';
       }).join('');
       var note = notes[aud] ? '<p class="fs-plan__note">' + inline(notes[aud]) + '</p>' : '';
-      return '<div class="fs-plan' + (aud === 'partner' ? ' fs-plan--accent' : '') + '">' +
+      // Выделена колонка «Участие»: страница для тех, кто приходит впервые
+      return '<div class="fs-plan' + (aud === 'new' ? ' fs-plan--accent' : '') + '">' +
         '<h3 class="fs-plan__who">' + esc(labels[aud] || aud) + '</h3>' +
         '<ul class="fs-waves">' + rows + '</ul>' + note + '</div>';
     }).join('');
 
-    // fee.extras – что оплачивается кроме оргвзноса (фуршет, проживание): отдельная карточка рядом
-    var ex = fee.extras;
+    // fee.extras – что оплачивается кроме оргвзноса (фуршет, проживание, дети): широкая карточка под колонками
+    var ex = fee.extras, extras = '';
     if (ex && ex.items) {
-      plans += '<div class="fs-plan">' + (ex.title ? '<h3 class="fs-plan__who">' + esc(ex.title) + '</h3>' : '') +
+      extras = '<div class="fs-plan fs-extras">' + (ex.title ? '<h3 class="fs-plan__who">' + esc(ex.title) + '</h3>' : '') +
         '<ul class="fs-waves">' + ex.items.map(function (it) {
           // price – сумма справа («от» при from, «/ сут» при unit); note – пояснение мелко под названием
           var num = typeof it.price === 'number';
@@ -476,12 +496,11 @@
               (it.unit ? '<small class="fs-sum__unit"> / ' + esc(it.unit) + '</small>' : '') + '</span>' : '') + '</li>';
         }).join('') + '</ul>' + (ex.note ? '<p class="fs-plan__note">' + inline(ex.note) + '</p>' : '') + '</div>';
     }
-    var count = auds.length + (ex && ex.items ? 1 : 0);
 
     return section(
       title(fee.title || 'Стоимость') + lead(fee.lead) +
       (fee.gift ? '<p class="fs-gift">' + inline(fee.gift) + '</p>' : '') +
-      '<div class="fs-plans fs-plans--' + count + '">' + plans + '</div>' +
+      '<div class="fs-plans fs-plans--' + auds.length + '">' + plans + '</div>' + extras +
       '<div class="fs-after">' +
         (fee.installment ? '<p class="fs-after__note">' + inline(fee.installment) + '</p>' : '') +
         '<a class="fs-btn" href="' + esc(link) + '"' + (/^https?:/.test(link) ? ' target="_blank" rel="noopener"' : '') + '>' + esc(fee.button || 'Участвую') + '</a>' +
@@ -985,7 +1004,8 @@
       '.fs-gift{display:table;margin:0 auto 28px;padding:12px 24px;border-radius:var(--fs-btn-radius);background:var(--fs-highlight);color:var(--fs-highlight-fg);font-weight:600;text-align:center;line-height:1.4}',
       '.fs-plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}',
       '.fs-plans--1{grid-template-columns:minmax(0,1fr);max-width:540px;margin:0 auto}',
-      '.fs-plans--3{grid-template-columns:repeat(3,minmax(0,1fr))}',
+      '.fs-extras{margin-top:28px}',
+      '.fs-extras>.fs-waves{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:48px}',
       '.fs-wave__sub{display:block;margin-top:4px;font-size:14px;font-weight:400;opacity:.75}',
       '.fs-sum__unit{font-size:.6em}',
       '.fs-plan{position:relative;min-width:0;padding:36px 32px 26px;border:1.5px solid var(--fs-accent);border-radius:var(--fs-radius);box-shadow:var(--fs-shadow);background:var(--fs-bg)}',
@@ -1101,7 +1121,7 @@
       '@media (max-width:1000px){.fs-masters{--fs-cols:2 !important;--fs-gx:28px;row-gap:44px}}',
       '@media (max-width:760px){',
         '.fs-section{padding:var(--fs-pad-y-mobile) 16px}',
-        '.fs-plans{grid-template-columns:minmax(0,1fr);gap:18px}',
+        '.fs-plans{grid-template-columns:minmax(0,1fr);gap:18px}.fs-extras{margin-top:18px}.fs-extras>.fs-waves{grid-template-columns:minmax(0,1fr)}',
         '.fs-plan{padding:30px 20px 20px}.fs-plan__who{font-size:24px}.fs-sum{font-size:24px}',
         '.fs-md,.fs-lead{font-size:16px}',
         '.fs-md .fs-lead-p{font-size:17px;margin-bottom:22px}',
