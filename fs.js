@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.22-1';
+  var VERSION = '2026.10.22-2';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -647,10 +647,15 @@
     document.addEventListener('keydown', onKey);
     modal.querySelector('.fs-modal__x').focus();
 
-    load('shared/content/masters/' + m.id + '.md', 'text').then(function (src) {
+    // Общий текст мастера + дополнение события (events/<id>/content/masters/<мастер>.md), если есть
+    Promise.all([
+      load('shared/content/masters/' + m.id + '.md', 'text'),
+      opt(load(c.ev._dir + 'content/masters/' + m.id + '.md', 'text'))
+    ]).then(function (r) {
       // Имя уже в шапке окна – первый заголовок ## с именем не повторяем
-      src = src.replace(/^\s*##\s+.+\n/, '');
+      var src = r[0].replace(/^\s*##\s+.+\n/, '');
       if (STUB.test(src)) throw new Error('заглушка');
+      if (r[1]) src += '\n\n' + r[1];
       modal.querySelector('.fs-modal__text').innerHTML = md(src, c.aud);
     }, function () {
       modal.querySelector('.fs-modal__text').innerHTML = m.short ? '<div class="fs-md"><p>' + inline(m.short) + '</p></div>' : '';

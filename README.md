@@ -254,7 +254,7 @@ layout: split
 
 **Длительности.** `event.json` → `durations`, например `[7, 10]` или `[7]`.
 
-**Мастера.** Новый мастер – запись в `shared/masters.json` (+ фото в `shared/img/masters/` и текст `shared/content/masters/<id>.md`), затем его `id` в `masters` нужного `event.json`. Чтобы показать мастера только на одной странице: `{ "id": "valeeva", "audience": "partner" }`. `pos` и `zoom` – кадрирование фото в кружке.
+**Мастера.** Новый мастер – запись в `shared/masters.json` (+ фото в `shared/img/masters/` и текст `shared/content/masters/<id>.md`), затем его `id` в `masters` нужного `event.json`. Чтобы показать мастера только на одной странице: `{ "id": "valeeva", "audience": "partner" }`. `pos` и `zoom` – кадрирование фото в кружке (в окне «Подробнее» фото целиком). Что мастер ведёт на конкретном событии – `events/<id>/content/masters/<мастер>.md`: дописывается в конец окна «Подробнее» только на этом событии.
 
 **Спецпрограммы.** Список – `shared/specials.json`, какие и по какой цене у события – `event.json` → `specials.items` и `specials.prices` (по волнам). Особая цена у одной программы: `{ "id": "banya", "prices": [3000, 4000, 5000] }`.
 
