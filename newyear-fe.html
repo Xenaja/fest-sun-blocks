@@ -3,33 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Новогодняя Мистерия для партнёров – лендинг на блоках</title>
-  <style>
-    body { margin: 0; background: #e8e8e8; }
-    .demo-label { max-width: 1100px; margin: 0 auto; padding: 10px 16px; font: 12px/1.4 monospace; color: #555; }
-    .demo-label b { color: #1f1f1f; }
-  </style>
+  <title>Новогодняя Мистерия для партнёров – переадресация</title>
+  <meta name="robots" content="noindex">
 </head>
 <body>
-  <div class="demo-label"><b>soundmystery.ru/newyear_fe</b> – страница для партнёров: те же блоки, что на newyear.html, плюс invite</div>
-
-  <div class="demo-label"><b>text · program</b></div>
-  <div class="fs-block" data-block="text" data-name="program" data-event="novogodnyaya-misteriya" id="prog"></div>
-
-  <div class="demo-label"><b>prices</b> – стоимость для партнёров · data-audience="partner"</div>
-  <div class="fs-block" data-block="prices" data-event="novogodnyaya-misteriya" data-audience="partner" id="prices"></div>
-
-  <div class="demo-label"><b>text · invite</b> – «Приглашайте на Мистерию новичков» · data-audience="partner"</div>
-  <div class="fs-block" data-block="text" data-name="invite" data-event="novogodnyaya-misteriya" data-audience="partner"></div>
-
-  <div class="demo-label"><b>text · community</b> – «Клуб осознанных миллионеров-долгожителей» · data-audience="partner"</div>
-  <div class="fs-block" data-block="text" data-name="community" data-event="novogodnyaya-misteriya" data-audience="partner" data-variant="soft"></div>
-
-  <div class="demo-label"><b>reflinks</b> – невидимый: кнопки #popup:myform ведут в бота @fest_sun_bot (e_newyear)</div>
-  <div class="fs-block" data-block="reflinks" data-event="novogodnyaya-misteriya"></div>
-
-  <p class="demo-label"><a href="#popup:myform" id="tilda-btn">тильдовская кнопка #popup:myform</a></p>
-
+  <!-- soundmystery.ru/newyear_fe: партнёрской страницы больше нет (23.10.2026).
+       Блок redirect уводит на общий лендинг с той же строкой запроса (?ref=…, utm).
+       На Тильде: data-to="/newyear"; здесь – путь демо на GitHub Pages. -->
+  <div class="fs-block" data-block="redirect" data-to="/fest-sun-blocks/newyear.html"></div>
   <script src="fs.js"></script>
 </body>
 </html>

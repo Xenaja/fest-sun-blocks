@@ -1,7 +1,7 @@
 /* fest-sun-blocks · fs.js
    Встраиваемые блоки для лендингов событий ретрит-центра «Энергия Солнца».
    На странице Тильды (блок T123):
-     <div class="fs-block" data-block="prices" data-event="energiya-solntsa" data-audience="new"></div>
+     <div class="fs-block" data-block="prices" data-event="energiya-solntsa"></div>
      <script src="https://xenaja.github.io/fest-sun-blocks/fs.js"></script>
    Скрипт подключается один раз и рендерит все .fs-block на странице.
    Тексты и цены – только в JSON/MD репозитория, код блоков их не содержит. */
@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.22-23';
+  var VERSION = '2026.10.23-1';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -106,9 +106,12 @@
   var LIST_LINE = /^\s*([-*]|\d+[.)])\s+/;
   var STRUCT = /^(cards|cards-2|center|features|steps|buttons|bar)$/;
 
-  // ::: partner / ::: new – только для своей аудитории (абзацы выделяются карточкой,
-  // одиночные пункты списка просто продолжают список); ::: cards – сетка карточек
-  function fences(src, aud) {
+  // Страница одна на событие – для новичков (с 23.10.2026, data-audience больше нет).
+  // ::: new – показываем (абзацы выделяются карточкой, одиночные пункты списка
+  // просто продолжают список); ::: partner и любые другие – на сайте не показываем:
+  // этот текст читает бот в разделе партнёра. ::: cards – сетка карточек.
+  var SITE_FENCE = 'new';
+  function fences(src) {
     var root = [], stack = [];
     function target() {
       for (var i = stack.length - 1; i >= 0; i--) if (stack[i].buf) return stack[i].buf;
@@ -132,7 +135,7 @@
           if (!hidden) target().push('\u0000' + kind);
           stack.push({ kind: kind, hide: false });
         } else {
-          var hide = hidden || aud !== kind;
+          var hide = hidden || kind !== SITE_FENCE;
           stack.push({ kind: kind, hide: hide, buf: hide ? null : [] });
         }
         return;
@@ -224,30 +227,74 @@
     return html;
   }
 
-  function md(src, aud) { return '<div class="fs-md">' + blocks(fences(src || '', aud)) + '</div>'; }
+  function md(src) { return '<div class="fs-md">' + blocks(fences(src || '')) + '</div>'; }
 
   // ------------------------------------------------------------ бот и ref
 
+  // Код партнёра из ?ref= хранится 30 дней (аудит, п. 8). Новый ?ref заменяет
+  // сохранённый – кого закрепить, решает бот по своим правилам. Из адресной
+  // строки ?ref не убираем: партнёр копирует адрес и пересылает его с кодом.
+  var REF_KEY = 'fs_ref2', REF_DAYS = 30;
   function getRef() {
     var ref = null;
     try {
       var m = location.search.match(/[?&]ref=([^&#]*)/);
-      if (m) ref = decodeURIComponent(m[1]).replace(/[^A-Za-z0-9_-]/g, '').slice(0, 50) || null;
+      if (m) ref = decodeURIComponent(m[1]).replace(/[^A-Za-z0-9_-]/g, '').slice(0, 32) || null;
     } catch (e) { /* битый параметр – игнорируем */ }
     try {
-      if (ref) localStorage.setItem('fs_ref', ref);
-      else ref = localStorage.getItem('fs_ref');
+      if (ref) {
+        localStorage.setItem(REF_KEY, JSON.stringify({ v: ref, t: Date.now() }));
+      } else {
+        var saved = JSON.parse(localStorage.getItem(REF_KEY) || 'null');
+        if (saved && Date.now() - saved.t < REF_DAYS * 864e5) ref = saved.v;
+        else localStorage.removeItem(REF_KEY);
+      }
+      localStorage.removeItem('fs_ref'); // старый формат – без срока
     } catch (e) { /* хранилище недоступно */ }
     return ref;
   }
 
-  // t.me/<бот>?start=e_fest  или  e_fest__s_<ref> (формат бота sun-reg-bot)
+  // t.me/<бот>?start=e_fest__s_site[__r_<код>] (формат бота sun-reg-bot).
+  // Метка site – человек пришёл с лендинга; tag (bot:master) дописывается к ней.
   function botLink(ev, tag) {
     if (!ev.bot || !ev.bot.telegram) return null;
     var start = ev.bot.start || '';
-    var source = [tag, getRef()].filter(Boolean).join('-');
-    if (source && start) start = (start + '__s_' + source).slice(0, 64);
+    if (start) {
+      var ref = getRef();
+      var label = [tag, 'site'].filter(Boolean).join('-');
+      var tail = ref ? '__r_' + ref : '';
+      start = (start + '__s_' + label).slice(0, 64 - tail.length) + tail;
+    }
     return ev.bot.telegram + (start ? '?start=' + encodeURIComponent(start) : '');
+  }
+
+  // Ссылки между нашими сайтами получают ?ref=, если код сохранён: человек
+  // с fest-sun.ru переходит на soundmystery.ru и остаётся за тем же партнёром.
+  var OWN_SITES = /^https?:\/\/(www\.)?(fest-sun\.ru|soundmystery\.ru)(\/|$|\?|#)/i;
+  function decorateSiteLinks() {
+    var ref = getRef();
+    if (!ref) return;
+    var links = document.querySelectorAll('a[href]');
+    for (var i = 0; i < links.length; i++) {
+      var a = links[i], h = a.getAttribute('href');
+      if (!OWN_SITES.test(h) || /[?&]ref=/.test(h)) continue;
+      var hash = h.indexOf('#') >= 0 ? h.slice(h.indexOf('#')) : '';
+      var base = hash ? h.slice(0, h.indexOf('#')) : h;
+      a.setAttribute('href', base + (base.indexOf('?') >= 0 ? '&' : '?') + 'ref=' + encodeURIComponent(ref) + hash);
+    }
+  }
+
+  // Тильда дорисовывает блоки позже – следим за страницей, пересчитываем ссылки
+  var watchers = [];
+  function watch(fn) {
+    watchers.push(fn);
+    fn();
+    if (watchers.length > 1 || !window.MutationObserver || !document.body) return;
+    var timer = null;
+    new MutationObserver(function () {
+      clearTimeout(timer);
+      timer = setTimeout(function () { watchers.forEach(function (f) { f(); }); }, 100);
+    }).observe(document.body, { childList: true, subtree: true });
   }
 
   function isFormLink(h) {
@@ -270,16 +317,8 @@
   function startReflinks(url) {
     var first = !reflinkUrl;
     reflinkUrl = url;
-    rewriteLinks();
-    if (!first) return;
-    // Тильда дорисовывает блоки позже – следим за страницей
-    var timer = null;
-    if (window.MutationObserver) {
-      new MutationObserver(function () {
-        clearTimeout(timer);
-        timer = setTimeout(rewriteLinks, 100);
-      }).observe(document.body, { childList: true, subtree: true });
-    }
+    if (!first) return rewriteLinks();
+    watch(rewriteLinks);
     // Подстраховка: если ссылку не успели заменить, перехватываем клик
     document.addEventListener('click', function (e) {
       var a = e.target.closest && e.target.closest('a[href]');
@@ -333,9 +372,9 @@
     var name = (c.el.getAttribute('data-name') || 'about').replace(/[^a-z0-9_-]/gi, '');
     return loadContent(c.ev, 'content/' + name + '.md').then(function (src) {
       var meta = frontMatter(src);
-      var html = md(meta.body, c.aud);
+      var html = md(meta.body);
       if (html === '<div class="fs-md"></div>') {
-        // Весь текст – для другой аудитории: блок просто не показываем
+        // Весь текст – для партнёров (его показывает бот): блок просто не показываем
         return { html: '', after: function (el) { el.style.display = 'none'; } };
       }
       if (meta.layout === 'split') return section(splitLayout(html), 'fs-text fs-text--split');
@@ -371,9 +410,9 @@
     return '<div class="fs-md fs-split"><div class="fs-split__left">' + left + '</div><div class="fs-split__right">' + right + '</div></div>';
   }
 
-  function faqItems(src, aud) {
+  function faqItems(src) {
     if (!src) return [];
-    var lines = fences(src, aud), items = [], cur = null;
+    var lines = fences(src), items = [], cur = null;
     lines.forEach(function (l) {
       var m = l.match(/^##\s+(.+)$/);
       if (m) { cur = { q: m[1], a: [] }; items.push(cur); } else if (cur) cur.a.push(l);
@@ -386,7 +425,7 @@
       opt(load(c.ev._dir + 'content/faq.md', 'text')),
       opt(load('shared/content/faq-common.md', 'text'))
     ]).then(function (r) {
-      var items = faqItems(r[0], c.aud).concat(faqItems(r[1], c.aud));
+      var items = faqItems(r[0]).concat(faqItems(r[1]));
       if (!items.length) throw new Error('нет вопросов');
       return section(
         title(c.el.getAttribute('data-title') || 'Вопросы и ответы') +
@@ -402,7 +441,9 @@
     if (!fee || !fee.waves) throw new Error('нет fee в event.json');
     var cur = fee.current_wave || 1;
     var labels = fee.labels || {};
-    var auds = c.aud ? [c.aud] : ['partner', 'new'];
+    // Обе колонки рядом: «Участие» первой, партнёрская – второй (и на телефоне ниже)
+    var auds = ['new', 'partner'];
+    var notes = { new: fee.new_note, partner: fee.partner_note };
     // Без бота кнопка ведёт на fee.link (например, #popup:myform – попап Тильды)
     var link = botLink(c.ev) || fee.link || '#';
 
@@ -416,7 +457,7 @@
         return '<li class="fs-wave' + state + '"><span class="fs-wave__label">' + esc(w.label) +
           (n === cur ? ' <span class="fs-now">сейчас</span>' : '') + '</span>' + sum + '</li>';
       }).join('');
-      var note = aud === 'new' && fee.new_note ? '<p class="fs-plan__note">' + inline(fee.new_note) + '</p>' : '';
+      var note = notes[aud] ? '<p class="fs-plan__note">' + inline(notes[aud]) + '</p>' : '';
       return '<div class="fs-plan' + (aud === 'partner' ? ' fs-plan--accent' : '') + '">' +
         '<h3 class="fs-plan__who">' + esc(labels[aud] || aud) + '</h3>' +
         '<ul class="fs-waves">' + rows + '</ul>' + note + '</div>';
@@ -626,8 +667,9 @@
       all.forEach(function (m) { byId[m.id] = m; });
       return (ids || []).map(function (e) {
         var id = typeof e === 'string' ? e : e.id;
+        // audience: "partner" – мастер только для партнёров: на общем лендинге не показываем
         var audience = (typeof e === 'object' && e.audience) || 'all';
-        if (audience !== 'all' && c.aud && audience !== c.aud) return null;
+        if (audience === 'partner') return null;
         return byId[id] ? noStub(byId[id]) : null;
       }).filter(Boolean);
     });
@@ -672,7 +714,7 @@
       var src = r[0].replace(/^\s*##\s+.+\n/, '');
       if (STUB.test(src)) throw new Error('заглушка');
       if (r[1]) src += '\n\n' + r[1];
-      modal.querySelector('.fs-modal__text').innerHTML = md(src, c.aud);
+      modal.querySelector('.fs-modal__text').innerHTML = md(src);
     }, function () {
       modal.querySelector('.fs-modal__text').innerHTML = m.short ? '<div class="fs-md"><p>' + inline(m.short) + '</p></div>' : '';
     });
@@ -740,6 +782,29 @@
     return '';
   };
 
+  // Внизу лендинга: «Вы партнёр Full Energy?» – одна-две строки и кнопка в раздел
+  // партнёра в боте. Текст – content/partner-cta.md события (или shared/).
+  BLOCKS['partner-cta'] = function (c) {
+    if (!c.ev.bot || !c.ev.bot.telegram) throw new Error('нет bot в event.json');
+    return loadContent(c.ev, 'content/partner-cta.md').then(function (src) {
+      var meta = frontMatter(src);
+      var url = c.ev.bot.telegram + '?start=partner__s_site';
+      return section(md(meta.body) +
+        '<div class="fs-buttons"><a class="fs-btn" href="' + esc(url) + '" target="_blank" rel="noopener">' +
+        esc(meta.button || 'Получить личную ссылку') + '</a></div>', 'fs-partner-cta');
+    });
+  };
+
+  // Старая страница → новая с той же строкой запроса (?ref=…, utm):
+  // <div class="fs-block" data-block="redirect" data-to="/newyear"></div>
+  function redirect(el) {
+    var to = el.getAttribute('data-to') || '/';
+    if (!/^\/[^\/]|^\/$/.test(to)) return fail(el, new Error('data-to – путь на этом сайте, например /newyear'));
+    var path = to.split('?')[0].split('#')[0];
+    if (path === location.pathname) return;
+    location.replace(path + location.search + location.hash);
+  }
+
   // ------------------------------------------------------------ рендер
 
   function fail(el, err) {
@@ -751,9 +816,10 @@
   function render(el) {
     el.setAttribute('data-fs-done', '1');
     var type = el.getAttribute('data-block');
+    if (type === 'redirect') return redirect(el);
     var evId = el.getAttribute('data-event');
     if (!BLOCKS[type]) return fail(el, new Error('неизвестный блок ' + type));
-    var ctx = { el: el, aud: el.getAttribute('data-audience') || null };
+    var ctx = { el: el };
 
     loadEvent(evId).then(function (ev) {
       ctx.ev = ev;
@@ -779,6 +845,7 @@
     injectCSS();
     var list = document.querySelectorAll('.fs-block:not([data-fs-done])');
     for (var i = 0; i < list.length; i++) render(list[i]);
+    if (!scan.linksWatched && document.body) { scan.linksWatched = true; watch(decorateSiteLinks); }
   }
 
   // ------------------------------------------------------------ стили
@@ -844,6 +911,7 @@
       '.fs-center{text-align:center;max-width:760px;margin:0 auto}',
       '.fs-cards.fs-cards--2{grid-template-columns:repeat(2,minmax(0,1fr))}','.fs-md a.fs-btn{text-decoration:none}','.fs-features+.fs-center,.fs-steps+.fs-center{margin-top:26px}','.fs-center+.fs-features{margin-top:40px}',
       '.fs-buttons{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:18px;margin:30px auto 6px}',
+      '.fs-partner-cta .fs-md{text-align:center;max-width:720px;margin:0 auto}',
       '.fs-buttons p{display:contents}',
       '.fs-buttons .fs-btn~.fs-btn{background:transparent;color:inherit;border-color:var(--fs-btn-bg);box-shadow:none}',
       '.fs-buttons .fs-btn~.fs-btn:hover{background:var(--fs-btn-bg);color:var(--fs-btn-fg)}',

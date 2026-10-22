@@ -19,9 +19,8 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 
 | атрибут | что значит |
 |---|---|
-| `data-block` | какой блок: `text`, `faq`, `prices`, `rooms`, `specials`, `masters`, `alumni`, `reflinks` |
+| `data-block` | какой блок: `text`, `faq`, `prices`, `rooms`, `specials`, `masters`, `alumni`, `reflinks`, `partner-cta`, `redirect` |
 | `data-event` | событие: `energiya-solntsa`, `krug-masterov`, … (папка в `events/`) |
-| `data-audience` | `new` – страница для гостей, `partner` – для партнёров Full Energy |
 | `data-name` | только для `text`: какой файл показать (`about` → `content/about.md`) |
 | `data-variant` | фон секции: не указан – светлый, `soft` – молочный, `dark` – тёмный |
 | `data-title` | заменить заголовок блока, не трогая данные |
@@ -35,7 +34,9 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 <script src="https://xenaja.github.io/fest-sun-blocks/fs.js"></script>
 ```
 
-**reflinks** – ничего не рисует. Кнопки «Участвую» с ссылками `#popup:myform`, `vk.com/app6013442…` и `wa.me/…` начинают вести в бота @fest_sun_bot с меткой события. Если человек пришёл по ссылке с `?ref=XXX`, метка передаётся в бота (`e_fest__s_XXX`) и запоминается в браузере.
+**Одна страница на событие (с 23.10.2026).** Лендинг – для новичков; всё для партнёров (зачем и как приглашать, готовые сообщения, личная ссылка, «Клуб») – в боте. `data-audience` больше не нужен: если остался в старых сниппетах, скрипт его не читает. Партнёры пересылают ссылку на лендинг со своим кодом: `soundmystery.ru/newyear?ref=<код>`.
+
+**reflinks** – ничего не рисует. Кнопки «Участвую» с ссылками `#popup:myform`, `vk.com/app6013442…` и `wa.me/…` начинают вести в бота @fest_sun_bot: `e_fest__s_site` (метка `site` – пришёл с лендинга). Код партнёра из `?ref=XXX` уходит в бота отдельно: `e_fest__s_site__r_XXX`. Код хранится в браузере 30 дней, новый `?ref` заменяет старый; из адресной строки `?ref` не убирается – партнёр может скопировать адрес и переслать. Ссылки на fest-sun.ru и soundmystery.ru внутри страницы тоже получают `?ref=`.
 
 ```html
 <div class="fs-block" data-block="reflinks" data-event="energiya-solntsa"></div>
@@ -44,32 +45,41 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 **text** – текстовая секция из `content/<name>.md`:
 
 ```html
-<div class="fs-block" data-block="text" data-name="about" data-event="energiya-solntsa" data-audience="new"></div>
-<div class="fs-block" data-block="text" data-name="benefits" data-event="energiya-solntsa" data-audience="new" data-variant="soft"></div>
-<div class="fs-block" data-block="text" data-name="program" data-event="energiya-solntsa" data-audience="new"></div>
-<div class="fs-block" data-block="text" data-name="kids" data-event="energiya-solntsa" data-audience="new" data-variant="soft"></div>
-<div class="fs-block" data-block="text" data-name="business" data-event="energiya-solntsa" data-audience="new" data-variant="dark"></div>
-<div class="fs-block" data-block="text" data-name="food" data-event="energiya-solntsa" data-audience="new"></div>
+<div class="fs-block" data-block="text" data-name="about" data-event="energiya-solntsa"></div>
+<div class="fs-block" data-block="text" data-name="benefits" data-event="energiya-solntsa" data-variant="soft"></div>
+<div class="fs-block" data-block="text" data-name="program" data-event="energiya-solntsa"></div>
+<div class="fs-block" data-block="text" data-name="kids" data-event="energiya-solntsa" data-variant="soft"></div>
+<div class="fs-block" data-block="text" data-name="business" data-event="energiya-solntsa" data-variant="dark"></div>
+<div class="fs-block" data-block="text" data-name="food" data-event="energiya-solntsa"></div>
 ```
 
 Тексты `about`, `benefits`, `program`, `kids` (в `events/energiya-solntsa/content/`) и `food` (в `shared/content/`) – черновики заказчика, правятся только по его просьбе.
 
-**Сообщество** – один блок на всех лендингах, вариант выбирается по `data-audience` (`new` – «Сообщество, в которое вы попадаете», `partner` – «Клуб осознанных миллионеров-долгожителей»). Без `data-audience` блок пустой, поэтому ставить его всегда с аудиторией:
+**Сообщество** – один блок на всех лендингах: «Сообщество, в которое вы попадаете» (раздел `::: new` в `shared/content/community.md`). Раздел `::: partner` («Клуб осознанных миллионеров-долгожителей») на сайте не показывается – его читает бот в меню партнёра:
 
 ```html
-<div class="fs-block" data-block="text" data-name="community" data-event="novogodnyaya-misteriya" data-audience="new" data-variant="soft"></div>
+<div class="fs-block" data-block="text" data-name="community" data-event="novogodnyaya-misteriya" data-variant="soft"></div>
 ```
 
-**prices** – оргвзнос по волнам. Без `data-audience` показывает обе колонки:
+**prices** – оргвзнос по волнам, две колонки рядом: «Участие» и «Для партнёров Full Energy» (на телефоне – одна под другой, партнёрская второй). Подписи колонок – `fee.labels`, строки под ними – `fee.new_note` и `fee.partner_note` в `event.json`:
 
 ```html
-<div class="fs-block" data-block="prices" data-event="energiya-solntsa" data-audience="new" id="prices"></div>
+<div class="fs-block" data-block="prices" data-event="energiya-solntsa" id="prices"></div>
 ```
 
-**invite** – «Приглашайте на фестиваль новичков», только для партнёров. Ставится на странице партнёров сразу после prices; на странице гостей скрывается сам:
+**invite** – «Приглашайте новичков»: на сайт больше не ставится, файл `content/invite.md` читает бот (раздел партнёра). Если блок остался на странице, он скрывается сам – весь текст внутри `::: partner`.
+
+**partner-cta** – внизу лендинга, перед контактами: «Вы партнёр Full Energy?» и кнопка «Получить личную ссылку» → `t.me/fest_sun_bot?start=partner__s_site`. Текст – `content/partner-cta.md` события (или общий `shared/content/partner-cta.md`), подпись кнопки – `button:` в начале файла:
 
 ```html
-<div class="fs-block" data-block="text" data-name="invite" data-event="energiya-solntsa" data-audience="partner"></div>
+<div class="fs-block" data-block="partner-cta" data-event="novogodnyaya-misteriya" data-variant="soft"></div>
+```
+
+**redirect** – для старых партнёрских страниц (`soundmystery.ru/newyear_fe`, `fest-sun.ru/fe`): сразу уводит на общий лендинг, сохраняя всю строку запроса (`?ref=…`, utm). `data-to` – путь на том же сайте. В настройках страницы – запрет индексации. Демо: `newyear-fe.html`.
+
+```html
+<div class="fs-block" data-block="redirect" data-to="/newyear"></div>
+<script src="https://xenaja.github.io/fest-sun-blocks/fs.js"></script>
 ```
 
 **Кнопка меню «Участвую» → к стоимости.** В настройках меню Тильды поставьте кнопке ссылку `#prices` (у блока prices в сниппете есть `id="prices"`). Скрипт плавно прокрутит к блоку с отступом под закреплённое меню (80 px; меняется переменной темы `--fs-anchor-offset`). Ссылки `#prices` reflinks не трогает.
@@ -77,29 +87,29 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 **rooms** – проживание с питанием, переключатель длительностей, галереи номеров:
 
 ```html
-<div class="fs-block" data-block="rooms" data-event="energiya-solntsa" data-audience="new"></div>
+<div class="fs-block" data-block="rooms" data-event="energiya-solntsa"></div>
 ```
 
 **specials** – цены спецпрограмм по волнам:
 
 ```html
-<div class="fs-block" data-block="specials" data-event="energiya-solntsa" data-audience="new"></div>
+<div class="fs-block" data-block="specials" data-event="energiya-solntsa"></div>
 ```
 
 **masters** – карточки мастеров, «Подробнее» открывает полный текст. **alumni** – лента «У нас уже выступали»:
 
 ```html
-<div class="fs-block" data-block="masters" data-event="energiya-solntsa" data-audience="new"></div>
-<div class="fs-block" data-block="alumni" data-event="energiya-solntsa" data-audience="new"></div>
+<div class="fs-block" data-block="masters" data-event="energiya-solntsa"></div>
+<div class="fs-block" data-block="alumni" data-event="energiya-solntsa"></div>
 ```
 
 **faq** – вопросы события, затем общие:
 
 ```html
-<div class="fs-block" data-block="faq" data-event="energiya-solntsa" data-audience="new"></div>
+<div class="fs-block" data-block="faq" data-event="energiya-solntsa"></div>
 ```
 
-На странице для партнёров во всех сниппетах `data-audience="partner"`. Для «Круга мастеров» – `data-event="krug-masterov"`.
+Для «Круга мастеров» – `data-event="krug-masterov"`.
 
 ### Сниппеты для «Круга мастеров» (fest-sun.ru/retreatmaster)
 
@@ -125,7 +135,7 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 
 ### Сниппеты для «Новогодней Мистерии» (soundmystery.ru/newyear)
 
-Демо: **https://xenaja.github.io/fest-sun-blocks/newyear.html**. Тема `soundmystery` – цвета и кнопки сайта soundmystery.ru. Основа страницы остаётся в Тильде (первый экран, мастера, стоимость, проживание, галереи, отзывы, контакты), блоки на коде заменяют текстовые секции. `intro` – статус-бар сразу под первым экраном: заголовок и пункты через точки (разметка `::: bar`). Заявки – в бота @fest_sun_bot (`e_newyear`): на обеих страницах (newyear и newyear_fe) ставится невидимый блок reflinks, он переводит все кнопки `#popup:myform` (и тильдовские, и в блоках) в бота, метку партнёра `?ref=` передаёт как `e_newyear__s_<ref>`:
+Демо: **https://xenaja.github.io/fest-sun-blocks/newyear.html**. Тема `soundmystery` – цвета и кнопки сайта soundmystery.ru. Основа страницы остаётся в Тильде (первый экран, мастера, стоимость, проживание, галереи, отзывы, контакты), блоки на коде заменяют текстовые секции. `intro` – статус-бар сразу под первым экраном: заголовок и пункты через точки (разметка `::: bar`). Заявки – в бота @fest_sun_bot (`e_newyear`): невидимый блок reflinks переводит все кнопки `#popup:myform` (и тильдовские, и в блоках) в бота, код партнёра `?ref=` передаёт как `e_newyear__s_site__r_<код>`:
 
 ```html
 <div class="fs-block" data-block="reflinks" data-event="novogodnyaya-misteriya"></div>
@@ -142,19 +152,19 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 
 `id="about"`, `id="master"` и `id="prog"` – якоря пунктов меню сайта «О мистерии», «Ведущие» и «Программа». Мастера: TEYA, Павитра, Захаревич, Ноллендорф (`event.json` → `masters`).
 
-**Стоимость** – блок prices вместо тильдовского «Стоимость» (тот блок в Тильде скрыть). Оргвзнос по волнам (по 33 места), рядом карточка «Также оплачивается» (`fee.extras`: фуршет, проживание и питание). Кнопка «Участвую» – на `fee.link` (`#popup:myform`), пока у события нет бота:
+**Стоимость** – блок prices вместо тильдовского «Стоимость» (тот блок в Тильде скрыть). Оргвзнос по волнам (по 33 места) в двух колонках – «Участие» и «Для партнёров Full Energy», рядом карточка «Также оплачивается» (`fee.extras`: фуршет, проживание и питание). Кнопка «Участвую» ведёт в бота:
 
 ```html
-<div class="fs-block" data-block="prices" data-event="novogodnyaya-misteriya" data-audience="new" id="prices"></div>
+<div class="fs-block" data-block="prices" data-event="novogodnyaya-misteriya" id="prices"></div>
 ```
 
-На странице партнёров – `data-audience="partner"`.
-
-**Страница для партнёров** – soundmystery.ru/newyear_fe (демо `newyear-fe.html`): те же блоки, что у новичков, плюс «Приглашайте на Мистерию новичков» после программы (или после стоимости). Шаги ведут новичков на страницу soundmystery.ru/newyear:
+**Внизу страницы, перед контактами** – partner-cta:
 
 ```html
-<div class="fs-block" data-block="text" data-name="invite" data-event="novogodnyaya-misteriya" data-audience="partner"></div>
+<div class="fs-block" data-block="partner-cta" data-event="novogodnyaya-misteriya" data-variant="soft"></div>
 ```
+
+**soundmystery.ru/newyear_fe** – партнёрской страницы больше нет: на ней только блок `redirect` с `data-to="/newyear"` (демо `newyear-fe.html`).
 
 Заглушки («Заглушка: …») в `masters.json` и `content/masters/*.md` на сайт не выводятся: у мастера без описания – фото и имя, без «Подробнее». Расписание по часам пока скрыто: в Тильде скрыт старый блок программы (на одну ночь).
 
@@ -170,7 +180,8 @@ shared/                        – общее для всех событий
   content/masters/<id>.md      – полные тексты мастеров
   content/faq-common.md        – общие вопросы
   content/food.md, route.md    – питание, как добраться (через блок text)
-  content/community.md         – «Сообщество» для всех лендингов: ::: new – новичкам, ::: partner – партнёрам
+  content/community.md         – «Сообщество» для всех лендингов: ::: new – на сайте, ::: partner («Клуб») – читает бот
+  content/partner-cta.md       – «Вы партнёр Full Energy?» внизу лендинга (если у события нет своего)
   img/                         – фото мастеров и номеров
 events/<event-id>/
   event.json                   – даты, тема, длительности, оргвзнос и волны, спецпрограммы,
@@ -198,7 +209,7 @@ events/<event-id>/
 > цитата
 
 ::: partner
-Это видят только партнёры (data-audience="partner").
+Этого нет на сайте: текст для партнёров читает бот.
 :::
 
 ::: new
@@ -221,7 +232,7 @@ layout: split
 ---
 ```
 
-Так оформлен `about.md`. Первый абзац после заголовка всегда становится вводным; абзацы внутри `::: new` / `::: partner` выделяются отдельно.
+Так оформлен `about.md`. Первый абзац после заголовка всегда становится вводным; абзацы внутри `::: new` выделяются отдельно; `::: partner` на сайте не показывается.
 
 Оформление блока на плашке – `layout: plate` в начале файла (как в `invite.md`). Внутри можно сделать карточки-преимущества и шаги:
 
@@ -267,7 +278,7 @@ layout: split
 
 Тире в текстах – только среднее (–). Числа в ценах форматируются сами: `10000` в JSON → «10 000 ₽».
 
-**Цену оргвзноса.** `events/<id>/event.json` → `fee.waves`: у каждой волны `partner` и `new`. `0` показывается как «В подарок».
+**Цену оргвзноса.** `events/<id>/event.json` → `fee.waves`: у каждой волны `partner` и `new`. `0` показывается как «В подарок». Подписи колонок – `fee.labels` (`new` – «Участие», `partner` – «Для партнёров Full Energy»), строки под колонками – `fee.new_note` и `fee.partner_note`.
 
 **Текущую волну.** `fee.current_wave`: `1`, `2` или `3`. Прошедшие волны зачёркиваются, текущая отмечается «сейчас» – и в стоимости, и в спецпрограммах.
 
@@ -279,7 +290,7 @@ layout: split
 
 **Длительности.** `event.json` → `durations`, например `[7, 10]` или `[7]`.
 
-**Мастера.** Новый мастер – запись в `shared/masters.json` (+ фото в `shared/img/masters/` и текст `shared/content/masters/<id>.md`), затем его `id` в `masters` нужного `event.json`. Чтобы показать мастера только на одной странице: `{ "id": "valeeva", "audience": "partner" }`. `pos` и `zoom` – кадрирование фото в кружке (в окне «Подробнее» фото целиком). Что мастер ведёт на конкретном событии – `events/<id>/content/masters/<мастер>.md`: дописывается в конец окна «Подробнее» только на этом событии.
+**Мастера.** Новый мастер – запись в `shared/masters.json` (+ фото в `shared/img/masters/` и текст `shared/content/masters/<id>.md`), затем его `id` в `masters` нужного `event.json`. Чтобы мастер не показывался на лендинге: `{ "id": "valeeva", "audience": "partner" }`. `pos` и `zoom` – кадрирование фото в кружке (в окне «Подробнее» фото целиком). Что мастер ведёт на конкретном событии – `events/<id>/content/masters/<мастер>.md`: дописывается в конец окна «Подробнее» только на этом событии.
 
 **Спецпрограммы.** Список – `shared/specials.json`, какие и по какой цене у события – `event.json` → `specials.items` и `specials.prices` (по волнам). Особая цена у одной программы: `{ "id": "banya", "prices": [3000, 4000, 5000] }`.
 
