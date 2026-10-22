@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.22-15';
+  var VERSION = '2026.10.22-16';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -805,7 +805,7 @@
       '.fs-callout>:last-child{margin-bottom:0}',
       '.fs-callout .fs-h3,.fs-callout .fs-title{color:var(--fs-card-title);margin-top:0}',
       '.fs-center{text-align:center;max-width:760px;margin:0 auto}',
-      '.fs-cards.fs-cards--2{grid-template-columns:repeat(2,minmax(0,1fr))}','.fs-md a.fs-btn{text-decoration:none}','.fs-features+.fs-center,.fs-steps+.fs-center{margin-top:26px}',
+      '.fs-cards.fs-cards--2{grid-template-columns:repeat(2,minmax(0,1fr))}','.fs-md a.fs-btn{text-decoration:none}','.fs-features+.fs-center,.fs-steps+.fs-center{margin-top:26px}','.fs-center+.fs-features{margin-top:40px}',
       '.fs-buttons{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:18px;margin:30px auto 6px}',
       '.fs-buttons p{display:contents}',
       '.fs-buttons .fs-btn~.fs-btn{background:transparent;color:inherit;border-color:var(--fs-btn-bg);box-shadow:none}',
