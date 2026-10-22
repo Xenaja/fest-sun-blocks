@@ -138,6 +138,12 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 
 `id="about"`, `id="master"` и `id="prog"` – якоря пунктов меню сайта «О мистерии», «Ведущие» и «Программа». Мастера: TEYA, Павитра, Захаревич, Ноллендорф (`event.json` → `masters`).
 
+**Страница для партнёров** – soundmystery.ru/newyear_fe (демо `newyear-fe.html`): те же блоки, что у новичков, плюс «Приглашайте на Мистерию новичков» после программы (или после стоимости). Шаги ведут новичков на страницу soundmystery.ru/newyear:
+
+```html
+<div class="fs-block" data-block="text" data-name="invite" data-event="novogodnyaya-misteriya" data-audience="partner"></div>
+```
+
 Заглушки («Заглушка: …») в `masters.json` и `content/masters/*.md` на сайт не выводятся: у мастера без описания – фото и имя, без «Подробнее». Расписание по часам пока скрыто: в Тильде скрыт старый блок программы (на одну ночь).
 
 ## Как устроены данные

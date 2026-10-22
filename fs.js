@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.22-10';
+  var VERSION = '2026.10.22-12';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -838,7 +838,7 @@
       '.fs-features>.fs-list>li::before{display:none}',
       '.fs-features>.fs-list>li:last-child:nth-child(odd){grid-column:1/-1}',
       '.fs-features>.fs-list>li>strong:first-child{display:block;font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:var(--fs-feature-title-size,21px);line-height:1.3;letter-spacing:var(--fs-feature-title-spacing,0);text-transform:var(--fs-feature-title-case,none);color:var(--fs-title);margin-bottom:8px}',
-      '.fs-steps>ol.fs-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;max-width:none;margin:0;counter-reset:fs}',
+      '.fs-steps>ol.fs-list{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:28px;max-width:none;margin:0;counter-reset:fs}',
       '.fs-steps>ol.fs-list>li{margin:0;padding:64px 0 0;font-size:16px;line-height:1.6;position:relative}',
       '.fs-steps>ol.fs-list>li::before{content:counter(fs);top:0;left:0;width:46px;height:46px;border-radius:50%;background:var(--fs-card-bg);color:var(--fs-highlight);display:flex;align-items:center;justify-content:center;font-family:var(--fs-font-head);font-size:22px;font-weight:700}',
       '.fs-steps>ol.fs-list>li::after{content:"";position:absolute;top:23px;left:58px;right:-16px;height:1px;background:var(--fs-line)}',
@@ -1010,7 +1010,7 @@
         '.fs-bar>.fs-list>li+li::before{display:none}',
         '.fs-features>.fs-list{grid-template-columns:minmax(0,1fr);gap:12px}',
         '.fs-features>.fs-list>li{padding:20px 18px}',
-        '.fs-steps>ol.fs-list{grid-template-columns:minmax(0,1fr);gap:18px}',
+        '.fs-steps>ol.fs-list{grid-auto-flow:row;grid-template-columns:minmax(0,1fr);gap:18px}',
         '.fs-steps>ol.fs-list>li{padding:8px 0 0 62px;min-height:46px}',
         '.fs-steps>ol.fs-list>li::after{display:none}',
         '.fs-callout{padding:26px 20px;font-size:16px}',
