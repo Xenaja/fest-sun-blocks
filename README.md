@@ -138,6 +138,14 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 
 `id="about"`, `id="master"` и `id="prog"` – якоря пунктов меню сайта «О мистерии», «Ведущие» и «Программа». Мастера: TEYA, Павитра, Захаревич, Ноллендорф (`event.json` → `masters`).
 
+**Стоимость** – блок prices вместо тильдовского «Стоимость» (тот блок в Тильде скрыть). Оргвзнос по волнам (по 33 места), рядом карточка «Также оплачивается» (`fee.extras`: фуршет, проживание и питание). Кнопка «Участвую» – на `fee.link` (`#popup:myform`), пока у события нет бота:
+
+```html
+<div class="fs-block" data-block="prices" data-event="novogodnyaya-misteriya" data-audience="new" id="prices"></div>
+```
+
+На странице партнёров – `data-audience="partner"`.
+
 **Страница для партнёров** – soundmystery.ru/newyear_fe (демо `newyear-fe.html`): те же блоки, что у новичков, плюс «Приглашайте на Мистерию новичков» после программы (или после стоимости). Шаги ведут новичков на страницу soundmystery.ru/newyear:
 
 ```html

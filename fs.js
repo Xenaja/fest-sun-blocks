@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.22-16';
+  var VERSION = '2026.10.22-18';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -403,7 +403,8 @@
     var cur = fee.current_wave || 1;
     var labels = fee.labels || {};
     var auds = c.aud ? [c.aud] : ['partner', 'new'];
-    var link = botLink(c.ev) || '#';
+    // Без бота кнопка ведёт на fee.link (например, #popup:myform – попап Тильды)
+    var link = botLink(c.ev) || fee.link || '#';
 
     var plans = auds.map(function (aud) {
       var rows = fee.waves.map(function (w, i) {
@@ -421,13 +422,27 @@
         '<ul class="fs-waves">' + rows + '</ul>' + note + '</div>';
     }).join('');
 
+    // fee.extras – что оплачивается кроме оргвзноса (фуршет, проживание): отдельная карточка рядом
+    var ex = fee.extras;
+    if (ex && ex.items) {
+      plans += '<div class="fs-plan">' + (ex.title ? '<h3 class="fs-plan__who">' + esc(ex.title) + '</h3>' : '') +
+        '<ul class="fs-waves">' + ex.items.map(function (it) {
+          // price – число (сумма справа) или текст (пояснение мелко под названием)
+          var num = typeof it.price === 'number';
+          return '<li class="fs-wave"><span class="fs-wave__label">' + inline(it.label) +
+            (!num && it.price ? '<span class="fs-wave__sub">' + inline(it.price) + '</span>' : '') + '</span>' +
+            (num ? '<span class="fs-sum">' + money(it.price) + '</span>' : '') + '</li>';
+        }).join('') + '</ul>' + (ex.note ? '<p class="fs-plan__note">' + inline(ex.note) + '</p>' : '') + '</div>';
+    }
+    var count = auds.length + (ex && ex.items ? 1 : 0);
+
     return section(
       title(fee.title || 'Стоимость') + lead(fee.lead) +
       (fee.gift ? '<p class="fs-gift">' + inline(fee.gift) + '</p>' : '') +
-      '<div class="fs-plans fs-plans--' + auds.length + '">' + plans + '</div>' +
+      '<div class="fs-plans fs-plans--' + count + '">' + plans + '</div>' +
       '<div class="fs-after">' +
         (fee.installment ? '<p class="fs-after__note">' + inline(fee.installment) + '</p>' : '') +
-        '<a class="fs-btn" href="' + esc(link) + '" target="_blank" rel="noopener">' + esc(fee.button || 'Участвую') + '</a>' +
+        '<a class="fs-btn" href="' + esc(link) + '"' + (/^https?:/.test(link) ? ' target="_blank" rel="noopener"' : '') + '>' + esc(fee.button || 'Участвую') + '</a>' +
       '</div>', 'fs-prices');
   };
 
@@ -880,6 +895,8 @@
       '.fs-gift{display:table;margin:0 auto 28px;padding:12px 24px;border-radius:var(--fs-btn-radius);background:var(--fs-highlight);color:var(--fs-highlight-fg);font-weight:600;text-align:center;line-height:1.4}',
       '.fs-plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}',
       '.fs-plans--1{grid-template-columns:minmax(0,1fr);max-width:540px;margin:0 auto}',
+      '.fs-plans--3{grid-template-columns:repeat(3,minmax(0,1fr))}',
+      '.fs-wave__sub{display:block;margin-top:4px;font-size:14px;font-weight:400;opacity:.75}',
       '.fs-plan{position:relative;min-width:0;padding:36px 32px 26px;border:1.5px solid var(--fs-accent);border-radius:var(--fs-radius);box-shadow:var(--fs-shadow);background:var(--fs-bg)}',
       '.fs-plan--accent{background:var(--fs-card-bg);color:var(--fs-card-fg);border-color:var(--fs-card-bg)}',
       '.fs-plan__who{font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:24px;line-height:1.2;color:var(--fs-title);margin:0 0 18px}',
