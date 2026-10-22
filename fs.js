@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.23-5';
+  var VERSION = '2026.10.23-7';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -89,8 +89,13 @@
 
   // ------------------------------------------------------------ мини-markdown
 
+  // Папка события для картинок в md: ![подпись](img/icon.webp) – путь от папки события
+  var mdDir = '';
   function inline(s) {
     return esc(s)
+      .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, function (_, alt, u) {
+        return '<img class="fs-img" src="' + asset(mdDir, u) + '" alt="' + alt + '" loading="lazy">';
+      })
       .replace(/\[\[([^\]]+)\]\]\(([^)\s]+)\)/g, function (_, t, u) {
         return '<a class="fs-btn" href="#" data-fs-link="' + u + '">' + t + '</a>';
       })
@@ -104,14 +109,16 @@
   var CARDS_OPEN = '\u0000cards', CARDS_CLOSE = '\u0000/cards';
   var CALLOUT_OPEN = '\u0000callout', CALLOUT_CLOSE = '\u0000/callout';
   var LIST_LINE = /^\s*([-*]|\d+[.)])\s+/;
-  var STRUCT = /^(cards|cards-2|center|features|steps|buttons|bar)$/;
+  var STRUCT = /^(cards|cards-2|center|features|steps|buttons|bar|icons)$/;
 
   // Страница одна на событие – для новичков (с 23.10.2026, data-audience больше нет).
   // ::: new – показываем (абзацы выделяются карточкой, одиночные пункты списка
   // просто продолжают список); ::: partner и любые другие – на сайте не показываем:
   // этот текст читает бот в разделе партнёра. ::: cards – сетка карточек.
   var SITE_FENCE = 'new';
-  function fences(src) {
+  // show – какие куски ::: показывать: на сайте 'new', на странице партнёров мини-лендинга – 'partner'
+  function fences(src, show) {
+    show = show || SITE_FENCE;
     var root = [], stack = [];
     function target() {
       for (var i = stack.length - 1; i >= 0; i--) if (stack[i].buf) return stack[i].buf;
@@ -135,7 +142,7 @@
           if (!hidden) target().push('\u0000' + kind);
           stack.push({ kind: kind, hide: false });
         } else {
-          var hide = hidden || kind !== SITE_FENCE;
+          var hide = hidden || kind !== show;
           stack.push({ kind: kind, hide: hide, buf: hide ? null : [] });
         }
         return;
@@ -181,7 +188,7 @@
 
     lines.forEach(function (line) {
       var m;
-      var mk = line.match(/^\u0000(cards|cards-2|callout|center|features|steps|buttons|bar)$/);
+      var mk = line.match(/^\u0000(cards|cards-2|callout|center|features|steps|buttons|bar|icons)$/);
       if (mk) {
         flush();
         out('<div class="' + (mk[1] === 'cards-2' ? 'fs-cards fs-cards--2' : 'fs-' + mk[1]) + '">');
@@ -189,7 +196,7 @@
         afterTitle = false;
         return;
       }
-      if (/^\u0000\/(cards|cards-2|callout|center|features|steps|buttons|bar)$/.test(line)) {
+      if (/^\u0000\/(cards|cards-2|callout|center|features|steps|buttons|bar|icons)$/.test(line)) {
         flush();
         if (/^\u0000\/cards/.test(line)) closeCard();
         out('</div>');
@@ -227,7 +234,7 @@
     return html;
   }
 
-  function md(src) { return '<div class="fs-md">' + blocks(fences(src || '')) + '</div>'; }
+  function md(src, show) { return '<div class="fs-md">' + blocks(fences(src || '', show)) + '</div>'; }
 
   // ------------------------------------------------------------ бот и ref
 
@@ -235,11 +242,14 @@
   // сохранённый – кого закрепить, решает бот по своим правилам. Из адресной
   // строки ?ref не убираем: партнёр копирует адрес и пересылает его с кодом.
   var REF_KEY = 'fs_ref2', REF_DAYS = 30;
+  // В Telegram Mini App код приходит в start_param (t.me/<бот>/<app>?startapp=<код>) – его ставит мини-лендинг
+  var appRef = null;
+  function cleanRef(v) { return (v || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 32) || null; }
   function getRef() {
-    var ref = null;
+    var ref = appRef;
     try {
       var m = location.search.match(/[?&]ref=([^&#]*)/);
-      if (m) ref = decodeURIComponent(m[1]).replace(/[^A-Za-z0-9_-]/g, '').slice(0, 32) || null;
+      if (!ref && m) ref = cleanRef(decodeURIComponent(m[1]));
     } catch (e) { /* битый параметр – игнорируем */ }
     try {
       if (ref) {
@@ -255,16 +265,21 @@
   }
 
   // t.me/<бот>?start=e_fest__s_site[__r_<код>] (формат бота sun-reg-bot).
-  // Метка site – человек пришёл с лендинга; tag (bot:master) дописывается к ней.
+  // Метка site – человек пришёл с лендинга (mini – с мини-лендинга); tag (bot:master) дописывается к ней.
+  var SOURCE = 'site';
+  function startParam(ev, tag) {
+    var start = ev.bot.start || '';
+    if (!start) return '';
+    var ref = getRef();
+    var label = [tag, SOURCE].filter(Boolean).join('-');
+    var tail = ref ? '__r_' + ref : '';
+    var full = start + '__s_' + label + tail;
+    // Лимит Telegram – 64 символа: сначала жертвуем меткой, код партнёра не режем
+    return full.length <= 64 ? full : start + tail;
+  }
   function botLink(ev, tag) {
     if (!ev.bot || !ev.bot.telegram) return null;
-    var start = ev.bot.start || '';
-    if (start) {
-      var ref = getRef();
-      var label = [tag, 'site'].filter(Boolean).join('-');
-      var tail = ref ? '__r_' + ref : '';
-      start = (start + '__s_' + label).slice(0, 64 - tail.length) + tail;
-    }
+    var start = startParam(ev, tag);
     return ev.bot.telegram + (start ? '?start=' + encodeURIComponent(start) : '');
   }
 
@@ -391,7 +406,9 @@
     var name = (c.el.getAttribute('data-name') || 'about').replace(/[^a-z0-9_-]/gi, '');
     return loadContent(c.ev, 'content/' + name + '.md').then(function (src) {
       var meta = frontMatter(src);
-      var html = md(meta.body);
+      mdDir = c.ev._dir;
+      var html = md(meta.body, c.show);
+      mdDir = '';
       if (html === '<div class="fs-md"></div>') {
         // Весь текст – для партнёров (его показывает бот): блок просто не показываем
         return { html: '', after: function (el) { el.style.display = 'none'; } };
@@ -461,7 +478,8 @@
     var cur = fee.current_wave || 1;
     var labels = fee.labels || {};
     // Обе колонки рядом: «Участие» первой, партнёрская – второй (и на телефоне ниже)
-    var auds = ['new', 'partner'];
+    // data-cols="partner" – только партнёрская колонка (страница партнёров мини-лендинга)
+    var auds = c.el.getAttribute('data-cols') === 'partner' ? ['partner'] : ['new', 'partner'];
     var notes = { new: fee.new_note, partner: fee.partner_note };
     // Без бота кнопка ведёт на fee.link (например, #popup:myform – попап Тильды)
     var link = botLink(c.ev) || fee.link || '#';
@@ -498,7 +516,7 @@
     }
 
     return section(
-      title(fee.title || 'Стоимость') + lead(fee.lead) +
+      title(c.el.getAttribute('data-title') || fee.title || 'Стоимость') + (auds.length > 1 ? lead(fee.lead) : '') +
       (fee.gift ? '<p class="fs-gift">' + inline(fee.gift) + '</p>' : '') +
       '<div class="fs-plans fs-plans--' + auds.length + '">' + plans + '</div>' + extras +
       '<div class="fs-after">' +
@@ -824,6 +842,200 @@
     location.replace(path + location.search + location.hash);
   }
 
+  // ------------------------------------------------------------ видео и галерея
+
+  // Видео: event.json → video { rutube | youtube | vk (адрес плеера), cover, title }.
+  // Сначала обложка с кнопкой, плеер грузится по нажатию – страница не тяжелеет.
+  function videoSrc(v) {
+    if (v.rutube) return 'https://rutube.ru/play/embed/' + encodeURIComponent(v.rutube) + '?autoplay=1';
+    if (v.youtube) return 'https://www.youtube.com/embed/' + encodeURIComponent(v.youtube) + '?autoplay=1&rel=0';
+    if (v.vk) return v.vk + (v.vk.indexOf('?') >= 0 ? '&' : '?') + 'autoplay=1';
+    return null;
+  }
+  function videoPage(v) {
+    if (v.rutube) return 'https://rutube.ru/video/' + encodeURIComponent(v.rutube) + '/';
+    if (v.youtube) return 'https://youtu.be/' + encodeURIComponent(v.youtube);
+    return v.link || null;
+  }
+  BLOCKS.video = function (c) {
+    var v = c.ev.video;
+    if (!v || !videoSrc(v)) throw new Error('нет video в event.json');
+    var cover = v.cover ? asset(c.ev._dir, v.cover) : '';
+    var page = videoPage(v);
+    return {
+      html: section(title(v.title) +
+        '<div class="fs-video"' + (cover ? ' style="background-image:url(\'' + esc(cover) + '\')"' : '') + '>' +
+          '<button type="button" class="fs-video__play" aria-label="Смотреть видео"></button></div>' +
+        (page ? '<p class="fs-video__alt"><a href="' + esc(page) + '" target="_blank" rel="noopener">Не загружается? Смотреть на сайте видео</a></p>' : ''),
+        'fs-video-section'),
+      after: function (el) {
+        var box = el.querySelector('.fs-video');
+        box.querySelector('.fs-video__play').addEventListener('click', function () {
+          box.innerHTML = '<iframe src="' + esc(videoSrc(v)) + '" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen title="' + esc(v.title || 'Видео') + '"></iframe>';
+        });
+      }
+    };
+  };
+
+  // Галерея: event.json → galleries.<data-name> { title, caption, photos: ["img/a.webp", …] или [{ src, alt }] }.
+  // Листается пальцем (scroll-snap), на компьютере – ещё и стрелками. Фото кроме первого – по мере прокрутки.
+  BLOCKS.gallery = function (c) {
+    var name = c.el.getAttribute('data-name') || '';
+    var g = (c.ev.galleries || {})[name];
+    if (!g || !g.photos || !g.photos.length) throw new Error('нет galleries.' + name + ' в event.json');
+    var items = g.photos.map(function (p, i) {
+      var src = typeof p === 'string' ? p : p.src;
+      var alt = (typeof p === 'object' && p.alt) || g.title || '';
+      return '<li class="fs-gallery__item"><img src="' + esc(asset(c.ev._dir, src)) + '" alt="' + esc(alt) + '"' +
+        (i ? ' loading="lazy"' : '') + ' decoding="async"></li>';
+    }).join('');
+    return {
+      html: section((g.title ? '<h3 class="fs-h3 fs-gallery__title">' + inline(g.title) + '</h3>' : '') +
+        (g.caption ? '<p class="fs-gallery__caption">' + inline(g.caption) + '</p>' : '') +
+        '<div class="fs-gallery"><ul class="fs-gallery__track">' + items + '</ul>' +
+        '<button type="button" class="fs-gallery__nav fs-gallery__nav--prev" aria-label="Назад">‹</button>' +
+        '<button type="button" class="fs-gallery__nav fs-gallery__nav--next" aria-label="Дальше">›</button></div>',
+        'fs-gallery-section'),
+      after: function (el) {
+        var track = el.querySelector('.fs-gallery__track');
+        [].forEach.call(el.querySelectorAll('.fs-gallery__nav'), function (b) {
+          b.addEventListener('click', function () {
+            var dir = b.classList.contains('fs-gallery__nav--prev') ? -1 : 1;
+            track.scrollBy({ left: dir * track.clientWidth * .8, behavior: 'smooth' });
+          });
+        });
+      }
+    };
+  };
+
+  // ------------------------------------------------------------ мини-лендинг
+
+  // Страница m/<событие>/: <div class="fs-mini" data-event="…" data-page="main|partner"></div>.
+  // Состав и порядок блоков – event.json → mini.<page>.blocks, флаги и адреса ботов – shared/config.json.
+  // Открыт в Telegram (Mini App), в ВК (?vk=1), в MAX (?max=1) или в обычном браузере.
+  function detectPlatform() {
+    if (/tgWebApp/.test(location.hash + location.search)) return 'tg';
+    if (/[?&](vk=1|vk_app_id=)/.test(location.search)) return 'vk';
+    if (/[?&]max=1/.test(location.search)) return 'max';
+    return 'web';
+  }
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = src; s.onload = resolve; s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  // Куда ведёт «Оставить заявку»: Telegram всегда, ВК и MAX – когда их адреса есть в config.json
+  function leadLinks(ev, cfg) {
+    var start = startParam(ev);
+    var out = [{ label: 'Telegram', url: botLink(ev) }];
+    if (cfg.vk_club) out.push({ label: 'ВКонтакте', url: 'https://vk.me/club' + cfg.vk_club + (start ? '?ref=' + encodeURIComponent(start) : '') });
+    if (cfg.max_bot) out.push({ label: 'MAX', url: 'https://max.ru/' + cfg.max_bot + (start ? '?start=' + encodeURIComponent(start) : '') });
+    return out;
+  }
+  function chooseMessenger(links, theme) {
+    var box = document.createElement('div');
+    box.className = 'fs-root fs-theme-' + theme + ' fs-choose';
+    box.innerHTML = '<div class="fs-choose__box" role="dialog" aria-label="Где оставить заявку">' +
+      '<p class="fs-choose__title">Где удобнее оставить заявку?</p>' +
+      links.map(function (l) { return '<a class="fs-btn" href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(l.label) + '</a>'; }).join('') +
+      '<button type="button" class="fs-choose__x" data-close>Отмена</button></div>';
+    box.addEventListener('click', function (e) {
+      if (e.target === box || e.target.closest('[data-close]') || e.target.closest('a')) box.parentNode.removeChild(box);
+    });
+    document.body.appendChild(box);
+  }
+
+  function initMini(root) {
+    root.setAttribute('data-fs-done', '1');
+    var page = root.getAttribute('data-page') || 'main';
+    var platform = detectPlatform();
+    SOURCE = 'mini';
+    document.documentElement.classList.add('fs-mini-html', 'fs-on-' + platform);
+    // Скрипт Telegram – только внутри Telegram
+    var tgReady = platform !== 'tg' ? Promise.resolve(null) :
+      loadScript('https://telegram.org/js/telegram-web-app.js').then(function () {
+        return window.Telegram && window.Telegram.WebApp;
+      }, function () { return null; });
+
+    Promise.all([loadEvent(root.getAttribute('data-event')), opt(load('shared/config.json', 'json')), tgReady]).then(function (r) {
+      var ev = r[0], cfg = r[1] || {}, tg = r[2];
+      var theme = (ev.theme || ev.id).replace(/[^a-z0-9-]/gi, '');
+      var spec = (ev.mini || {})[page];
+      if (!spec || !spec.blocks) throw new Error('нет mini.' + page + ' в event.json');
+
+      if (tg) {
+        tg.ready();
+        tg.expand();
+        var sp = tg.initDataUnsafe && tg.initDataUnsafe.start_param;
+        if (sp) { appRef = cleanRef(sp); getRef(); } // код партнёра из startapp – запоминаем, как ?ref
+        // Задел: учёт открытий – только когда задан api_url (и это есть в политике обработки ПД)
+        if (cfg.api_url && tg.initData) {
+          fetch(cfg.api_url + '/mini/open', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ initData: tg.initData, page: page, event: ev.id }) }).catch(function () { /* ок */ });
+        }
+        // Ссылки внутри Telegram открываем его средствами: t.me – в самом Telegram, остальное – во встроенном браузере
+        document.addEventListener('click', function (e) {
+          var a = e.target.closest && e.target.closest('a[href]');
+          if (!a) return;
+          var h = a.getAttribute('href');
+          if (isFormLink(h)) h = botLink(ev);
+          if (/^https?:\/\/t\.me\//.test(h)) { e.preventDefault(); e.stopImmediatePropagation(); tg.openTelegramLink(h); }
+          else if (/^https?:/.test(h)) { e.preventDefault(); e.stopImmediatePropagation(); tg.openLink(h); }
+        }, true);
+      }
+      // Мосты ВК и MAX – подготовлены, включаются флагом bridges в config.json
+      if (cfg.bridges && platform === 'vk') {
+        loadScript('https://unpkg.com/@vkontakte/vk-bridge@2.15.2/dist/browser.min.js').then(function () {
+          if (window.vkBridge) window.vkBridge.send('VKWebAppInit');
+        }, function () { /* ок */ });
+      }
+
+      spec.blocks.forEach(function (b) {
+        if (b['if'] && !cfg[b['if']]) return; // блок по флагу config.json (например, клуб на странице партнёров)
+        var d = document.createElement('div');
+        d.className = 'fs-block';
+        d.setAttribute('data-event', ev.id);
+        Object.keys(b).forEach(function (k) { if (k !== 'if') d.setAttribute('data-' + k, b[k]); });
+        root.appendChild(d);
+      });
+      // Кнопки #popup:myform из текстов – тоже в бота
+      if (botLink(ev)) startReflinks(botLink(ev));
+
+      // Главная кнопка: заявка (страница события) или возврат в бота (страница партнёров)
+      var back = page === 'partner';
+      var text = spec.cta || (back ? 'Вернуться в бота' : 'Оставить заявку');
+      var act = function () {
+        if (back) {
+          if (tg) return tg.close();
+          location.href = ev.bot.telegram + '?start=partner';
+          return;
+        }
+        if (tg) return tg.openTelegramLink(botLink(ev));
+        var links = leadLinks(ev, cfg);
+        var want = platform === 'vk' ? 'ВКонтакте' : platform === 'max' ? 'MAX' : null;
+        var pick = links.filter(function (l) { return l.label === want; })[0];
+        if (pick || links.length === 1) { location.href = (pick || links[0]).url; return; }
+        chooseMessenger(links, theme);
+      };
+      if (tg && tg.MainButton) {
+        tg.MainButton.setText(text);
+        tg.MainButton.onClick(act);
+        tg.MainButton.show();
+      } else {
+        var bar = document.createElement('div');
+        bar.className = 'fs-root fs-theme-' + theme + ' fs-mini-cta';
+        bar.innerHTML = '<button type="button" class="fs-btn">' + esc(text) + '</button>';
+        bar.querySelector('button').addEventListener('click', act);
+        document.body.appendChild(bar);
+        root.classList.add('fs-mini--bar');
+      }
+      scan();
+    }).then(null, function (err) { fail(root, err); });
+  }
+
   // ------------------------------------------------------------ рендер
 
   function fail(el, err) {
@@ -838,7 +1050,8 @@
     if (type === 'redirect') return redirect(el);
     var evId = el.getAttribute('data-event');
     if (!BLOCKS[type]) return fail(el, new Error('неизвестный блок ' + type));
-    var ctx = { el: el };
+    // data-show – какие куски ::: показывать (страница партнёров мини-лендинга – partner)
+    var ctx = { el: el, show: el.getAttribute('data-show') || null };
 
     loadEvent(evId).then(function (ev) {
       ctx.ev = ev;
@@ -864,6 +1077,8 @@
     injectCSS();
     var list = document.querySelectorAll('.fs-block:not([data-fs-done])');
     for (var i = 0; i < list.length; i++) render(list[i]);
+    var minis = document.querySelectorAll('.fs-mini:not([data-fs-done])');
+    for (var j = 0; j < minis.length; j++) initMini(minis[j]);
     if (!scan.linksWatched && document.body) { scan.linksWatched = true; watch(decorateSiteLinks); }
   }
 
@@ -960,6 +1175,48 @@
       '.fs-features>.fs-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:none;margin:0}',
       '.fs-features>.fs-list>li{margin:0;padding:24px 26px;background:var(--fs-bg);border:1px solid var(--fs-line);border-top:3px solid var(--fs-highlight);border-radius:var(--fs-radius);font-size:16px;line-height:1.6}',
       '.fs-features>.fs-list>li::before{display:none}',
+      // ::: icons – картинка, заголовок и строка текста (проживание, питание, практика)
+      '.fs-icons>.fs-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;max-width:none;margin:10px 0 0}',
+      '.fs-icons>.fs-list>li{margin:0;padding:0;text-align:center;font-size:16px;line-height:1.55}',
+      '.fs-icons>.fs-list>li::before{display:none}',
+      '.fs-icons .fs-img{display:block;width:120px;height:120px;margin:0 auto 14px;object-fit:contain}',
+      '.fs-icons strong{display:block;font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:20px;color:var(--fs-title);margin-bottom:6px;text-transform:uppercase}',
+      // видео и галерея
+      '.fs-video{position:relative;max-width:900px;margin:0 auto;aspect-ratio:16/9;background:#000 center/cover no-repeat;border-radius:var(--fs-radius);overflow:hidden}',
+      '.fs-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}',
+      '.fs-video__play{position:absolute;inset:0;margin:auto;width:84px;height:84px;border-radius:50%;border:2px solid #fff;background:rgba(0,0,0,.45);cursor:pointer}',
+      '.fs-video__play::after{content:"";position:absolute;left:33px;top:25px;border-left:26px solid #fff;border-top:16px solid transparent;border-bottom:16px solid transparent}',
+      '.fs-video__play:hover{background:rgba(0,0,0,.65)}',
+      '.fs-video__alt{text-align:center;margin:14px 0 0;font-size:14px;color:var(--fs-muted)}.fs-video__alt a{color:inherit}',
+      '.fs-root.fs-b-gallery{--fs-pad-y:24px;--fs-pad-y-mobile:20px}',
+      '.fs-gallery__title{text-align:center;margin:0 0 16px}',
+      '.fs-gallery__caption{text-align:center;max-width:640px;margin:-6px auto 16px;font-size:15px;color:var(--fs-muted)}',
+      '.fs-gallery{position:relative;max-width:1100px;margin:0 auto}',
+      '.fs-gallery__track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;list-style:none;margin:0;padding:0;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}',
+      '.fs-gallery__track::-webkit-scrollbar{display:none}',
+      '.fs-gallery__item{flex:0 0 min(80%,520px);scroll-snap-align:center;margin:0;padding:0}.fs-gallery__item::before{display:none}',
+      '.fs-gallery__item img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:var(--fs-radius);background:var(--fs-bg-soft)}',
+      '.fs-gallery__nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:#1f1f1f;font-size:30px;line-height:40px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.25)}',
+      '.fs-gallery__nav--prev{left:10px}.fs-gallery__nav--next{right:10px}',
+      '@media (hover:none){.fs-gallery__nav{display:none}}',
+      // мини-лендинг: отступы короче, первый экран на весь экран, кнопка заявки внизу
+      '.fs-mini-html body{margin:0}',
+      '.fs-mini-html .fs-root{--fs-pad-y:52px;--fs-pad-y-mobile:40px}',
+      '.fs-mini-html .fs-root.fs-b-gallery{--fs-pad-y:20px;--fs-pad-y-mobile:16px}',
+      '.fs-mini-html .fs-hero{min-height:min(100svh,760px);box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end;padding-top:40px;padding-bottom:56px}',
+      '.fs-mini-html .fs-hero--img{background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(0,0,0,.82) 100%),var(--fs-hero-img) center top/cover no-repeat}',
+      '.fs-mini--bar{padding-bottom:84px}',
+      '.fs-mini-html .fs-text .fs-buttons{display:none}',
+      '.fs-mini-cta{position:fixed;left:0;right:0;bottom:0;z-index:2147482000;display:flex;justify-content:center;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(20,20,20,.9);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}',
+      '.fs-mini-cta .fs-btn{width:100%;max-width:420px}',
+      '.fs-choose{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6);font-family:var(--fs-font-body)}',
+      '.fs-choose__box{width:100%;max-width:440px;box-sizing:border-box;padding:24px 20px calc(20px + env(safe-area-inset-bottom));background:var(--fs-bg);color:var(--fs-fg);border-radius:16px 16px 0 0;display:flex;flex-direction:column;gap:12px}',
+      '.fs-choose__title{margin:0 0 6px;text-align:center;font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:20px;color:var(--fs-title)}',
+      '.fs-choose__x{border:0;background:none;color:var(--fs-muted);font:inherit;padding:10px;cursor:pointer}',
+      // Telegram: светлые секции берут цвета темы Telegram (светлой или тёмной), тёмные остаются фирменными
+      '.fs-on-tg body{background:var(--tg-theme-bg-color,#fff)}',
+      '.fs-on-tg .fs-root:not(.fs-variant-dark){--fs-bg-soft:var(--tg-theme-secondary-bg-color,#f1f2f2);--fs-fg:var(--tg-theme-text-color,#1f1f1f);--fs-title:var(--tg-theme-text-color,#242424);--fs-muted:var(--tg-theme-hint-color,rgba(31,31,31,.62));--fs-line:color-mix(in srgb,var(--tg-theme-hint-color,#999) 45%,transparent);--fs-accent:var(--tg-theme-hint-color,#1f1f1f);--fs-past:var(--tg-theme-hint-color,rgba(31,31,31,.4))}',
+      '.fs-on-tg .fs-root:not(.fs-variant-dark):not(.fs-variant-soft){--fs-bg:var(--tg-theme-bg-color,#fff)}',
       '.fs-features>.fs-list>li:last-child:nth-child(odd){grid-column:1/-1}',
       '.fs-features>.fs-list>li>strong:first-child{display:block;font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:var(--fs-feature-title-size,21px);line-height:1.3;letter-spacing:var(--fs-feature-title-spacing,0);text-transform:var(--fs-feature-title-case,none);color:var(--fs-title);margin-bottom:8px}',
       '.fs-steps>ol.fs-list{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:28px;max-width:none;margin:0;counter-reset:fs}',
@@ -1144,6 +1401,9 @@
         '.fs-callout{padding:26px 20px;font-size:16px}',
         '.fs-modal{padding:0}.fs-modal__box{max-height:100%;height:100%;border-radius:0}',
         '.fs-modal__media{height:min(62vh,420px)}.fs-modal__body{padding:32px 20px 40px}.fs-modal__name{font-size:28px}',
+        '.fs-icons>.fs-list{grid-template-columns:minmax(0,1fr);gap:20px}',
+        '.fs-icons>.fs-list>li{display:grid;grid-template-columns:72px minmax(0,1fr);column-gap:16px;align-items:center;text-align:left;font-size:15px}',
+        '.fs-icons .fs-img{grid-row:1/span 2;width:72px;height:72px;margin:0}.fs-icons strong{font-size:17px;margin:0 0 2px}',
       '}',
       '@media (max-width:600px){',
         '.fs-sp-table{display:none}.fs-sp-cards{display:block}',

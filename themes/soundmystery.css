@@ -66,3 +66,11 @@
   --fs-pad-y: 80px;
   --fs-pad-y-mobile: 56px;
 }
+
+/* Первый экран (мини-лендинг): название – золотом и прописными, как на обложке события */
+.fs-theme-soundmystery .fs-hero__main {
+  color: #ffd589;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+}
+.fs-theme-soundmystery .fs-hero__eyebrow { color: #ffffff; opacity: .85; }
