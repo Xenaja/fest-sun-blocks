@@ -55,5 +55,14 @@
     "photo": "img/masters/nollendorf.webp",
     "photo_full": "img/masters/full/nollendorf.webp",
     "pos": "50% 22%"
+  },
+  {
+    "id": "danaya",
+    "name": "Даная (DJ Lakshmi)",
+    "regalia": "Ведущая ecstatic dance, женских кругов, преподаватель йоги, транс динамических и шаманских практик, проводник по местам Силы",
+    "short": "Проведёт практику Ecstatic dance & гонг-медитация.",
+    "photo": "img/masters/danaya.webp",
+    "photo_full": "img/masters/full/danaya.webp",
+    "pos": "50% 50%"
   }
 ]
