@@ -168,6 +168,33 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 
 Заглушки («Заглушка: …») в `masters.json` и `content/masters/*.md` на сайт не выводятся: у мастера без описания – фото и имя, без «Подробнее». Расписание по часам пока скрыто: в Тильде скрыт старый блок программы (на одну ночь).
 
+## Мини-лендинг в мессенджерах (m/)
+
+Короткая версия страницы события на GitHub Pages – из тех же блоков и данных. Бот выдаёт на неё ссылки.
+
+| Страница | Адрес | Что это |
+|---|---|---|
+| `m/newyear/` | https://xenaja.github.io/fest-sun-blocks/m/newyear/?ref=КОД | Новогодняя Мистерия для гостей |
+| `m/partner/` | https://xenaja.github.io/fest-sun-blocks/m/partner/ | для партнёров, открывается из бота |
+
+На странице один контейнер `<div class="fs-mini" data-event="…" data-page="main|partner">` и `fs.js`. Состав и порядок блоков – `event.json` → `mini.main.blocks` / `mini.partner.blocks` (поля блока = атрибуты `data-*`: `block`, `name`, `variant`, `cols`, `show`, `title`; `if` – показывать только при флаге в `shared/config.json`).
+
+Где открыта страница и куда ведёт «Оставить заявку»:
+- **Telegram Mini App** (в адресе `tgWebApp…`): грузится скрипт Telegram, цвета светлых секций – из темы Telegram, код партнёра – из `startapp`, заявка – родной кнопкой Telegram в чат бота.
+- **ВК** (`?vk=1`), **MAX** (`?max=1`), **браузер** – закреплённая кнопка внизу; если в `shared/config.json` заданы `vk_club` / `max_bot` – выбор мессенджера, иначе сразу Telegram.
+- Ссылки в бота: `e_newyear__s_mini__r_<код>`.
+
+`shared/config.json`: `vk_club`, `max_bot` (пока null – кнопки ВК и MAX скрыты), `bridges` (VK Bridge / MAX), `api_url` (учёт открытий `POST /mini/open` – включать только после записи в политике ПД), `partner_club` (раздел «Клуб» на странице партнёров).
+
+Новые блоки (работают и на сайте, в Тильду пока не ставим):
+- `hero` – первый экран: `event.json` → `hero` (eyebrow, title, lead, dates, image).
+- `video` – `event.json` → `video` (`rutube` | `youtube` | `vk`, `cover`, `title`); плеер грузится по нажатию, под ним ссылка на сайт видео.
+- `gallery` – `data-name="rooms"` → `event.json` → `galleries.rooms` (title, caption, photos); листается пальцем.
+- `::: icons` в md – картинка, заголовок, строка: `- ![Подпись](img/icon.webp) **Заголовок** текст` (картинки – от папки события).
+- `prices` с `data-cols="partner"` – только партнёрская колонка, `data-title` – свой заголовок.
+
+Фото – в `events/<событие>/img/`, webp до 1200 px; ссылок на tildacdn нет.
+
 ## Как устроены данные
 
 ```
