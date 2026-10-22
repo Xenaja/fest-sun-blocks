@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.21-9';
+  var VERSION = '2026.10.22-1';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -625,7 +625,9 @@
       '<div class="fs-modal__bg" data-close></div>' +
       '<div class="fs-modal__box" role="dialog" aria-modal="true" aria-label="' + esc(m.name) + '">' +
         '<button type="button" class="fs-modal__x" aria-label="Закрыть" data-close>×</button>' +
-        (m.photo ? '<img class="fs-modal__photo" src="' + esc(asset('shared/', m.photo_full || m.photo)) + '" alt="' + esc(m.name) + '" style="object-position:' + esc(m.pos || '50% 50%') + '">' : '') +
+        // Фото в окне целиком (contain), поля – размытая копия того же снимка: лица не обрезаются
+        (m.photo ? '<div class="fs-modal__media"><img class="fs-modal__blur" src="' + esc(asset('shared/', m.photo_full || m.photo)) + '" alt="" aria-hidden="true">' +
+          '<img class="fs-modal__photo" src="' + esc(asset('shared/', m.photo_full || m.photo)) + '" alt="' + esc(m.name) + '"></div>' : '') +
         '<div class="fs-modal__body"><h3 class="fs-modal__name">' + esc(m.name) + '</h3>' +
           (m.regalia ? '<p class="fs-modal__reg">' + esc(m.regalia) + '</p>' : '') +
           '<div class="fs-modal__text"><p class="fs-muted">Загружаем…</p></div></div>' +
@@ -963,7 +965,9 @@
       '.fs-modal__bg{position:absolute;inset:0;background:var(--fs-dark-bg);opacity:.85}',
       '.fs-modal__box{position:relative;width:100%;max-width:820px;max-height:92vh;overflow:auto;background:var(--fs-bg);color:var(--fs-fg);border-radius:var(--fs-radius);box-shadow:var(--fs-shadow)}',
       '.fs-modal__x{position:sticky;top:12px;float:right;margin:12px 12px -56px 0;z-index:2;width:44px;height:44px;border:0;border-radius:50%;background:var(--fs-bg);color:var(--fs-fg);font-size:28px;line-height:44px;cursor:pointer}',
-      '.fs-modal__photo{display:block;width:100%;height:380px;object-fit:cover}',
+      '.fs-modal__media{position:relative;height:460px;overflow:hidden;background:var(--fs-dark-bg)}',
+      '.fs-modal__blur{position:absolute;inset:-40px;width:calc(100% + 80px);height:calc(100% + 80px);object-fit:cover;filter:blur(28px);opacity:.75}',
+      '.fs-modal__photo{position:relative;display:block;width:100%;height:100%;object-fit:contain}',
       '.fs-modal__body{padding:48px 56px 52px}',
       '.fs-modal__name{font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:36px;line-height:1.2;text-align:center;color:var(--fs-title);margin:0}',
       '.fs-modal__reg{text-align:center;color:var(--fs-muted);margin:8px 0 0;font-size:15px}',
@@ -1004,7 +1008,7 @@
         '.fs-steps>ol.fs-list>li::after{display:none}',
         '.fs-callout{padding:26px 20px;font-size:16px}',
         '.fs-modal{padding:0}.fs-modal__box{max-height:100%;height:100%;border-radius:0}',
-        '.fs-modal__photo{height:280px}.fs-modal__body{padding:32px 20px 40px}.fs-modal__name{font-size:28px}',
+        '.fs-modal__media{height:min(62vh,420px)}.fs-modal__body{padding:32px 20px 40px}.fs-modal__name{font-size:28px}',
       '}',
       '@media (max-width:600px){',
         '.fs-sp-table{display:none}.fs-sp-cards{display:block}',
