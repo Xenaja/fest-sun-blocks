@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.22-3';
+  var VERSION = '2026.10.22-4';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -836,6 +836,7 @@
       '.fs-features>.fs-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:none;margin:0}',
       '.fs-features>.fs-list>li{margin:0;padding:24px 26px;background:var(--fs-bg);border:1px solid var(--fs-line);border-top:3px solid var(--fs-highlight);border-radius:var(--fs-radius);font-size:16px;line-height:1.6}',
       '.fs-features>.fs-list>li::before{display:none}',
+      '.fs-features>.fs-list>li:last-child:nth-child(odd){grid-column:1/-1}',
       '.fs-features>.fs-list>li>strong:first-child{display:block;font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:var(--fs-feature-title-size,21px);line-height:1.3;letter-spacing:var(--fs-feature-title-spacing,0);text-transform:var(--fs-feature-title-case,none);color:var(--fs-title);margin-bottom:8px}',
       '.fs-steps>ol.fs-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;max-width:none;margin:0;counter-reset:fs}',
       '.fs-steps>ol.fs-list>li{margin:0;padding:64px 0 0;font-size:16px;line-height:1.6;position:relative}',

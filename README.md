@@ -54,6 +54,12 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 
 Тексты `about`, `benefits`, `program`, `kids` (в `events/energiya-solntsa/content/`) и `food` (в `shared/content/`) – черновики заказчика, правятся только по его просьбе.
 
+**Сообщество** – один блок на всех лендингах, вариант выбирается по `data-audience` (`new` – «Сообщество, в которое вы попадаете», `partner` – «Клуб осознанных миллионеров-долгожителей»). Без `data-audience` блок пустой, поэтому ставить его всегда с аудиторией:
+
+```html
+<div class="fs-block" data-block="text" data-name="community" data-event="novogodnyaya-misteriya" data-audience="new" data-variant="soft"></div>
+```
+
 **prices** – оргвзнос по волнам. Без `data-audience` показывает обе колонки:
 
 ```html
@@ -146,6 +152,7 @@ shared/                        – общее для всех событий
   content/masters/<id>.md      – полные тексты мастеров
   content/faq-common.md        – общие вопросы
   content/food.md, route.md    – питание, как добраться (через блок text)
+  content/community.md         – «Сообщество» для всех лендингов: ::: new – новичкам, ::: partner – партнёрам
   img/                         – фото мастеров и номеров
 events/<event-id>/
   event.json                   – даты, тема, длительности, оргвзнос и волны, спецпрограммы,
