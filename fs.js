@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.24-5';
+  var VERSION = '2026.10.24-6';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -1313,17 +1313,57 @@
     }
     return null;
   }
+  // наш блок, который сосед n показывает сверху/снизу (n – сам блок или запись Тильды с ним)
+  function rootIn(n, last) {
+    if (!n) return null;
+    if (n.classList && n.classList.contains('fs-root')) return n;
+    var list = [].filter.call(n.querySelectorAll('.fs-root'), function (r) { return r.offsetHeight > 0; });
+    return list.length ? list[last ? list.length - 1 : 0] : null;
+  }
+  function sectionOf(r) {
+    for (var c = r && r.firstElementChild; c; c = c.nextElementSibling) if (c.classList.contains('fs-section')) return c;
+    return null;
+  }
+  function bgOf(sec) { return sec ? getComputedStyle(sec).backgroundColor : ''; }
+
+  // Края и стыки: фигурный край рядом с узким блоком или с нашим блоком того же цвета – прямой;
+  // у двух наших блоков одного цвета подряд отступы не складываются (второй без верхнего);
+  // фигурный край заходит на соседа – соседу (нашему) добавляем столько же отступа.
   function flattenEdges() {
     flattenEdges.timer = 0;
-    var roots = document.querySelectorAll('.fs-root.fs-variant-dark, .fs-root.fs-variant-soft');
-    for (var i = 0; i < roots.length; i++) {
-      var r = roots[i], mode = r.getAttribute('data-edge');
-      var narrow = function (n) { return !!n && n.offsetHeight < FLAT_NEAR && !n.querySelector('.fs-root'); };
-      var top = mode ? mode === 'top' || mode === 'both' : !narrow(neighbour(r, 'previousElementSibling'));
-      var bottom = mode ? mode === 'bottom' || mode === 'both' : !narrow(neighbour(r, 'nextElementSibling'));
-      r.classList.toggle('fs-flat-top', !top);
-      r.classList.toggle('fs-flat-bottom', !bottom);
+    [].forEach.call(document.querySelectorAll('.fs-section[data-fs-pad]'), function (s) {
+      s.style.paddingTop = s.style.paddingBottom = '';
+      s.removeAttribute('data-fs-pad');
+    });
+    var roots = [].filter.call(document.querySelectorAll('.fs-root'), function (r) {
+      return r.offsetHeight > 0 && sectionOf(r) && !sectionOf(r).classList.contains('fs-hero');
+    });
+    var narrow = function (n) { return !!n && n.offsetHeight < FLAT_NEAR && !rootIn(n); };
+    var info = roots.map(function (r) {
+      var prevBox = neighbour(r, 'previousElementSibling'), nextBox = neighbour(r, 'nextElementSibling');
+      var prev = rootIn(prevBox, true), next = rootIn(nextBox), bg = bgOf(sectionOf(r));
+      return { r: r, prev: prev, next: next, prevBox: prevBox, nextBox: nextBox,
+        samePrev: !!prev && bgOf(sectionOf(prev)) === bg, sameNext: !!next && bgOf(sectionOf(next)) === bg };
+    });
+    info.forEach(function (x) {
+      var mode = x.r.getAttribute('data-edge');
+      var top = mode ? mode === 'top' || mode === 'both' : !narrow(x.prevBox) && !x.samePrev;
+      var bottom = mode ? mode === 'bottom' || mode === 'both' : !narrow(x.nextBox) && !x.sameNext;
+      x.r.classList.toggle('fs-flat-top', !top);
+      x.r.classList.toggle('fs-flat-bottom', !bottom);
+    });
+    function pad(sec, side, px) {
+      var cs = getComputedStyle(sec), prop = side === 'top' ? 'paddingTop' : 'paddingBottom';
+      sec.style[prop] = Math.max(0, parseFloat(cs[prop]) + px) + 'px';
+      sec.setAttribute('data-fs-pad', '1');
     }
+    info.forEach(function (x) {
+      var sec = sectionOf(x.r), cs = getComputedStyle(sec);
+      var edgeT = parseFloat(cs.borderTopWidth) || 0, edgeB = parseFloat(cs.borderBottomWidth) || 0;
+      if (x.samePrev && !edgeT) pad(sec, 'top', -parseFloat(cs.paddingTop));
+      if (x.prev && edgeT) pad(sectionOf(x.prev), 'bottom', edgeT);
+      if (x.next && edgeB) pad(sectionOf(x.next), 'top', edgeB);
+    });
   }
   function flattenSoon() {
     if (!flattenEdges.timer) flattenEdges.timer = setTimeout(flattenEdges, 150);
