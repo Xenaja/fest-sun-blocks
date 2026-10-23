@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.23-15';
+  var VERSION = '2026.10.23-16';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -624,14 +624,19 @@
           (r.building ? '<span class="fs-room__bld">' + esc(r.building) + '</span>' : '') + '</div></div>';
       }).join('');
 
+      // Цен ещё нет (все per_day пустые) – только фото номеров, без таблицы-заглушки
+      var priced = rooms.some(function (r) {
+        return people.some(function (n) { return price(r, n, durs[0]) != null; });
+      });
       var html = section(
-        title(c.el.getAttribute('data-title') || center.rooms_title || 'Проживание') + tabs +
+        title(c.el.getAttribute('data-title') || center.rooms_title || 'Проживание') +
+        (priced ? tabs +
         '<div class="fs-table-wrap"><table class="fs-table fs-rooms-table"><thead><tr><th scope="col">Номер</th>' +
         people.map(function (n) { return '<th scope="col" class="fs-num">' + n + ' чел.</th>'; }).join('') +
         '</tr></thead><tbody>' + tbody(durs[0]) + '</tbody></table></div>' +
-        '<div class="fs-room-cards">' + cards(durs[0]) + '</div>' +
+        '<div class="fs-room-cards">' + cards(durs[0]) + '</div>' : '') +
         (center.rooms_note ? '<p class="fs-note">' + inline(center.rooms_note) + '</p>' : '') +
-        (gallery ? '<div class="fs-rooms">' + gallery + '</div>' : ''), 'fs-rooms-section');
+        (gallery ? '<div class="fs-rooms' + (rooms.length === 4 ? ' fs-rooms--4' : '') + '">' + gallery + '</div>' : ''), 'fs-rooms-section');
 
       return { html: html, after: function (el) {
         el.addEventListener('click', function (e) {
@@ -1314,6 +1319,9 @@
       '.fs-room-card__prices li{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border:1px solid var(--fs-line);border-radius:var(--fs-radius);font-size:12px;color:var(--fs-muted)}',
       '.fs-room-card__prices b{font-size:16px;color:var(--fs-fg);font-variant-numeric:tabular-nums}',
       '.fs-rooms{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:24px;margin-top:44px}',
+      // Четыре номера – сеткой 2×2, а не «3 + 1»; на телефоне – по одному
+      '.fs-rooms--4{grid-template-columns:repeat(2,minmax(0,1fr))}',
+      '@media (max-width:600px){.fs-rooms--4{grid-template-columns:minmax(0,1fr)}}',
       '.fs-room{min-width:0}',
       '.fs-gal{position:relative;aspect-ratio:4/3;max-width:100%;overflow:hidden;border-radius:var(--fs-radius);background:var(--fs-bg-soft)}',
       '.fs-gal__track{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}',

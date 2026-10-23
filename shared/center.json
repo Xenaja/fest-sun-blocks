@@ -1,30 +1,75 @@
 {
   "name": "Ретрит-центр «Энергия Солнца»",
-  "_placeholder": "Цены и номера – заглушки, реальные придут позже",
+  "_placeholder": "Номера и фото – с fest-sun.ru (выгрузка Тильды 23.10.2026). Цен нет: на сайте они пустые – таблица цен не показывается, пока per_day не заполнят",
   "rooms_title": "Проживание с питанием",
-  "rooms_note": "Цена за одного человека за весь срок: проживание и двухразовое вегетарианское питание.",
-  "people": [1, 2, 3, 4],
+  "rooms_note": "Стоимость спального места не зависит от уровня комфорта номера – успевайте забронировать более комфортный!",
+  "people": [
+    1,
+    2,
+    3,
+    4
+  ],
   "rooms": [
     {
       "id": "standard",
       "name": "Стандарт",
-      "building": "Главный корпус",
-      "per_day": { "1": 5000, "2": 4500, "3": null, "4": null },
-      "photos": ["img/rooms/placeholder-1.svg", "img/rooms/placeholder-2.svg", "img/rooms/placeholder-3.svg"]
+      "building": "Двухместный",
+      "per_day": {
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null
+      },
+      "photos": [
+        "img/rooms/standard-1.webp"
+      ]
     },
     {
-      "id": "comfort",
-      "name": "Комфорт",
-      "building": "Главный корпус",
-      "per_day": { "1": 6000, "2": 5000, "3": 4500, "4": null },
-      "photos": ["img/rooms/placeholder-2.svg", "img/rooms/placeholder-3.svg", "img/rooms/placeholder-1.svg"]
+      "id": "semi1",
+      "name": "Полулюкс",
+      "building": "Однокомнатный, трёхместный",
+      "per_day": {
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null
+      },
+      "photos": [
+        "img/rooms/semi1-1.webp",
+        "img/rooms/semi1-2.webp",
+        "img/rooms/semi1-3.webp"
+      ]
     },
     {
-      "id": "family",
-      "name": "Семейный",
-      "building": "Гостевой дом",
-      "per_day": { "1": null, "2": 5000, "3": 4500, "4": 4000 },
-      "photos": ["img/rooms/placeholder-3.svg", "img/rooms/placeholder-1.svg", "img/rooms/placeholder-2.svg"]
+      "id": "semi2",
+      "name": "Полулюкс",
+      "building": "Двухкомнатный, трёхместный",
+      "per_day": {
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null
+      },
+      "photos": [
+        "img/rooms/semi2-1.webp",
+        "img/rooms/semi2-2.webp"
+      ]
+    },
+    {
+      "id": "lux",
+      "name": "Люкс",
+      "building": "Двухкомнатный, пятиместный",
+      "per_day": {
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null
+      },
+      "photos": [
+        "img/rooms/lux-1.webp",
+        "img/rooms/lux-2.webp",
+        "img/rooms/lux-3.webp"
+      ]
     }
   ]
 }
