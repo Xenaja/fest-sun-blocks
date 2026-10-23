@@ -19,7 +19,7 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 
 | атрибут | что значит |
 |---|---|
-| `data-block` | какой блок: `text`, `faq`, `prices`, `rooms`, `specials`, `masters`, `alumni`, `reflinks`, `partner-cta`, `redirect`, `galaxy`, `footer` |
+| `data-block` | какой блок: `text`, `faq`, `prices`, `rooms`, `specials`, `masters`, `alumni`, `reflinks`, `partner-cta`, `redirect`, `galaxy`, `footer`, `garland` |
 | `data-event` | событие: `energiya-solntsa`, `krug-masterov`, … (папка в `events/`) |
 | `data-name` | только для `text`: какой файл показать (`about` → `content/about.md`) |
 | `data-variant` | фон секции: не указан – светлый, `soft` – молочный, `dark` – тёмный |
@@ -101,6 +101,13 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 
 ```html
 <div class="fs-block" data-block="footer" data-event="novogodnyaya-misteriya"></div>
+<script src="https://xenaja.github.io/fest-sun-blocks/fs.js"></script>
+```
+
+**garland** – праздничная гирлянда на стыке двух блоков: провод провисает дугами, огоньки по очереди мягко мерцают. Поставьте HTML-блок (T123, отступы 0) между двумя блоками – сам он места не занимает, гирлянда висит поверх стыка. `data-wire="light"` – светлый провод для стыка тёмных блоков. Лучше 2–3 раза на страницу, не чаще. Демо – `newyear.html`.
+
+```html
+<div class="fs-block" data-block="garland" data-wire="light"></div>
 <script src="https://xenaja.github.io/fest-sun-blocks/fs.js"></script>
 ```
 
@@ -370,6 +377,8 @@ layout: split
 | `--fs-font-head`, `--fs-font-body`, `--fs-head-weight` | шрифты (по умолчанию наследуются от Тильды) |
 | `--fs-width`, `--fs-pad-y`, `--fs-pad-y-mobile` | ширина и отступы секций (ЭС: 90 / 60 px – как пресет 90 в Тильде) |
 | `--fs-dark-edge`, `--fs-dark-edge-mobile` | фигурные края тёмных секций – высота клина к центру сверху и снизу (ЭС: 60 / 24 px; не задано – прямоугольник) |
+| `--fs-soft-edge`, `--fs-soft-edge-mobile` | то же для серых секций (`data-variant="soft"`); по умолчанию края прямые |
+| `--fs-dark-wave-top`, `--fs-dark-wave-bottom`, `--fs-soft-wave-*`, `--fs-dark-clip` | своя форма края вместо клина: SVG-маска (чёрное – видно) верхнего и нижнего края, тогда `--fs-dark-clip: none`. У soundmystery – звуковая волна, на телефоне реже. Край заходит на соседний блок, в вырезах виден он сам |
 
 ## Надёжность
 

@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.23-37';
+  var VERSION = '2026.10.23-38';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -1011,6 +1011,47 @@
     else window.addEventListener('resize', resize);
   }
 
+  // Гирлянда на стыке двух блоков: провод провисает дугами, огоньки по очереди мягко мерцают.
+  // Ставится в HTML-блок между блоками и места не занимает – висит поверх стыка.
+  // data-wire="light" – светлый провод (на тёмном фоне), по умолчанию тёмно-золотой.
+  // <div class="fs-block" data-block="garland"></div>
+  var garlandN = 0;
+  function garland(el) {
+    var id = 'fsg' + (++garlandN);
+    var COLORS = ['#ffd589', '#ff8562', '#febf6f', '#fff3d6'];
+    var wire = el.getAttribute('data-wire') === 'light' ? 'rgba(255,226,170,.6)' : 'rgba(120,92,48,.55)';
+    el.classList.add('fs-garland');
+    var lastW = 0;
+    function draw() {
+      var w = el.clientWidth;
+      if (!w || w === lastW) return;
+      lastW = w;
+      var n = Math.max(2, Math.round(w / (w < 600 ? 110 : 160))), step = w / n, top = 4, sag = 16, k = 0;
+      var d = 'M0,' + top, bulbs = '';
+      for (var i = 0; i < n; i++) {
+        var x0 = i * step;
+        d += ' Q' + (x0 + step / 2).toFixed(1) + ',' + (top + 2 * sag) + ' ' + (x0 + step).toFixed(1) + ',' + top;
+        [0.25, 0.5, 0.75].forEach(function (f) {
+          var x = (x0 + step * f).toFixed(1), y = (top + 4 * sag * f * (1 - f)).toFixed(1), c = k % COLORS.length;
+          var delay = '-' + ((k * 0.35) % 2.8).toFixed(2) + 's';
+          bulbs += '<g transform="translate(' + x + ',' + y + ')">' +
+            '<circle class="fs-garland__glow" cy="9" r="13" fill="url(#' + id + c + ')" style="animation-delay:' + delay + '"/>' +
+            '<rect x="-2" y="0" width="4" height="4" rx="1" fill="#5a4a30"/>' +
+            '<ellipse class="fs-garland__bulb" cy="9.5" rx="3.6" ry="5.4" fill="' + COLORS[c] + '" style="animation-delay:' + delay + '"/></g>';
+          k++;
+        });
+      }
+      var defs = COLORS.map(function (col, c) {
+        return '<radialGradient id="' + id + c + '"><stop offset="0" stop-color="' + col + '" stop-opacity=".9"/><stop offset="1" stop-color="' + col + '" stop-opacity="0"/></radialGradient>';
+      }).join('');
+      el.innerHTML = '<svg width="' + w + '" height="' + (top + sag + 30) + '" aria-hidden="true"><defs>' + defs + '</defs>' +
+        '<path d="' + d + '" fill="none" stroke="' + wire + '" stroke-width="1.4"/>' + bulbs + '</svg>';
+    }
+    draw();
+    if (window.ResizeObserver) new ResizeObserver(draw).observe(el);
+    else window.addEventListener('resize', draw);
+  }
+
   // ------------------------------------------------------------ видео и галерея
 
   // Видео: event.json → video { rutube | youtube | vk (адрес плеера), cover, title }.
@@ -1218,6 +1259,7 @@
     var type = el.getAttribute('data-block');
     if (type === 'redirect') return redirect(el);
     if (type === 'galaxy') return galaxy(el);
+    if (type === 'garland') return garland(el);
     var evId = el.getAttribute('data-event');
     if (!BLOCKS[type]) return fail(el, new Error('неизвестный блок ' + type));
     // data-show – какие куски ::: показывать (страница партнёров мини-лендинга – partner)
@@ -1275,6 +1317,23 @@
     document.head.appendChild(st);
   }
 
+  // Фигурные края секций варианта v (dark, soft). Высота – --fs-<v>-edge (и -mobile), 0 – прямоугольник.
+  // Форма – clip-path (у тёмных по умолчанию клин к центру) или маска темы --fs-<v>-wave-top / -bottom
+  // (SVG, чёрное – видно; тогда тема ставит --fs-<v>-clip:none). Край заходит на соседний блок
+  // отрицательным отступом, и в вырезах виден сам сосед – стык без полос, какого бы цвета он ни был.
+  // Толщина края – прозрачная рамка (фон под ней есть), поэтому свои отступы секций не трогаем.
+  function edgeCSS(v, clip) {
+    var s = '.fs-root.fs-variant-' + v + '>.fs-section:not(.fs-hero)', t = 'var(--fs-edge-t)', b = 'var(--fs-edge-b)';
+    var mask = 'var(--fs-' + v + '-wave-top) top/100% calc(' + t + ' + 1px) no-repeat,' +
+      'linear-gradient(#000 0 0) 0 calc(' + t + ' - 1px)/100% calc(100% - ' + t + ' - ' + b + ' + 2px) no-repeat,' +
+      'var(--fs-' + v + '-wave-bottom) bottom/100% calc(' + b + ' + 1px) no-repeat';
+    return s + '{--fs-edge:var(--fs-' + v + '-edge,0px);--fs-edge-t:calc(var(--fs-edge) * var(--fs-top-k,1));--fs-edge-b:calc(var(--fs-edge) * var(--fs-bottom-k,1));' +
+      'position:relative;z-index:1;margin-top:calc(-1 * ' + t + ');margin-bottom:calc(-1 * ' + b + ');' +
+      'border-top:' + t + ' solid transparent;border-bottom:' + b + ' solid transparent;' +
+      'clip-path:var(--fs-' + v + '-clip,' + clip + ');-webkit-mask:' + mask + ';mask:' + mask + '}' +
+      '@media (max-width:600px){' + s + '{--fs-edge:var(--fs-' + v + '-edge-mobile,var(--fs-' + v + '-edge,0px))}}';
+  }
+
   function injectCSS() {
     if (document.getElementById('fs-style')) return;
     var css = [
@@ -1285,12 +1344,17 @@
       '--fs-radius:0px;--fs-btn-radius:6px;--fs-shadow:none;--fs-font-head:inherit;--fs-font-body:inherit;--fs-head-weight:700;--fs-title-size:clamp(26px,3vw,32px);--fs-width:1100px;--fs-pad-y:80px;--fs-pad-y-mobile:56px}',
 
       '.fs-root.fs-variant-dark{--fs-bg:var(--fs-dark-bg);--fs-fg:var(--fs-dark-fg);--fs-title:var(--fs-dark-title);--fs-muted:var(--fs-dark-muted);--fs-line:var(--fs-dark-line);--fs-card-bg:var(--fs-dark-card-bg);--fs-past:var(--fs-dark-muted)}',
-      // Фигурные края тёмных секций: клин к центру сверху и снизу. Высота клина –
-      // --fs-dark-edge темы (0 – обычный прямоугольник, как было)
-      '.fs-root.fs-variant-dark>.fs-section{--fs-edge:var(--fs-dark-edge,0px);padding-top:calc(var(--fs-pad-y) + var(--fs-edge));padding-bottom:calc(var(--fs-pad-y) + var(--fs-edge));clip-path:polygon(0 var(--fs-edge),50% 0,100% var(--fs-edge),100% calc(100% - var(--fs-edge)),50% 100%,0 calc(100% - var(--fs-edge)))}',
-      '@media (max-width:600px){.fs-root.fs-variant-dark>.fs-section{--fs-edge:var(--fs-dark-edge-mobile,var(--fs-dark-edge,0px));padding-top:calc(var(--fs-pad-y-mobile) + var(--fs-edge));padding-bottom:calc(var(--fs-pad-y-mobile) + var(--fs-edge))}}',
-      // Подвал: тёмный, без фигурного края и с отступами меньше, чем у секций
-      '.fs-root.fs-b-footer>.fs-section{clip-path:none;padding-top:56px;padding-bottom:28px}',
+      // Фигурные края тёмных и серых секций – см. edgeCSS
+      edgeCSS('dark', 'polygon(0 var(--fs-edge-t),50% 0,100% var(--fs-edge-t),100% calc(100% - var(--fs-edge-b)),50% 100%,0 calc(100% - var(--fs-edge-b)))'),
+      edgeCSS('soft', 'none'),
+      // Подвал: тёмный, фигурный край только сверху, отступы меньше, чем у секций
+      '.fs-root.fs-b-footer{--fs-bottom-k:0}.fs-root.fs-b-footer>.fs-section{padding-top:56px;padding-bottom:28px}',
+      // Гирлянда: блок без высоты, рисунок висит поверх стыка соседних блоков
+      '.fs-garland{position:relative;z-index:5;height:0;pointer-events:none}',
+      '.fs-garland>svg{position:absolute;left:0;top:-8px;overflow:visible}',
+      '@keyframes fs-twinkle{0%,100%{opacity:.15}50%{opacity:1}}@keyframes fs-twinkle-b{0%,100%{opacity:.6}50%{opacity:1}}',
+      '.fs-garland__glow{animation:fs-twinkle 2.8s ease-in-out infinite}.fs-garland__bulb{animation:fs-twinkle-b 2.8s ease-in-out infinite}',
+      '@media (prefers-reduced-motion:reduce){.fs-garland__glow,.fs-garland__bulb{animation:none;opacity:.8}}',
       '.fs-footer__grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:28px 48px;align-items:start}',
       '.fs-footer__name{font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:26px;line-height:1.2;text-transform:uppercase;color:var(--fs-title)}',
       '.fs-footer__meta{margin-top:8px;font-size:15px;color:var(--fs-highlight)}',
@@ -1301,7 +1365,9 @@
       '@media (max-width:600px){.fs-root.fs-b-footer>.fs-section{padding-top:44px;padding-bottom:24px}.fs-footer__grid{grid-template-columns:1fr;gap:24px;text-align:center}.fs-footer__bottom{justify-content:center;text-align:center}}',
       '.fs-root.fs-variant-soft{--fs-bg:var(--fs-bg-soft)}',
       '.fs-root,.fs-root *,.fs-root *::before,.fs-root *::after{box-sizing:border-box}',
-      '.fs-root{display:block;max-width:100%;overflow-x:hidden}',
+      // clip режет только по горизонтали – фигурный край секции может зайти на соседний блок;
+      // flow-root – отрицательные отступы соседних секций не схлопываются в один
+      '.fs-root{display:flow-root;max-width:100%;overflow-x:hidden;overflow-x:clip}',
       '.fs-block[id]{scroll-margin-top:var(--fs-anchor-offset,80px)}',
       '.fs-section{background:var(--fs-bg);color:var(--fs-fg);font-family:var(--fs-font-body);padding:var(--fs-pad-y) 16px;-webkit-text-size-adjust:100%}',
       '.fs-inner{max-width:var(--fs-width);margin:0 auto}',
