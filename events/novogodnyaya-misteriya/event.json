@@ -45,6 +45,8 @@
     "link": "#popup:myform"
   },
 
+  "garlands": ["prices"],
+
   "masters_block": { "title": "Мастера и артисты" },
   "masters": ["teya", "pavitra", "zakharevich", "nollendorf", "danaya", "yura-ra", "telminov", "davudov", "shcherbakova"],
 

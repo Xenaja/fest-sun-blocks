@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.23-42';
+  var VERSION = '2026.10.23-43';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -1282,6 +1282,14 @@
       resolveLinks(el, ctx.ev);
       if (res.after) res.after(el);
       flattenSoon();
+      // гирлянда над блоком – event.json → garlands: ["prices", "program", …] (тип блока или data-name)
+      if ((ctx.ev.garlands || []).indexOf(el.getAttribute('data-name') || type) >= 0 &&
+          !(el.previousElementSibling && el.previousElementSibling.classList.contains('fs-garland'))) {
+        var g = document.createElement('div');
+        g.setAttribute('data-fs-done', '1');
+        el.parentNode.insertBefore(g, el);
+        garland(g);
+      }
     }).then(null, function (err) { fail(el, err); });
   }
 
