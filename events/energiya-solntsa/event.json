@@ -38,11 +38,11 @@
   },
   "masters": [
     { "id": "pavitra", "audience": "all" },
-    "yura-ra",
-    "chernyh",
     "pravin",
     "tanzu",
     "teya",
+    "chernyh",
+    "yura-ra",
     "nollendorf",
     "klaviho",
     "danaya",
