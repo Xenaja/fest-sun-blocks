@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.24-7';
+  var VERSION = '2026.10.24-8';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -109,7 +109,7 @@
   var CARDS_OPEN = '\u0000cards', CARDS_CLOSE = '\u0000/cards';
   var CALLOUT_OPEN = '\u0000callout', CALLOUT_CLOSE = '\u0000/callout';
   var LIST_LINE = /^\s*([-*]|\d+[.)])\s+/;
-  var STRUCT = /^(cards|cards-2|center|features|steps|buttons|bar|icons|accordion)$/;
+  var STRUCT = /^(cards|cards-2|center|features|steps|buttons|bar|icons|accordion|more)$/;
 
   // Страница одна на событие – для новичков (с 23.10.2026, data-audience больше нет).
   // ::: new – показываем (абзацы выделяются карточкой, одиночные пункты списка
@@ -188,7 +188,7 @@
 
     lines.forEach(function (line) {
       var m;
-      var mk = line.match(/^\u0000(cards|cards-2|callout|center|features|steps|buttons|bar|icons|accordion)$/);
+      var mk = line.match(/^\u0000(cards|cards-2|callout|center|features|steps|buttons|bar|icons|accordion|more)$/);
       if (mk) {
         flush();
         out('<div class="' + (mk[1] === 'cards-2' ? 'fs-cards fs-cards--2' : 'fs-' + mk[1]) + '">');
@@ -196,7 +196,7 @@
         afterTitle = false;
         return;
       }
-      if (/^\u0000\/(cards|cards-2|callout|center|features|steps|buttons|bar|icons|accordion)$/.test(line)) {
+      if (/^\u0000\/(cards|cards-2|callout|center|features|steps|buttons|bar|icons|accordion|more)$/.test(line)) {
         flush();
         if (/^\u0000\/cards/.test(line)) closeCard();
         out('</div>');
@@ -719,21 +719,14 @@
     });
   }
 
-  function openMaster(c, m) {
-    var theme = c.el.getAttribute('data-fs-theme');
+  // Окно поверх страницы (мастер, «Подробнее»): закрывается крестиком, фоном и Esc
+  function showModal(theme, label, inner) {
     var modal = document.createElement('div');
     modal.className = 'fs-root fs-theme-' + theme + ' fs-modal';
     modal.innerHTML =
       '<div class="fs-modal__bg" data-close></div>' +
-      '<div class="fs-modal__box" role="dialog" aria-modal="true" aria-label="' + esc(m.name) + '">' +
-        '<button type="button" class="fs-modal__x" aria-label="Закрыть" data-close>×</button>' +
-        // Фото в окне целиком (contain), поля – размытая копия того же снимка: лица не обрезаются
-        (m.photo ? '<div class="fs-modal__media"><img class="fs-modal__blur" src="' + esc(asset('shared/', m.photo_full || m.photo)) + '" alt="" aria-hidden="true">' +
-          '<img class="fs-modal__photo" src="' + esc(asset('shared/', m.photo_full || m.photo)) + '" alt="' + esc(m.name) + '"></div>' : '') +
-        '<div class="fs-modal__body"><h3 class="fs-modal__name">' + esc(m.name) + '</h3>' +
-          (m.regalia ? '<p class="fs-modal__reg">' + esc(m.regalia) + '</p>' : '') +
-          '<div class="fs-modal__text"><p class="fs-muted">Загружаем…</p></div></div>' +
-      '</div>';
+      '<div class="fs-modal__box" role="dialog" aria-modal="true" aria-label="' + esc(label) + '">' +
+        '<button type="button" class="fs-modal__x" aria-label="Закрыть" data-close>×</button>' + inner + '</div>';
     document.body.appendChild(modal);
     var lastFocus = document.activeElement;
     var prevOverflow = document.body.style.overflow;
@@ -748,6 +741,17 @@
     modal.addEventListener('click', function (e) { if (e.target.closest('[data-close]')) close(); });
     document.addEventListener('keydown', onKey);
     modal.querySelector('.fs-modal__x').focus();
+    return modal;
+  }
+
+  function openMaster(c, m) {
+    var modal = showModal(c.el.getAttribute('data-fs-theme'), m.name,
+        // Фото в окне целиком (contain), поля – размытая копия того же снимка: лица не обрезаются
+        (m.photo ? '<div class="fs-modal__media"><img class="fs-modal__blur" src="' + esc(asset('shared/', m.photo_full || m.photo)) + '" alt="" aria-hidden="true">' +
+          '<img class="fs-modal__photo" src="' + esc(asset('shared/', m.photo_full || m.photo)) + '" alt="' + esc(m.name) + '"></div>' : '') +
+        '<div class="fs-modal__body"><h3 class="fs-modal__name">' + esc(m.name) + '</h3>' +
+          (m.regalia ? '<p class="fs-modal__reg">' + esc(m.regalia) + '</p>' : '') +
+          '<div class="fs-modal__text"><p class="fs-muted">Загружаем…</p></div></div>');
 
     // Общий текст мастера + дополнение события (events/<id>/content/masters/<мастер>.md), если есть
     Promise.all([
@@ -1287,6 +1291,7 @@
       var res = typeof out === 'string' ? { html: out } : out;
       el.innerHTML = res.html;
       enhanceAccordions(el);
+      enhanceMore(el);
       resolveLinks(el, ctx.ev);
       if (res.after) res.after(el);
       flattenSoon();
@@ -1332,7 +1337,7 @@
   function flattenEdges() {
     flattenEdges.timer = 0;
     [].forEach.call(document.querySelectorAll('.fs-section[data-fs-pad]'), function (s) {
-      s.style.paddingTop = s.style.paddingBottom = '';
+      s.style.paddingTop = s.style.paddingBottom = s.style.marginTop = '';
       s.removeAttribute('data-fs-pad');
     });
     var roots = [].filter.call(document.querySelectorAll('.fs-root'), function (r) {
@@ -1360,13 +1365,33 @@
     info.forEach(function (x) {
       var sec = sectionOf(x.r), cs = getComputedStyle(sec);
       var edgeT = parseFloat(cs.borderTopWidth) || 0, edgeB = parseFloat(cs.borderBottomWidth) || 0;
-      if (x.samePrev && !edgeT) pad(sec, 'top', -parseFloat(cs.paddingTop));
+      if (x.samePrev && !edgeT) {
+        pad(sec, 'top', -parseFloat(cs.paddingTop));
+        sec.style.marginTop = '-1px'; // без щели в долю пикселя между блоками одного цвета
+      }
       if (x.prev && edgeT) pad(sectionOf(x.prev), 'bottom', edgeT);
       if (x.next && edgeB) pad(sectionOf(x.next), 'top', edgeB);
     });
   }
   function flattenSoon() {
     if (!flattenEdges.timer) flattenEdges.timer = setTimeout(flattenEdges, 150);
+  }
+
+  // ::: more – подробности в окне: на странице вместо текста кнопка «Подробнее»,
+  // заголовок окна – заголовок секции
+  function enhanceMore(root) {
+    [].forEach.call(root.querySelectorAll('.fs-more'), function (box) {
+      var html = box.innerHTML;
+      var h = root.querySelector('.fs-title');
+      var title = h ? h.textContent : '';
+      box.className = 'fs-buttons fs-more-btns';
+      box.innerHTML = '<button type="button" class="fs-btn">Подробнее</button>';
+      box.firstChild.addEventListener('click', function () {
+        showModal(root.getAttribute('data-fs-theme'), title,
+          '<div class="fs-modal__body">' + (title ? '<h3 class="fs-modal__name">' + esc(title) + '</h3>' : '') +
+          '<div class="fs-modal__text fs-md">' + html + '</div></div>');
+      });
+    });
   }
 
   // ::: accordion – пункты списка «**Заголовок.** описание» сворачиваются: виден заголовок
@@ -1730,6 +1755,7 @@
       '.fs-modal__name{font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:36px;line-height:1.2;text-align:center;color:var(--fs-title);margin:0}',
       '.fs-modal__reg{text-align:center;color:var(--fs-muted);margin:8px 0 0;font-size:15px}',
       '.fs-modal__text{margin-top:28px}',
+      '.fs-more-btns{margin-top:26px}.fs-more-btns .fs-btn{cursor:pointer}.fs-modal__text.fs-md .fs-list{max-width:none}',
       '.fs-modal .fs-md{font-size:17px}.fs-modal .fs-md .fs-title{font-size:26px;text-transform:none;margin-top:28px}',
 
       /* вопросы */
