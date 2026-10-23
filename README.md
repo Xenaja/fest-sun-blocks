@@ -61,6 +61,8 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 <div class="fs-block" data-block="text" data-name="community" data-event="novogodnyaya-misteriya" data-variant="soft"></div>
 ```
 
+У Новогодней Мистерии свой `community.md` (`events/novogodnyaya-misteriya/content/`) – копия общего без «Путешествий по местам Силы». Правки общего текста повторяйте и там.
+
 **О компании** – «Энергия, которой хватает на всё»: Full Energy как генеральный партнёр событий центра и три опоры (тело, сознание, дело). Текст общий для всех лендингов – `shared/content/company.md`; ставится в конце страницы, перед контактами:
 
 ```html
