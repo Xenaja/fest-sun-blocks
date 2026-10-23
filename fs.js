@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.23-40';
+  var VERSION = '2026.10.23-41';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -1376,9 +1376,9 @@
       // Фигурные края тёмных и серых секций – см. edgeCSS
       edgeCSS('dark', 'polygon(0 var(--fs-edge-t),50% 0,100% var(--fs-edge-t),100% calc(100% - var(--fs-edge-b)),50% 100%,0 calc(100% - var(--fs-edge-b)))'),
       edgeCSS('soft', 'none'),
-      // Подвал: тёмный, фигурный край только сверху, отступы меньше, чем у секций
+      // Подвал: тёмный, без фигурных краёв (под ним обычно карта или контакты), отступы меньше, чем у секций
       '.fs-root.fs-flat-top{--fs-top-k:0}.fs-root.fs-flat-bottom{--fs-bottom-k:0}',
-      '.fs-root.fs-b-footer{--fs-bottom-k:0}.fs-root.fs-b-footer>.fs-section{padding-top:56px;padding-bottom:28px}',
+      '.fs-root.fs-b-footer{--fs-top-k:0;--fs-bottom-k:0}.fs-root.fs-b-footer>.fs-section{padding-top:56px;padding-bottom:28px}',
       // Гирлянда: блок без высоты, рисунок висит поверх стыка соседних блоков
       '.fs-garland{position:relative;z-index:5;height:0;pointer-events:none}',
       '.fs-garland>svg{position:absolute;left:0;top:-8px;overflow:visible}',
