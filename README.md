@@ -352,7 +352,8 @@ layout: split
 | `--fs-hero-bg`, `--fs-hero-overlay`, `--fs-hero-kicker-size`, `--fs-hero-kicker-color`, `--fs-hero-main-size` | первый экран: фон, затемнение картинки, размеры и цвет двух строк H1 |
 | `--fs-radius`, `--fs-btn-radius`, `--fs-shadow` | скругления и тени |
 | `--fs-font-head`, `--fs-font-body`, `--fs-head-weight` | шрифты (по умолчанию наследуются от Тильды) |
-| `--fs-width`, `--fs-pad-y`, `--fs-pad-y-mobile` | ширина и отступы секций |
+| `--fs-width`, `--fs-pad-y`, `--fs-pad-y-mobile` | ширина и отступы секций (ЭС: 90 / 60 px – как пресет 90 в Тильде) |
+| `--fs-dark-edge`, `--fs-dark-edge-mobile` | фигурные края тёмных секций – высота клина к центру сверху и снизу (ЭС: 60 / 24 px; не задано – прямоугольник) |
 
 ## Надёжность
 

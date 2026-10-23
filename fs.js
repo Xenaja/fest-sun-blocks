@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.23-21';
+  var VERSION = '2026.10.23-22';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -1120,6 +1120,10 @@
       '--fs-radius:0px;--fs-btn-radius:6px;--fs-shadow:none;--fs-font-head:inherit;--fs-font-body:inherit;--fs-head-weight:700;--fs-title-size:clamp(26px,3vw,32px);--fs-width:1100px;--fs-pad-y:80px;--fs-pad-y-mobile:56px}',
 
       '.fs-root.fs-variant-dark{--fs-bg:var(--fs-dark-bg);--fs-fg:var(--fs-dark-fg);--fs-title:var(--fs-dark-title);--fs-muted:var(--fs-dark-muted);--fs-line:var(--fs-dark-line);--fs-card-bg:var(--fs-dark-card-bg);--fs-past:var(--fs-dark-muted)}',
+      // Фигурные края тёмных секций: клин к центру сверху и снизу. Высота клина –
+      // --fs-dark-edge темы (0 – обычный прямоугольник, как было)
+      '.fs-root.fs-variant-dark>.fs-section{--fs-edge:var(--fs-dark-edge,0px);padding-top:calc(var(--fs-pad-y) + var(--fs-edge));padding-bottom:calc(var(--fs-pad-y) + var(--fs-edge));clip-path:polygon(0 var(--fs-edge),50% 0,100% var(--fs-edge),100% calc(100% - var(--fs-edge)),50% 100%,0 calc(100% - var(--fs-edge)))}',
+      '@media (max-width:600px){.fs-root.fs-variant-dark>.fs-section{--fs-edge:var(--fs-dark-edge-mobile,var(--fs-dark-edge,0px));padding-top:calc(var(--fs-pad-y-mobile) + var(--fs-edge));padding-bottom:calc(var(--fs-pad-y-mobile) + var(--fs-edge))}}',
       '.fs-root.fs-variant-soft{--fs-bg:var(--fs-bg-soft)}',
       '.fs-root,.fs-root *,.fs-root *::before,.fs-root *::after{box-sizing:border-box}',
       '.fs-root{display:block;max-width:100%;overflow-x:hidden}',

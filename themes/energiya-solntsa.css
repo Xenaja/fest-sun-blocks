@@ -59,6 +59,8 @@
 
   /* размеры */
   --fs-width: 1100px;
-  --fs-pad-y: 80px;
-  --fs-pad-y-mobile: 56px;
+  --fs-pad-y: 90px;          /* один шаг отступа по всему лендингу – как пресет 90 в Тильде */
+  --fs-pad-y-mobile: 60px;
+  --fs-dark-edge: 60px;       /* фигурные края тёмных секций (клин к центру) */
+  --fs-dark-edge-mobile: 24px;
 }
