@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.24-4';
+  var VERSION = '2026.10.24-5';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -934,13 +934,13 @@
       cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
       // звёзды по кругу на всю диагональ – при вращении углы не пустеют
       var R = Math.sqrt(w * w + h * h) / 2;
-      var n = Math.min(900, Math.round(w * h / 1700 * opt.density));
+      var n = Math.min(1100, Math.round(w * h / 1300 * opt.density));
       stars = [];
       for (var i = 0; i < n; i++) {
         var d = Math.random(); // глубина: дальние мельче и медленнее
         stars.push({
-          a: Math.random() * 6.283, r: R * Math.sqrt(Math.random()), d: d, s: 0.4 + d * d * 1.4,
-          al: 0.35 + Math.random() * 0.65, tw: 0.4 + Math.random() * 1.6, ph: Math.random() * 6.283,
+          a: Math.random() * 6.283, r: R * Math.sqrt(Math.random()), d: d, s: 0.45 + d * d * 1.6,
+          al: 0.45 + Math.random() * 0.55, tw: 0.4 + Math.random() * 1.6, ph: Math.random() * 6.283,
           c: COLORS[(Math.random() * COLORS.length) | 0]
         });
       }
@@ -952,7 +952,7 @@
       if (!w) return;
       var m = Math.max(w, h);
       clouds.forEach(function (c) {
-        var a = 0.1 + 0.05 * Math.sin(t * 0.15 + c.ph);
+        var a = 0.14 + 0.06 * Math.sin(t * 0.15 + c.ph);
         var x = c.x * w + Math.sin(t * 0.03 + c.ph) * w * 0.03;
         var y = c.y * h + Math.cos(t * 0.025 + c.ph) * h * 0.03;
         var gr = g.createRadialGradient(x, y, 0, x, y, c.r * m);
@@ -970,7 +970,7 @@
         g.fillStyle = 'rgba(' + s.c + ',' + al.toFixed(3) + ')';
         g.beginPath(); g.arc(x, y, s.s, 0, 6.283); g.fill();
         if (s.s > 1.1) { // у крупных – мягкий ореол
-          g.fillStyle = 'rgba(' + s.c + ',' + (al * 0.15).toFixed(3) + ')';
+          g.fillStyle = 'rgba(' + s.c + ',' + (al * 0.2).toFixed(3) + ')';
           g.beginPath(); g.arc(x, y, s.s * 3.5, 0, 6.283); g.fill();
         }
       }
@@ -982,7 +982,7 @@
       }
       if (comet) {
         var k = (t - comet.t) / comet.life;
-        if (k >= 1) { comet = null; nextComet = t + 7 + Math.random() * 9; return; }
+        if (k >= 1) { comet = null; nextComet = t + 5 + Math.random() * 7; return; }
         var px = comet.x + comet.vx * (t - comet.t), py = comet.y + comet.vy * (t - comet.t);
         var tx = px - comet.vx * 0.13, ty = py - comet.vy * 0.13;
         var lg = g.createLinearGradient(px, py, tx, ty);
