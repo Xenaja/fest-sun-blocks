@@ -97,7 +97,7 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 <script src="https://xenaja.github.io/fest-sun-blocks/fs.js"></script>
 ```
 
-**footer** – подвал: название и даты события, адрес, контакт (телефон, WhatsApp, Telegram), политика конфиденциальности, ©. Данные – `footer` в `event.json` (`place` – строки адреса, `contacts`, `policy`, `copyright`). Ставится последним блоком страницы, тёмный по умолчанию. Сейчас настроен у Новогодней Мистерии:
+**footer** – подвал: название и даты события, адрес, контакт (телефон, WhatsApp, Telegram), политика конфиденциальности, ©. Данные – `footer` в `event.json` (`place` – строки адреса, `contacts`, `policy`, `copyright`). `place` и `contacts` необязательны: если на странице над подвалом уже есть блок «Контакты» Тильды, их не задаём, чтобы не дублировать (так у Новогодней Мистерии). Ставится последним блоком страницы, тёмный по умолчанию:
 
 ```html
 <div class="fs-block" data-block="footer" data-event="novogodnyaya-misteriya"></div>

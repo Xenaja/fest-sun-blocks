@@ -13,8 +13,6 @@
   "bot": { "telegram": "https://t.me/fest_sun_bot", "start": "e_newyear" },
 
   "footer": {
-    "place": ["Ретрит-центр «Энергия Солнца»", "Сочи, Вардане, ул. Рассветная, 22/12"],
-    "contacts": [{ "name": "Анна", "phone": "+7 918 415-88-78", "telegram": "Anna_provodnik", "whatsapp": "79184158878" }],
     "policy": "https://fest-sun.ru/policy",
     "copyright": "Ретрит-центр «Энергия Солнца»"
   },
