@@ -119,7 +119,11 @@
     "id": "davudov",
     "name": "Александр Давудов",
     "regalia": "",
-    "short": ""
+    "short": "",
+    "photo": "img/masters/davudov.webp",
+    "photo_full": "img/masters/full/davudov.webp",
+    "pos": "50% 30%",
+    "zoom": 1.3
   },
   {
     "id": "shcherbakova",
