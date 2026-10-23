@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.23-17';
+  var VERSION = '2026.10.23-18';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -536,7 +536,7 @@
       var items = sp.items.map(function (it) {
         var id = typeof it === 'string' ? it : it.id;
         var base = byId[id] || { name: id };
-        return { name: base.name, desc: base.desc, prices: (typeof it === 'object' && it.prices) || sp.prices || [] };
+        return { name: base.name, desc: STUB.test(base.desc || '') ? '' : base.desc, prices: (typeof it === 'object' && it.prices) || sp.prices || [] };
       });
       // "title": "" в event.json – без заголовка (если он уже есть на странице Тильды)
       var spTitle = c.el.getAttribute('data-title') || ('title' in sp ? sp.title : 'Спецпрограммы');
