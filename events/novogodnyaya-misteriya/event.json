@@ -61,10 +61,7 @@
   "video": { "title": "Мистерия звука", "rutube": "64bffe00ab2103b0a9dad2854e417003", "cover": "img/video-cover.webp" },
 
   "galleries": {
-    "rooms": {
-      "title": "Номера",
-      "photos": ["img/room-1.webp", "img/room-2.webp", "img/room-3.webp", "img/room-4.webp", "img/room-5.webp", "img/room-6.webp"]
-    },
+    "rooms": { "rooms": true },
     "territory": {
       "title": "Территория",
       "photos": ["img/territory-1.webp", "img/territory-2.webp", "img/territory-3.webp", "img/territory-4.webp", "img/territory-5.webp", "img/territory-6.webp"]

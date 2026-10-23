@@ -218,7 +218,7 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 Новые блоки (работают и на сайте, в Тильду пока не ставим):
 - `hero` – первый экран: `event.json` → `hero` (eyebrow, title, lead, dates, image).
 - `video` – `event.json` → `video` (`rutube` | `youtube` | `vk`, `cover`, `title`); плеер грузится по нажатию, под ним ссылка на сайт видео.
-- `gallery` – `data-name="rooms"` → `event.json` → `galleries.rooms` (title, caption, photos); листается пальцем.
+- `gallery` – `data-name="rooms"` → `event.json` → `galleries.rooms` (title, caption, photos); листается пальцем. Если вместо фото `"rooms": true` – блок показывает номера центра из `shared/center.json` (как `rooms`); так у Новогодней Мистерии.
 - `::: icons` в md – картинка, заголовок, строка: `- ![Подпись](img/icon.webp) **Заголовок** текст` (картинки – от папки события).
 - `prices` с `data-cols="partner"` – только партнёрская колонка, `data-title` – свой заголовок.
 

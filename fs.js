@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.23-45';
+  var VERSION = '2026.10.23-46';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -1092,6 +1092,11 @@
   BLOCKS.gallery = function (c) {
     var name = c.el.getAttribute('data-name') || '';
     var g = (c.ev.galleries || {})[name];
+    // galleries.<имя>.rooms: true – вместо галереи номера центра (shared/center.json), как блок rooms
+    if (g && g.rooms) {
+      c.el.classList.add('fs-b-rooms');
+      return BLOCKS.rooms(c);
+    }
     if (!g || !g.photos || !g.photos.length) throw new Error('нет galleries.' + name + ' в event.json');
     var items = g.photos.map(function (p, i) {
       var src = typeof p === 'string' ? p : p.src;
