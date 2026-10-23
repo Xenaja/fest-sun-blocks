@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.23-46';
+  var VERSION = '2026.10.24-1';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -109,7 +109,7 @@
   var CARDS_OPEN = '\u0000cards', CARDS_CLOSE = '\u0000/cards';
   var CALLOUT_OPEN = '\u0000callout', CALLOUT_CLOSE = '\u0000/callout';
   var LIST_LINE = /^\s*([-*]|\d+[.)])\s+/;
-  var STRUCT = /^(cards|cards-2|center|features|steps|buttons|bar|icons)$/;
+  var STRUCT = /^(cards|cards-2|center|features|steps|buttons|bar|icons|accordion)$/;
 
   // Страница одна на событие – для новичков (с 23.10.2026, data-audience больше нет).
   // ::: new – показываем (абзацы выделяются карточкой, одиночные пункты списка
@@ -188,7 +188,7 @@
 
     lines.forEach(function (line) {
       var m;
-      var mk = line.match(/^\u0000(cards|cards-2|callout|center|features|steps|buttons|bar|icons)$/);
+      var mk = line.match(/^\u0000(cards|cards-2|callout|center|features|steps|buttons|bar|icons|accordion)$/);
       if (mk) {
         flush();
         out('<div class="' + (mk[1] === 'cards-2' ? 'fs-cards fs-cards--2' : 'fs-' + mk[1]) + '">');
@@ -196,7 +196,7 @@
         afterTitle = false;
         return;
       }
-      if (/^\u0000\/(cards|cards-2|callout|center|features|steps|buttons|bar|icons)$/.test(line)) {
+      if (/^\u0000\/(cards|cards-2|callout|center|features|steps|buttons|bar|icons|accordion)$/.test(line)) {
         flush();
         if (/^\u0000\/cards/.test(line)) closeCard();
         out('</div>');
@@ -1284,6 +1284,7 @@
       if (type === 'reflinks') return;
       var res = typeof out === 'string' ? { html: out } : out;
       el.innerHTML = res.html;
+      enhanceAccordions(el);
       resolveLinks(el, ctx.ev);
       if (res.after) res.after(el);
       flattenSoon();
@@ -1324,6 +1325,19 @@
   }
   function flattenSoon() {
     if (!flattenEdges.timer) flattenEdges.timer = setTimeout(flattenEdges, 150);
+  }
+
+  // ::: accordion – пункты списка «**Заголовок.** описание» сворачиваются: виден заголовок
+  // и «+», описание – по нажатию (details/summary, работает и без скрипта стилей)
+  function enhanceAccordions(root) {
+    [].forEach.call(root.querySelectorAll('.fs-accordion>.fs-list>li'), function (li) {
+      var s = li.firstElementChild;
+      if (!s || !/^(STRONG|B)$/.test(s.tagName) || li.querySelector('details')) return;
+      var t = s.innerHTML.replace(/[.:]\s*$/, '');
+      li.removeChild(s);
+      li.innerHTML = '<details class="fs-acc"><summary><span>' + t + '</span><i class="fs-acc__icon" aria-hidden="true"></i></summary>' +
+        '<div class="fs-acc__body">' + li.innerHTML.replace(/^\s+/, '') + '</div></details>';
+    });
   }
 
   function scan() {
@@ -1392,6 +1406,17 @@
       // Подвал: тёмный, без фигурных краёв (под ним обычно карта или контакты), отступы меньше, чем у секций
       '.fs-root.fs-flat-top{--fs-top-k:0}.fs-root.fs-flat-bottom{--fs-bottom-k:0}',
       '.fs-root.fs-b-footer{--fs-top-k:0;--fs-bottom-k:0}.fs-root.fs-b-footer>.fs-section{padding-top:56px;padding-bottom:28px}',
+      // ::: accordion – заголовки строками, описание по «+»
+      '.fs-accordion{max-width:860px;margin:0 auto 24px}.fs-accordion>.fs-list{margin:0}',
+      '.fs-accordion>.fs-list>li{margin:0;padding:0;border-bottom:1px solid var(--fs-line)}.fs-accordion>.fs-list>li:first-child{border-top:1px solid var(--fs-line)}',
+      '.fs-root .fs-accordion>.fs-list>li::before{content:none;display:none}',
+      '.fs-acc>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 2px;font-weight:600;font-size:17px;line-height:1.35;color:var(--fs-title)}',
+      '.fs-acc>summary::-webkit-details-marker{display:none}.fs-acc>summary:focus-visible{outline:2px solid var(--fs-highlight);outline-offset:2px}',
+      '.fs-acc__icon{position:relative;flex:0 0 28px;height:28px;border:1px solid var(--fs-gold);border-radius:50%;transition:transform .25s}',
+      '.fs-acc__icon::before,.fs-acc__icon::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:2px;margin:-1px 0 0 -6px;background:var(--fs-gold);border-radius:1px}.fs-acc__icon::after{transform:rotate(90deg)}',
+      '.fs-acc[open] .fs-acc__icon{transform:rotate(45deg)}',
+      '.fs-acc__body{padding:0 2px 18px;font-size:16px;line-height:1.6}',
+      '@media (max-width:600px){.fs-acc>summary{font-size:16px;padding:13px 2px}.fs-acc__body{font-size:15px}}',
       // Гирлянда: блок без высоты, рисунок висит поверх стыка соседних блоков
       '.fs-garland{position:relative;z-index:5;height:0;pointer-events:none}',
       '.fs-garland>svg{position:absolute;left:0;top:-8px;overflow:visible}',
