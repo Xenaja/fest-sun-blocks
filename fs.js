@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.23-39';
+  var VERSION = '2026.10.23-40';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -1281,7 +1281,36 @@
       el.innerHTML = res.html;
       resolveLinks(el, ctx.ev);
       if (res.after) res.after(el);
+      flattenSoon();
     }).then(null, function (err) { fail(el, err); });
+  }
+
+  // Фигурный край рядом с узким блоком Тильды (кнопка, заголовок – ниже FLAT_NEAR px) – перебор,
+  // такой край делаем прямым. Вручную: data-edge="none" | "top" | "bottom" (какие края оставить)
+  // или "both" – оба, без автоматики.
+  var FLAT_NEAR = 220;
+  function neighbour(el, dir) {
+    var box = (el.closest && el.closest('.t-rec')) || el;
+    for (var n = box[dir]; n; n = n[dir]) {
+      if (n.classList && n.classList.contains('demo-label')) continue;
+      if (n.offsetHeight > 0) return n;
+    }
+    return null;
+  }
+  function flattenEdges() {
+    flattenEdges.timer = 0;
+    var roots = document.querySelectorAll('.fs-root.fs-variant-dark, .fs-root.fs-variant-soft');
+    for (var i = 0; i < roots.length; i++) {
+      var r = roots[i], mode = r.getAttribute('data-edge');
+      var narrow = function (n) { return !!n && n.offsetHeight < FLAT_NEAR && !n.querySelector('.fs-root'); };
+      var top = mode ? mode === 'top' || mode === 'both' : !narrow(neighbour(r, 'previousElementSibling'));
+      var bottom = mode ? mode === 'bottom' || mode === 'both' : !narrow(neighbour(r, 'nextElementSibling'));
+      r.classList.toggle('fs-flat-top', !top);
+      r.classList.toggle('fs-flat-bottom', !bottom);
+    }
+  }
+  function flattenSoon() {
+    if (!flattenEdges.timer) flattenEdges.timer = setTimeout(flattenEdges, 150);
   }
 
   function scan() {
@@ -1348,6 +1377,7 @@
       edgeCSS('dark', 'polygon(0 var(--fs-edge-t),50% 0,100% var(--fs-edge-t),100% calc(100% - var(--fs-edge-b)),50% 100%,0 calc(100% - var(--fs-edge-b)))'),
       edgeCSS('soft', 'none'),
       // Подвал: тёмный, фигурный край только сверху, отступы меньше, чем у секций
+      '.fs-root.fs-flat-top{--fs-top-k:0}.fs-root.fs-flat-bottom{--fs-bottom-k:0}',
       '.fs-root.fs-b-footer{--fs-bottom-k:0}.fs-root.fs-b-footer>.fs-section{padding-top:56px;padding-bottom:28px}',
       // Гирлянда: блок без высоты, рисунок висит поверх стыка соседних блоков
       '.fs-garland{position:relative;z-index:5;height:0;pointer-events:none}',
@@ -1697,6 +1727,9 @@
   });
 
   window.FestSun = { scan: scan, version: VERSION };
+  // высоты блоков Тильды окончательны после загрузки картинок и Zero-блоков
+  window.addEventListener('load', function () { flattenSoon(); setTimeout(flattenEdges, 1500); });
+  window.addEventListener('resize', flattenSoon);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scan);
   else scan();
 })();
