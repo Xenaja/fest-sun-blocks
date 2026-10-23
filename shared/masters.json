@@ -64,5 +64,67 @@
     "photo": "img/masters/danaya.webp",
     "photo_full": "img/masters/full/danaya.webp",
     "pos": "50% 30%"
+  },
+  {
+    "id": "chernyh",
+    "name": "Екатерина Черных",
+    "regalia": "Эксперт в области финансовой культуры, продюсер, создатель 5 и соавтор еще 5 игр, автор фестиваля «МаниФест»",
+    "short": "Выступление «Формула Денег»: мастер-классы по проявленности и созданию линейки продуктов, которые продаются.",
+    "photo": "img/masters/chernyh.webp",
+    "photo_full": "img/masters/full/chernyh.webp",
+    "pos": "50% 28%",
+    "zoom": 1.3
+  },
+  {
+    "id": "pravin",
+    "name": "Павел Правин",
+    "regalia": "Композитор, исполнитель, мультиинструменталист",
+    "short": "Постоянный участник группы ОдноНо. Продюсер музыкальной книги «Мистицизм звука» Хазрата Инайята Хана.",
+    "photo": "img/masters/pravin.webp",
+    "photo_full": "img/masters/full/pravin.webp",
+    "pos": "58% 30%",
+    "zoom": 1.4
+  },
+  {
+    "id": "tanzu",
+    "name": "Андрей Танзю",
+    "regalia": "Перкуссионист, основатель школы рамочных барабанов Frame Drum Family",
+    "short": "Один из лучших перкуссионистов России, пионер world music и первооткрыватель рамочных барабанов в России.",
+    "photo": "img/masters/tanzu.webp",
+    "photo_full": "img/masters/full/tanzu.webp",
+    "pos": "52% 35%",
+    "zoom": 1.5
+  },
+  {
+    "id": "klaviho",
+    "name": "Карина Клавихо",
+    "regalia": "Танцовщица, преподаватель Fusion Dance",
+    "short": "Мастер-класс по современному танцевальному направлению Fusion Dance.",
+    "photo": "img/masters/klaviho.webp",
+    "photo_full": "img/masters/full/klaviho.webp",
+    "pos": "60% 30%",
+    "zoom": 1.5
+  },
+  {
+    "id": "telminov",
+    "name": "Станислав Тельминов",
+    "regalia": "Проводник гвоздепрактики, производитель досок садху, 5-и кратный мировой рекордсмен по массовому стоянию на гвоздях, мастер правило, психолог, организатор Sadhu Fest",
+    "short": "17 лет личной практики стояния и лежания на гвоздях. Провел более 5000 людей через практики на досках Садху.",
+    "photo": "img/masters/telminov.webp",
+    "photo_full": "img/masters/full/telminov.webp",
+    "pos": "50% 30%",
+    "zoom": 1.4
+  },
+  {
+    "id": "davudov",
+    "name": "Александр Давудов",
+    "regalia": "",
+    "short": ""
+  },
+  {
+    "id": "shcherbakova",
+    "name": "Марина Щербакова",
+    "regalia": "",
+    "short": ""
   }
 ]

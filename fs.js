@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.23-7';
+  var VERSION = '2026.10.23-8';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -790,7 +790,7 @@
       }).join('');
       return {
         html: section(title(c.el.getAttribute('data-title') || mb.title || 'Мастера') + lead(mb.lead) +
-          '<div class="fs-masters" style="--fs-cols:' + (list.length === 5 || list.length === 6 ? 3 : Math.min(list.length, 4)) + '">' + cards + '</div>', 'fs-masters-section'),
+          '<div class="fs-masters" style="--fs-cols:' + (list.length === 5 || list.length === 6 || list.length === 9 ? 3 : Math.min(list.length, 4)) + '">' + cards + '</div>', 'fs-masters-section'),
         after: bindMasters(c, list)
       };
     });

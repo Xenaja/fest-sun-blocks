@@ -37,11 +37,18 @@
     "lead": "Прямо сейчас мы создаём для вас яркую насыщенную программу со звездным составом."
   },
   "masters": [
-    "valeeva",
     { "id": "pavitra", "audience": "all" },
     "yura-ra",
-    "zakharevich",
-    "danaya"
+    "chernyh",
+    "pravin",
+    "tanzu",
+    "teya",
+    "nollendorf",
+    "klaviho",
+    "danaya",
+    "telminov",
+    "davudov",
+    "shcherbakova"
   ],
   "alumni": ["pavitra", "zakharevich", "yura-ra"]
 }
