@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.23-16';
+  var VERSION = '2026.10.23-17';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -1353,7 +1353,9 @@
       '.fs-master__line{display:block;width:56px;height:1px;background:var(--fs-fg);opacity:.5;margin:18px 0 14px}',
       '.fs-master__more{align-self:flex-start;background:none;border:0;padding:0;font:inherit;font-size:16px;letter-spacing:.06em;color:var(--fs-fg);opacity:.85;cursor:pointer;transition:color .2s}',
       '.fs-master__more:hover{color:var(--fs-gold);opacity:1}',
-      '.fs-alumni{list-style:none;display:flex;gap:28px;overflow-x:auto;scroll-snap-type:x proximity;justify-content:safe center;margin:36px 0 0;padding:0 0 8px;scrollbar-width:thin}',
+      // Компьютер – ряды по центру, без прокрутки; телефон – лента пальцем (ниже)
+      '.fs-alumni{list-style:none;display:flex;flex-wrap:wrap;gap:32px 28px;justify-content:center;margin:36px 0 0;padding:0 0 8px}',
+      '@media (max-width:600px){.fs-alumni{flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x proximity;justify-content:flex-start;gap:20px;scrollbar-width:thin;scrollbar-color:var(--fs-highlight) transparent}}',
       '.fs-alumni li{flex:0 0 auto;scroll-snap-align:start}',
       '.fs-alum{display:flex;flex-direction:column;align-items:center;gap:12px;width:140px;background:none;border:0;padding:0;font:inherit;color:var(--fs-fg);cursor:pointer}',
       '.fs-alum__ph{position:relative;left:auto;top:auto;transform:none;width:120px;height:120px;border:2px solid var(--fs-gold)}',

@@ -134,5 +134,84 @@
     "photo_full": "img/masters/full/shcherbakova.webp",
     "pos": "50% 14%",
     "zoom": 1.3
+  },
+  {
+    "id": "odnono",
+    "name": "Odnono",
+    "regalia": "Deep indie-группа",
+    "short": "Электроника, этника, хип-хоп и поэзия – солдауты в Индии, Таиланде и на Бали.",
+    "photo": "img/masters/odnono.webp",
+    "photo_full": "img/masters/full/odnono.webp"
+  },
+  {
+    "id": "bittu-mallik",
+    "name": "Битту Маллик",
+    "regalia": "Индийский музыкант в 13-м поколении",
+    "short": "Мантры, классическая и суфийская музыка.",
+    "photo": "img/masters/bittu-mallik.webp",
+    "photo_full": "img/masters/full/bittu-mallik.webp"
+  },
+  {
+    "id": "uutai",
+    "name": "Олена Уутай",
+    "regalia": "Этно-музыкант, мастер горлового пения, Якутия",
+    "short": "Признанный во всём мире голос северных легенд.",
+    "photo": "img/masters/uutai.webp",
+    "photo_full": "img/masters/full/uutai.webp"
+  },
+  {
+    "id": "alizbar",
+    "name": "Alizbar и Ann'Sannat",
+    "regalia": "Концерт-медитация",
+    "short": "Кельтская арфа, флейты, ханги и поющие чаши.",
+    "photo": "img/masters/alizbar.webp",
+    "photo_full": "img/masters/full/alizbar.webp"
+  },
+  {
+    "id": "nadishana",
+    "name": "Надишана",
+    "regalia": "Виртуозный мультиинструменталист",
+    "short": "Ханг, варган и стальная перкуссия.",
+    "photo": "img/masters/nadishana.webp",
+    "photo_full": "img/masters/full/nadishana.webp",
+    "pos": "68% 40%"
+  },
+  {
+    "id": "fulvari",
+    "name": "Маргарита Фулвари",
+    "photo": "img/masters/fulvari.webp",
+    "photo_full": "img/masters/full/fulvari.webp"
+  },
+  {
+    "id": "shringara",
+    "name": "Shringara Orchestra",
+    "regalia": "Индийская рага, этно-рок, фьюжн",
+    "short": "Древняя сакральная музыка Индии в современном звучании.",
+    "photo": "img/masters/shringara.webp",
+    "photo_full": "img/masters/full/shringara.webp"
+  },
+  {
+    "id": "sage",
+    "name": "Sage",
+    "regalia": "Диджериду и голос",
+    "short": "Участник Boom, Ozora и «Дикой Мяты».",
+    "photo": "img/masters/sage.webp",
+    "photo_full": "img/masters/full/sage.webp"
+  },
+  {
+    "id": "ivan-nikto",
+    "name": "DJ ivaN Nikto",
+    "regalia": "Мастер потокового танца и Ecstatic Dance",
+    "short": "Одним из первых открыл России Ecstatic Dance.",
+    "photo": "img/masters/ivan-nikto.webp",
+    "photo_full": "img/masters/full/ivan-nikto.webp"
+  },
+  {
+    "id": "mongush",
+    "name": "Монгуш Чаяна",
+    "regalia": "Потомственная тувинская шаманка",
+    "short": "Голос древней традиции Тувы.",
+    "photo": "img/masters/mongush.webp",
+    "photo_full": "img/masters/full/mongush.webp"
   }
 ]
