@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.24-2';
+  var VERSION = '2026.10.24-3';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -636,7 +636,9 @@
         '</tr></thead><tbody>' + tbody(durs[0]) + '</tbody></table></div>' +
         '<div class="fs-room-cards">' + cards(durs[0]) + '</div>' : '') +
         (center.rooms_note ? '<p class="fs-note">' + inline(center.rooms_note) + '</p>' : '') +
-        (gallery ? '<div class="fs-rooms' + (rooms.length === 4 ? ' fs-rooms--4' : '') + '">' + gallery + '</div>' : ''), 'fs-rooms-section');
+        (gallery ? '<div class="fs-rooms' + (rooms.length === 4 ? ' fs-rooms--4' : '') + '">' + gallery + '</div>' : '') +
+        // строка под фото номеров – center.json → rooms_footnote
+        (center.rooms_footnote ? '<p class="fs-note fs-rooms-foot">' + inline(center.rooms_footnote) + '</p>' : ''), 'fs-rooms-section');
 
       return { html: html, after: function (el) {
         el.addEventListener('click', function (e) {
@@ -1634,6 +1636,7 @@
       '.fs-rooms{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:24px;margin-top:44px}',
       // Четыре номера – сеткой 2×2, а не «3 + 1»; на телефоне – по одному
       '.fs-rooms--4{grid-template-columns:repeat(2,minmax(0,1fr))}',
+      '.fs-rooms-foot{margin-top:28px}',
       '@media (max-width:600px){.fs-rooms--4{grid-template-columns:minmax(0,1fr)}}',
       '.fs-room{min-width:0}',
       '.fs-gal{position:relative;aspect-ratio:4/3;max-width:100%;overflow:hidden;border-radius:var(--fs-radius);background:var(--fs-bg-soft)}',
