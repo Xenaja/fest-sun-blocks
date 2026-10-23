@@ -2,7 +2,12 @@
   "id": "energiya-solntsa",
   "title": "Фестиваль «Энергия Солнца»",
   "theme": "energiya-solntsa",
-  "dates": { "start": null, "end": null, "label": "Даты уточняются" },
+  "dates": {
+    "label": "4 – 11 января",
+    "sessions": [
+      { "start": "2027-01-04", "end": "2027-01-11" }
+    ]
+  },
   "durations": [7, 10],
 
   "bot": { "telegram": "https://t.me/fest_sun_bot", "start": "e_fest" },
