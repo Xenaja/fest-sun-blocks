@@ -19,7 +19,7 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 
 | атрибут | что значит |
 |---|---|
-| `data-block` | какой блок: `text`, `faq`, `prices`, `rooms`, `specials`, `masters`, `alumni`, `reflinks`, `partner-cta`, `redirect`, `galaxy` |
+| `data-block` | какой блок: `text`, `faq`, `prices`, `rooms`, `specials`, `masters`, `alumni`, `reflinks`, `partner-cta`, `redirect`, `galaxy`, `footer` |
 | `data-event` | событие: `energiya-solntsa`, `krug-masterov`, … (папка в `events/`) |
 | `data-name` | только для `text`: какой файл показать (`about` → `content/about.md`) |
 | `data-variant` | фон секции: не указан – светлый, `soft` – молочный, `dark` – тёмный |
@@ -94,6 +94,13 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 
 ```html
 <div class="fs-block" data-block="galaxy"></div>
+<script src="https://xenaja.github.io/fest-sun-blocks/fs.js"></script>
+```
+
+**footer** – подвал: название и даты события, адрес, контакт (телефон, WhatsApp, Telegram), политика конфиденциальности, ©. Данные – `footer` в `event.json` (`place` – строки адреса, `contacts`, `policy`, `copyright`). Ставится последним блоком страницы, тёмный по умолчанию. Сейчас настроен у Новогодней Мистерии:
+
+```html
+<div class="fs-block" data-block="footer" data-event="novogodnyaya-misteriya"></div>
 <script src="https://xenaja.github.io/fest-sun-blocks/fs.js"></script>
 ```
 

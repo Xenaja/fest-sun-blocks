@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.23-35';
+  var VERSION = '2026.10.23-36';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -368,7 +368,7 @@
 
   var BLOCKS = {};
 
-  var DEFAULT_VARIANT = { masters: 'dark', alumni: 'dark', hero: 'dark' };
+  var DEFAULT_VARIANT = { masters: 'dark', alumni: 'dark', hero: 'dark', footer: 'dark' };
 
   // data-fs-link у кнопок: bot / bot:master → ссылка на бота события, остальное как есть
   function resolveLinks(el, ev) {
@@ -824,6 +824,34 @@
     return '';
   };
 
+  // Подвал: название и даты события, адрес, контакт, политика. Данные – footer в event.json
+  // { place: [строки], contacts: [{ name, phone, telegram, whatsapp }], policy, copyright }.
+  // <div class="fs-block" data-block="footer" data-event="novogodnyaya-misteriya"></div>
+  BLOCKS.footer = function (c) {
+    var f = c.ev.footer;
+    if (!f) throw new Error('нет footer в event.json');
+    var place = (f.place || []).map(inline).join('<br>');
+    var contacts = (f.contacts || []).map(function (p) {
+      var links = [];
+      if (p.whatsapp) links.push('<a href="https://wa.me/' + esc(p.whatsapp) + '" target="_blank" rel="noopener">WhatsApp</a>');
+      if (p.telegram) links.push('<a href="https://t.me/' + esc(p.telegram) + '" target="_blank" rel="noopener">Telegram</a>');
+      return '<p><a href="tel:+' + esc(String(p.phone).replace(/\D/g, '')) + '">' + esc(p.phone) + '</a>' +
+        (p.name ? ' – ' + esc(p.name) : '') + '</p>' +
+        (links.length ? '<p class="fs-footer__links">' + links.join(' · ') + '</p>' : '');
+    }).join('');
+    var dates = c.ev.dates && c.ev.dates.label;
+    return section(
+      '<div class="fs-footer__grid">' +
+        '<div><div class="fs-footer__name">' + esc(c.ev.title) + '</div>' +
+          (dates ? '<div class="fs-footer__meta">' + esc(dates) + '</div>' : '') + '</div>' +
+        (place ? '<div><div class="fs-footer__label">Где</div><p>' + place + '</p></div>' : '') +
+        (contacts ? '<div><div class="fs-footer__label">Связаться</div>' + contacts + '</div>' : '') +
+      '</div>' +
+      '<div class="fs-footer__bottom"><span>© ' + new Date().getFullYear() + ' ' + esc(f.copyright || '') + '</span>' +
+        (f.policy ? '<a href="' + esc(f.policy) + '" target="_blank" rel="noopener">Политика конфиденциальности</a>' : '') + '</div>',
+      'fs-footer');
+  };
+
   // Внизу лендинга: «Вы партнёр Full Energy?» – одна-две строки и кнопка в раздел
   // партнёра в боте. Текст – content/partner-cta.md события (или shared/).
   BLOCKS['partner-cta'] = function (c) {
@@ -1261,6 +1289,16 @@
       // --fs-dark-edge темы (0 – обычный прямоугольник, как было)
       '.fs-root.fs-variant-dark>.fs-section{--fs-edge:var(--fs-dark-edge,0px);padding-top:calc(var(--fs-pad-y) + var(--fs-edge));padding-bottom:calc(var(--fs-pad-y) + var(--fs-edge));clip-path:polygon(0 var(--fs-edge),50% 0,100% var(--fs-edge),100% calc(100% - var(--fs-edge)),50% 100%,0 calc(100% - var(--fs-edge)))}',
       '@media (max-width:600px){.fs-root.fs-variant-dark>.fs-section{--fs-edge:var(--fs-dark-edge-mobile,var(--fs-dark-edge,0px));padding-top:calc(var(--fs-pad-y-mobile) + var(--fs-edge));padding-bottom:calc(var(--fs-pad-y-mobile) + var(--fs-edge))}}',
+      // Подвал: тёмный, без фигурного края и с отступами меньше, чем у секций
+      '.fs-root.fs-b-footer>.fs-section{clip-path:none;padding-top:56px;padding-bottom:28px}',
+      '.fs-footer__grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:28px 48px;align-items:start}',
+      '.fs-footer__name{font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);font-size:26px;line-height:1.2;text-transform:uppercase;color:var(--fs-title)}',
+      '.fs-footer__meta{margin-top:8px;font-size:15px;color:var(--fs-highlight)}',
+      '.fs-footer__label{margin:0 0 10px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--fs-muted)}',
+      '.fs-footer p{margin:0 0 6px;font-size:15px;line-height:1.6}',
+      '.fs-footer a{color:inherit;text-decoration:none;border-bottom:1px solid var(--fs-line)}.fs-footer a:hover{color:var(--fs-highlight);border-color:currentColor}',
+      '.fs-footer__bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;margin-top:40px;padding-top:20px;border-top:1px solid var(--fs-line);font-size:13px;color:var(--fs-muted)}',
+      '@media (max-width:600px){.fs-root.fs-b-footer>.fs-section{padding-top:44px;padding-bottom:24px}.fs-footer__grid{grid-template-columns:1fr;gap:24px;text-align:center}.fs-footer__bottom{justify-content:center;text-align:center}}',
       '.fs-root.fs-variant-soft{--fs-bg:var(--fs-bg-soft)}',
       '.fs-root,.fs-root *,.fs-root *::before,.fs-root *::after{box-sizing:border-box}',
       '.fs-root{display:block;max-width:100%;overflow-x:hidden}',
