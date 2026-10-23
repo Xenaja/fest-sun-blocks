@@ -19,7 +19,7 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 
 | атрибут | что значит |
 |---|---|
-| `data-block` | какой блок: `text`, `faq`, `prices`, `rooms`, `specials`, `masters`, `alumni`, `reflinks`, `partner-cta`, `redirect` |
+| `data-block` | какой блок: `text`, `faq`, `prices`, `rooms`, `specials`, `masters`, `alumni`, `reflinks`, `partner-cta`, `redirect`, `galaxy` |
 | `data-event` | событие: `energiya-solntsa`, `krug-masterov`, … (папка в `events/`) |
 | `data-name` | только для `text`: какой файл показать (`about` → `content/about.md`) |
 | `data-variant` | фон секции: не указан – светлый, `soft` – молочный, `dark` – тёмный |
@@ -85,6 +85,13 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 
 ```html
 <div class="fs-block" data-block="redirect" data-to="/newyear"></div>
+<script src="https://xenaja.github.io/fest-sun-blocks/fs.js"></script>
+```
+
+**galaxy** – мягкая анимация галактики на первом экране: мерцающие звёзды, медленное вращение, «дышащая» туманность, изредка падающая звезда. Поставьте HTML-блок (T123) **сразу после** Zero-блока первого экрана и в его настройках – отступы сверху и снизу 0. Скрипт сам найдёт предыдущий Zero-блок (и пару «десктоп/мобильный», если первый экран сделан двумя блоками с разной видимостью) и нарисует звёзды поверх фона, но под надписями и кнопкой. Если галактика нужна на другом блоке – `data-target="#rec123456789"` (через запятую – несколько). `data-stars="0.6"` – реже звёзды, `data-stars="1.5"` – гуще; `data-shooting="0"` – без падающих звёзд. При «уменьшить движение» в системе картинка неподвижна, вне экрана анимация на паузе. Демо – первый блок в `index.html`.
+
+```html
+<div class="fs-block" data-block="galaxy"></div>
 <script src="https://xenaja.github.io/fest-sun-blocks/fs.js"></script>
 ```
 

@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.23-23';
+  var VERSION = '2026.10.23-24';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -847,6 +847,142 @@
     location.replace(path + location.search + location.hash);
   }
 
+  // Мягкая «галактика» на первом экране (Zero-блок Тильды): мерцающие звёзды, медленное
+  // вращение, дыхание туманности, изредка падающая звезда. Ставится в HTML-блок сразу
+  // после первого экрана и рисует поверх фона предыдущего Zero-блока – под его
+  // элементами (пару десктоп/мобильный находит сама). Другой блок – data-target="#rec…".
+  // data-stars – густота (1 по умолчанию), data-shooting="0" – без падающих звёзд.
+  // <div class="fs-block" data-block="galaxy"></div>
+  function galaxyTargets(el) {
+    var sel = el.getAttribute('data-target');
+    if (sel) return [].slice.call(document.querySelectorAll(sel));
+    var out = [], rec = el.closest && el.closest('.t-rec');
+    for (var p = rec && rec.previousElementSibling; p && out.length < 2; p = p.previousElementSibling) {
+      if (p.getAttribute('data-record-type') !== '396') break;
+      out.push(p);
+      // без data-screen-* блок виден на всех экранах – пары нет
+      if (!p.hasAttribute('data-screen-min') && !p.hasAttribute('data-screen-max')) break;
+    }
+    return out;
+  }
+
+  function galaxy(el) {
+    var targets = galaxyTargets(el);
+    if (!targets.length) return fail(el, new Error('перед блоком нет Zero-блока – укажите data-target="#rec…"'));
+    el.style.display = 'none';
+    var opt = {
+      density: parseFloat(el.getAttribute('data-stars')) || 1,
+      shooting: el.getAttribute('data-shooting') !== '0'
+    };
+    targets.forEach(function (t) { starfield(t.querySelector('.t396__artboard') || t, opt); });
+  }
+
+  function starfield(box, opt) {
+    if (box.querySelector('.fs-galaxy')) return;
+    var cv = document.createElement('canvas');
+    cv.className = 'fs-galaxy';
+    cv.setAttribute('aria-hidden', 'true');
+    cv.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none;mix-blend-mode:screen';
+    if (getComputedStyle(box).position === 'static') box.style.position = 'relative';
+    var filter = box.querySelector('.t396__filter');
+    box.insertBefore(cv, filter ? filter.nextSibling : box.firstChild);
+
+    var g = cv.getContext('2d');
+    var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var COLORS = ['255,255,255', '255,255,255', '255,246,222', '255,214,110', '216,208,255'];
+    var w = 0, h = 0, dpr = 1, stars = [], comet = null, nextComet = 4, visible = true, raf = 0, t0 = 0;
+    var clouds = [
+      { x: 0.28, y: 0.35, r: 0.42, c: '124,92,230', ph: 0 },
+      { x: 0.74, y: 0.62, r: 0.38, c: '255,196,90', ph: 2.1 },
+      { x: 0.55, y: 0.18, r: 0.34, c: '70,110,255', ph: 4.2 }
+    ];
+
+    function seed() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = box.clientWidth; h = box.clientHeight;
+      if (!w || !h) { stars = []; return; }
+      cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+      // звёзды по кругу на всю диагональ – при вращении углы не пустеют
+      var R = Math.sqrt(w * w + h * h) / 2;
+      var n = Math.min(900, Math.round(w * h / 1700 * opt.density));
+      stars = [];
+      for (var i = 0; i < n; i++) {
+        var d = Math.random(); // глубина: дальние мельче и медленнее
+        stars.push({
+          a: Math.random() * 6.283, r: R * Math.sqrt(Math.random()), d: d, s: 0.4 + d * d * 1.4,
+          al: 0.35 + Math.random() * 0.65, tw: 0.4 + Math.random() * 1.6, ph: Math.random() * 6.283,
+          c: COLORS[(Math.random() * COLORS.length) | 0]
+        });
+      }
+    }
+
+    function draw(t) {
+      g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      g.clearRect(0, 0, w, h);
+      if (!w) return;
+      var m = Math.max(w, h);
+      clouds.forEach(function (c) {
+        var a = 0.1 + 0.05 * Math.sin(t * 0.15 + c.ph);
+        var x = c.x * w + Math.sin(t * 0.03 + c.ph) * w * 0.03;
+        var y = c.y * h + Math.cos(t * 0.025 + c.ph) * h * 0.03;
+        var gr = g.createRadialGradient(x, y, 0, x, y, c.r * m);
+        gr.addColorStop(0, 'rgba(' + c.c + ',' + a.toFixed(3) + ')');
+        gr.addColorStop(1, 'rgba(' + c.c + ',0)');
+        g.fillStyle = gr;
+        g.fillRect(0, 0, w, h);
+      });
+      var cx = w / 2, cy = h / 2;
+      for (var i = 0; i < stars.length; i++) {
+        var s = stars[i], ang = s.a + t * (0.004 + s.d * 0.008);
+        var x = cx + Math.cos(ang) * s.r, y = cy + Math.sin(ang) * s.r * 0.85;
+        if (x < -3 || x > w + 3 || y < -3 || y > h + 3) continue;
+        var al = s.al * (0.55 + 0.45 * Math.sin(t * s.tw + s.ph));
+        g.fillStyle = 'rgba(' + s.c + ',' + al.toFixed(3) + ')';
+        g.beginPath(); g.arc(x, y, s.s, 0, 6.283); g.fill();
+        if (s.s > 1.1) { // у крупных – мягкий ореол
+          g.fillStyle = 'rgba(' + s.c + ',' + (al * 0.15).toFixed(3) + ')';
+          g.beginPath(); g.arc(x, y, s.s * 3.5, 0, 6.283); g.fill();
+        }
+      }
+      if (!opt.shooting) return;
+      if (!comet && t > nextComet) {
+        var dir = Math.random() < 0.5 ? -1 : 1;
+        comet = { x: w * (dir < 0 ? 0.5 + Math.random() * 0.45 : 0.05 + Math.random() * 0.45), y: h * Math.random() * 0.4,
+          vx: dir * (260 + Math.random() * 180), vy: 110 + Math.random() * 90, t: t, life: 1.1 };
+      }
+      if (comet) {
+        var k = (t - comet.t) / comet.life;
+        if (k >= 1) { comet = null; nextComet = t + 7 + Math.random() * 9; return; }
+        var px = comet.x + comet.vx * (t - comet.t), py = comet.y + comet.vy * (t - comet.t);
+        var tx = px - comet.vx * 0.13, ty = py - comet.vy * 0.13;
+        var lg = g.createLinearGradient(px, py, tx, ty);
+        lg.addColorStop(0, 'rgba(255,242,205,' + (Math.sin(k * Math.PI) * 0.8).toFixed(3) + ')');
+        lg.addColorStop(1, 'rgba(255,242,205,0)');
+        g.strokeStyle = lg; g.lineWidth = 1.4; g.lineCap = 'round';
+        g.beginPath(); g.moveTo(px, py); g.lineTo(tx, ty); g.stroke();
+      }
+    }
+
+    function frame(ms) {
+      raf = 0;
+      if (!t0) t0 = ms;
+      draw((ms - t0) / 1000);
+      if (visible && !still) raf = requestAnimationFrame(frame);
+    }
+    function start() { if (still) draw(0); else if (visible && !raf) raf = requestAnimationFrame(frame); }
+    function resize() { seed(); if (still) draw(0); }
+
+    seed();
+    start();
+    // Вне экрана (или скрытый вариант для другого экрана) – не рисуем
+    if (window.IntersectionObserver) new IntersectionObserver(function (es) {
+      visible = es[es.length - 1].isIntersecting;
+      start();
+    }).observe(box);
+    if (window.ResizeObserver) new ResizeObserver(resize).observe(box);
+    else window.addEventListener('resize', resize);
+  }
+
   // ------------------------------------------------------------ видео и галерея
 
   // Видео: event.json → video { rutube | youtube | vk (адрес плеера), cover, title }.
@@ -1053,6 +1189,7 @@
     el.setAttribute('data-fs-done', '1');
     var type = el.getAttribute('data-block');
     if (type === 'redirect') return redirect(el);
+    if (type === 'galaxy') return galaxy(el);
     var evId = el.getAttribute('data-event');
     if (!BLOCKS[type]) return fail(el, new Error('неизвестный блок ' + type));
     // data-show – какие куски ::: показывать (страница партнёров мини-лендинга – partner)
