@@ -204,6 +204,7 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 | Страница | Адрес | Что это |
 |---|---|---|
 | `m/newyear/` | https://xenaja.github.io/fest-sun-blocks/m/newyear/?ref=КОД | Новогодняя Мистерия для гостей |
+| `m/energiya-solntsa/` | https://xenaja.github.io/fest-sun-blocks/m/energiya-solntsa/?ref=КОД | Энергия Солнца для гостей (заявка – `e_fest`) |
 | `m/partner/` | https://xenaja.github.io/fest-sun-blocks/m/partner/ | для партнёров, открывается из бота |
 
 На странице один контейнер `<div class="fs-mini" data-event="…" data-page="main|partner">` и `fs.js`. Состав и порядок блоков – `event.json` → `mini.main.blocks` / `mini.partner.blocks` (поля блока = атрибуты `data-*`: `block`, `name`, `variant`, `cols`, `show`, `title`; `if` – показывать только при флаге в `shared/config.json`).

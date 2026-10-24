@@ -12,6 +12,47 @@
 
   "bot": { "telegram": "https://t.me/fest_sun_bot", "start": "e_fest" },
 
+  "hero": {
+    "eyebrow": "Ретрит-центр «Энергия Солнца» · Сочи",
+    "title": "Энергия Солнца",
+    "lead": "Здоровье · Саморазвитие · Творчество",
+    "dates": ["3 – 10 января"],
+    "image": "img/hero.webp"
+  },
+
+  "galleries": {
+    "rooms": { "rooms": true },
+    "territory": {
+      "title": "Территория",
+      "photos": ["img/territory-1.webp", "img/territory-2.webp", "img/territory-3.webp", "img/territory-4.webp", "img/territory-5.webp", "img/territory-6.webp"]
+    },
+    "food": {
+      "title": "Питание",
+      "photos": ["img/food-1.webp", "img/food-2.webp", "img/food-3.webp", "img/food-4.webp", "img/food-5.webp"]
+    }
+  },
+
+  "mini": {
+    "main": {
+      "cta": "Оставить заявку",
+      "blocks": [
+        { "block": "hero" },
+        { "block": "text", "name": "benefits", "variant": "soft" },
+        { "block": "masters" },
+        { "block": "text", "name": "program" },
+        { "block": "text", "name": "business", "variant": "dark" },
+        { "block": "prices" },
+        { "block": "specials" },
+        { "block": "text", "name": "stay" },
+        { "block": "gallery", "name": "rooms" },
+        { "block": "gallery", "name": "territory" },
+        { "block": "gallery", "name": "food" },
+        { "block": "text", "name": "kids", "variant": "soft" },
+        { "block": "text", "name": "gift" }
+      ]
+    }
+  },
+
   "fee": {
     "title": "Стоимость",
     "lead": [

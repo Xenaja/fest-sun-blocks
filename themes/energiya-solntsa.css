@@ -64,3 +64,11 @@
   --fs-dark-edge: 60px;       /* фигурные края тёмных секций (клин к центру) */
   --fs-dark-edge-mobile: 24px;
 }
+
+/* Первый экран (мини-лендинг): название – золотом и прописными, как на сайте */
+.fs-theme-energiya-solntsa .fs-hero__main {
+  color: var(--fs-highlight);
+  text-transform: uppercase;
+  letter-spacing: .02em;
+}
+.fs-theme-energiya-solntsa .fs-hero__lead { text-transform: uppercase; letter-spacing: .04em; font-size: clamp(12px, 3.3vw, 16px); white-space: nowrap; }
