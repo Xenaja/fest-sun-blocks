@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.24-12';
+  var VERSION = '2026.10.24-13';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -521,7 +521,8 @@
       '<div class="fs-plans fs-plans--' + auds.length + '">' + plans + '</div>' + extras +
       '<div class="fs-after">' +
         (fee.installment ? '<p class="fs-after__note">' + inline(fee.installment) + '</p>' : '') +
-        '<a class="fs-btn" href="' + esc(link) + '"' + (/^https?:/.test(link) ? ' target="_blank" rel="noopener"' : '') + '>' + esc(fee.button || 'Участвую') + '</a>' +
+        // на странице партнёров (только партнёрская колонка) кнопки нет – там «Вернуться в бота»
+        (auds.length > 1 ? '<a class="fs-btn" href="' + esc(link) + '"' + (/^https?:/.test(link) ? ' target="_blank" rel="noopener"' : '') + '>' + esc(fee.button || 'Участвую') + '</a>' : '') +
       '</div>', 'fs-prices');
   };
 
@@ -1198,13 +1199,19 @@
           fetch(cfg.api_url + '/mini/open', { method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ initData: tg.initData, page: page, event: ev.id }) }).catch(function () { /* ок */ });
         }
+        // Ссылка на чат: некоторые клиенты молча не открывают из мини-приложения ссылку на того же
+        // бота – тогда через секунду закрываем приложение, человек возвращается в чат
+        var openInTelegram = function (h) {
+          tg.openTelegramLink(h);
+          setTimeout(function () { try { tg.close(); } catch (err) { /* ок */ } }, 1000);
+        };
         // Ссылки внутри Telegram открываем его средствами: t.me – в самом Telegram, остальное – во встроенном браузере
         document.addEventListener('click', function (e) {
           var a = e.target.closest && e.target.closest('a[href]');
           if (!a) return;
           var h = a.getAttribute('href');
           if (isFormLink(h)) h = botLink(ev);
-          if (/^https?:\/\/t\.me\//.test(h)) { e.preventDefault(); e.stopImmediatePropagation(); tg.openTelegramLink(h); }
+          if (/^https?:\/\/t\.me\//.test(h)) { e.preventDefault(); e.stopImmediatePropagation(); openInTelegram(h); }
           else if (/^https?:/.test(h)) { e.preventDefault(); e.stopImmediatePropagation(); tg.openLink(h); }
         }, true);
       }
@@ -1235,7 +1242,7 @@
           location.href = ev.bot.telegram + '?start=partner';
           return;
         }
-        if (tg) return tg.openTelegramLink(botLink(ev));
+        if (tg) return openInTelegram(botLink(ev));
         var links = leadLinks(ev, cfg);
         var want = platform === 'vk' ? 'ВКонтакте' : platform === 'max' ? 'MAX' : null;
         var pick = links.filter(function (l) { return l.label === want; })[0];
