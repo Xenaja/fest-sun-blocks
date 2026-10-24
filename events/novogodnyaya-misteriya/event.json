@@ -46,7 +46,6 @@
   },
 
   "garlands": ["prices"],
-  "rooms_note": "Проживание с питанием – от 5 000 ₽ в сутки. Стоимость одноместного размещения и в номерах категории «люкс» – уточняйте в отделе продаж.",
 
   "masters_block": { "title": "Мастера и артисты" },
   "masters": ["teya", "pavitra", "zakharevich", "nollendorf", "danaya", "yura-ra", "telminov", "davudov", "shcherbakova"],
