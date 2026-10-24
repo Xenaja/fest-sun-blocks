@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.24-11';
+  var VERSION = '2026.10.24-12';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -635,7 +635,8 @@
         people.map(function (n) { return '<th scope="col" class="fs-num">' + n + ' чел.</th>'; }).join('') +
         '</tr></thead><tbody>' + tbody(durs[0]) + '</tbody></table></div>' +
         '<div class="fs-room-cards">' + cards(durs[0]) + '</div>' : '') +
-        (center.rooms_note ? '<p class="fs-note">' + inline(center.rooms_note) + '</p>' : '') +
+        // строка о цене – своя у события (event.json → rooms_note), иначе общая
+        ((c.ev.rooms_note || center.rooms_note) ? '<p class="fs-note">' + inline(c.ev.rooms_note || center.rooms_note) + '</p>' : '') +
         (gallery ? '<div class="fs-rooms' + (rooms.length === 4 ? ' fs-rooms--4' : '') + '">' + gallery + '</div>' : '') +
         // строка под фото номеров – center.json → rooms_footnote
         (center.rooms_footnote ? '<p class="fs-note fs-rooms-foot">' + inline(center.rooms_footnote) + '</p>' : ''), 'fs-rooms-section');
