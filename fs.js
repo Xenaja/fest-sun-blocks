@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.25-7';
+  var VERSION = '2026.10.25-9';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -109,7 +109,7 @@
   var CARDS_OPEN = '\u0000cards', CARDS_CLOSE = '\u0000/cards';
   var CALLOUT_OPEN = '\u0000callout', CALLOUT_CLOSE = '\u0000/callout';
   var LIST_LINE = /^\s*([-*]|\d+[.)])\s+/;
-  var STRUCT = /^(cards|cards-2|center|features|steps|buttons|bar|icons|accordion|more)$/;
+  var STRUCT = /^(cards|cards-2|center|features|steps|buttons|bar|icons|accordion|more|chips)$/;
 
   // Страница одна на событие – для новичков (с 23.10.2026, data-audience больше нет).
   // ::: new – показываем (абзацы выделяются карточкой, одиночные пункты списка
@@ -188,7 +188,7 @@
 
     lines.forEach(function (line) {
       var m;
-      var mk = line.match(/^\u0000(cards|cards-2|callout|center|features|steps|buttons|bar|icons|accordion|more)$/);
+      var mk = line.match(/^\u0000(cards|cards-2|callout|center|features|steps|buttons|bar|icons|accordion|more|chips)$/);
       if (mk) {
         flush();
         out('<div class="' + (mk[1] === 'cards-2' ? 'fs-cards fs-cards--2' : 'fs-' + mk[1]) + '">');
@@ -196,7 +196,7 @@
         afterTitle = false;
         return;
       }
-      if (/^\u0000\/(cards|cards-2|callout|center|features|steps|buttons|bar|icons|accordion|more)$/.test(line)) {
+      if (/^\u0000\/(cards|cards-2|callout|center|features|steps|buttons|bar|icons|accordion|more|chips)$/.test(line)) {
         flush();
         if (/^\u0000\/cards/.test(line)) closeCard();
         out('</div>');
@@ -1060,6 +1060,26 @@
     else window.addEventListener('resize', draw);
   }
 
+  // Готовый HTML-блок из shared/embeds/<имя>.html (свои стили и скрипт внутри), например
+  // «8 сфер» для отдельной страницы: <div class="fs-block" data-block="embed" data-name="8-spheres" data-event="…">
+  BLOCKS.embed = function (c) {
+    var name = (c.el.getAttribute('data-name') || '').replace(/[^\w-]/g, '');
+    if (!name) throw new Error('нет data-name у embed');
+    return load('shared/embeds/' + name + '.html', 'text').then(function (html) {
+      return { html: html, after: function (el) {
+        // скрипты, вставленные через innerHTML, не выполняются – пересоздаём
+        // (данные в <script type="application/json"> не трогаем – их читает сам блок)
+        [].forEach.call(el.querySelectorAll('script'), function (old) {
+          if (old.type && !/javascript|module/i.test(old.type)) return;
+          var s = document.createElement('script');
+          if (old.type) s.type = old.type;
+          s.text = old.textContent;
+          old.parentNode.replaceChild(s, old);
+        });
+      } };
+    });
+  };
+
   // ------------------------------------------------------------ видео и галерея
 
   // Видео: event.json → video { rutube | youtube | vk (адрес плеера), cover, title }.
@@ -1497,6 +1517,9 @@
       '.fs-acc[open] .fs-acc__icon{transform:rotate(45deg)}',
       '.fs-acc__body{padding:0 2px 18px;font-size:16px;line-height:1.6}',
       '@media (max-width:600px){.fs-acc>summary{font-size:16px;padding:13px 2px}.fs-acc__body{font-size:15px}}',
+      // ::: chips – короткий список «таблетками» в строку
+      '.fs-chips>.fs-list{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 12px;max-width:900px;margin:8px auto 30px}',
+      '.fs-root .fs-chips>.fs-list>li{margin:0;padding:9px 18px;border:1px solid var(--fs-gold);border-radius:40px;font-size:15px;line-height:1.3;background:var(--fs-bg)}.fs-root .fs-chips>.fs-list>li::before{content:none;display:none}',
       // Гирлянда: блок без высоты, рисунок висит поверх стыка соседних блоков
       '.fs-section>.fs-galaxy~.fs-inner{position:relative;z-index:1}',
       '.fs-garland{position:relative;z-index:5;height:0;pointer-events:none}',

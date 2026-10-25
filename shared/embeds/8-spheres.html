@@ -1,0 +1,890 @@
+<!-- «8 сфер гармоничной жизни» – готовый блок от DARSHAN (источник: https://darshan-astro.com/8-spheres.html, 25.10.2026). Подключается: data-block="embed" data-name="8-spheres" -->
+<style>
+/* Весь CSS живёт под .fs8 и не трогает остальные блоки страницы. Цвета и шрифты —
+   те же, что у темы сайта (индиго #2d2b5f, золото #f2cf4a, Philosopher + Montserrat). */
+.fs8{
+  --c-bg:var(--fs-bg-soft,#fbfaf7);
+  --c-card:#fff;
+  --c-ink:var(--fs-fg,#1f1d45);
+  --c-title:var(--fs-title,#2d2b5f);
+  --c-muted:rgba(31,29,69,.68);
+  --c-line:rgba(45,43,95,.16);
+  --c-indigo:var(--fs-dark-bg,#2d2b5f);
+  --c-indigo-2:#3d3a7c;
+  --c-gold:var(--fs-gold,#f2cf4a);
+  --c-btn:var(--fs-btn-bg,#fcc200);
+  --c-btn-ink:var(--fs-btn-fg,#1f1d45);
+  --f-head:var(--fs-font-head,'Philosopher',Georgia,serif);
+  --f-body:var(--fs-font-body,'Montserrat',Arial,sans-serif);
+  --w:var(--fs-width,1100px);
+  position:relative;display:flow-root;max-width:100%;overflow-x:clip;
+  background:var(--c-bg);color:var(--c-ink);
+  font-family:var(--f-body);font-size:16px;line-height:1.6;font-weight:400;
+  padding:80px 20px 100px;scroll-margin-top:80px;
+  -webkit-font-smoothing:antialiased;text-align:left;
+}
+.fs8,.fs8 *,.fs8 *::before,.fs8 *::after{box-sizing:border-box}
+/* :where() — обнуление без веса, чтобы оно не перебивало классы ниже */
+.fs8 :where(h2,h3,h4,h5,p,ul,ol,li,figure){margin:0;padding:0;border:0}
+.fs8 :where(ul,ol){list-style:none}
+.fs8 :where(button){font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:inherit;-webkit-tap-highlight-color:transparent}
+.fs8 :where(a){color:inherit}
+.fs8 svg{display:block}
+.fs8 :focus-visible{outline:2px solid var(--c-indigo);outline-offset:3px;border-radius:2px}
+.fs8-dark :focus-visible{outline-color:var(--c-gold)}
+.fs8__in{max-width:var(--w);margin:0 auto}
+
+/* ── Заголовок ── */
+.fs8-eyebrow{display:flex;justify-content:center;align-items:center;gap:10px;margin:0 0 14px;
+  font:600 12px/1 var(--f-body);letter-spacing:.2em;text-transform:uppercase;color:var(--c-muted)}
+.fs8-eyebrow::before,.fs8-eyebrow::after{content:"";width:28px;height:1px;background:var(--c-gold)}
+.fs8-title{font-family:var(--f-head);font-weight:700;font-size:clamp(26px,3.4vw,38px);line-height:1.15;
+  text-transform:uppercase;text-align:center;color:var(--c-title);margin:0 0 22px;text-wrap:balance;letter-spacing:0}
+.fs8-lead{max-width:760px;margin:0 auto;text-align:center;font-size:17px;line-height:1.65}
+.fs8-lead p+p{margin-top:12px}
+.fs8-lead strong{font-weight:600;color:var(--c-title)}
+.fs8-note{max-width:640px;margin:22px auto 0;text-align:center;font-size:14px;color:var(--c-muted)}
+
+/* ── Шаги ── */
+.fs8-step{display:flex;align-items:center;gap:14px;margin:72px 0 22px}
+.fs8-step__n{flex:none;width:42px;height:42px;border-radius:50%;background:var(--c-indigo);color:var(--c-gold);
+  display:grid;place-items:center;font:700 20px/1 var(--f-head)}
+.fs8-step h3{font-family:var(--f-head);font-weight:700;font-size:clamp(21px,2.4vw,26px);line-height:1.2;color:var(--c-title);letter-spacing:0}
+.fs8-step p{font-size:14px;color:var(--c-muted);margin-top:2px}
+
+/* ── Шаг 1: колесо и список ── */
+.fs8-explore{display:grid;grid-template-columns:minmax(0,470px) minmax(0,1fr);gap:44px;align-items:start}
+.fs8-wheel{width:100%;max-width:470px;margin:0 auto}
+.fs8-wheel svg{width:100%;height:auto;overflow:visible}
+.fs8-sec{cursor:pointer;fill:var(--c-indigo);transition:fill .2s}
+.fs8-sec:hover{fill:var(--c-indigo-2)}
+.fs8-sec.is-on{fill:var(--c-gold)}
+.fs8-sec-g .fs8-ico{color:var(--c-gold);pointer-events:none;transition:color .2s}
+.fs8-sec-g .fs8-lbl{fill:#fff;font:600 12.5px var(--f-body);pointer-events:none;transition:fill .2s}
+.fs8-sec-g .fs8-num{fill:rgba(255,255,255,.72);font:700 13px var(--f-head);pointer-events:none}
+.fs8-sec-g.is-on .fs8-ico{color:var(--c-indigo)}
+.fs8-sec-g.is-on .fs8-lbl{fill:var(--c-indigo)}
+.fs8-sec-g.is-on .fs8-num{fill:rgba(45,43,95,.6)}
+.fs8-ray{fill:var(--c-gold)}
+.fs8-hub{fill:var(--c-indigo)}
+.fs8-hub-ring{fill:none;stroke:var(--c-gold);stroke-width:2}
+.fs8-hub-t1{fill:var(--c-gold);font:700 44px var(--f-head);text-anchor:middle}
+.fs8-hub-t2{fill:#fff;font:700 17px var(--f-head);text-anchor:middle}
+.fs8-hub-t3{fill:rgba(255,255,255,.7);font:500 12px var(--f-body);text-anchor:middle}
+
+.fs8-list{display:flex;flex-direction:column;gap:10px}
+.fs8-item{background:var(--c-card);border:1px solid var(--c-line);border-radius:0;transition:border-color .2s,box-shadow .2s}
+.fs8-item.is-open{border-color:var(--c-indigo);box-shadow:0 8px 28px rgba(45,43,95,.10)}
+.fs8-item__btn{display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px}
+.fs8-badge{flex:none;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--c-indigo);color:var(--c-indigo);
+  display:grid;place-items:center;transition:background .2s,color .2s}
+.fs8-badge svg{width:20px;height:20px}
+.fs8-item.is-open .fs8-badge{background:var(--c-indigo);color:var(--c-gold)}
+.fs8-item__t{flex:1;min-width:0}
+.fs8-item__name{display:block;font:700 19px/1.2 var(--f-head);color:var(--c-title)}
+.fs8-item__tag{display:block;font-size:13px;color:var(--c-muted);margin-top:2px}
+.fs8-caret{flex:none;width:18px;height:18px;color:var(--c-indigo);transition:transform .25s}
+.fs8-item.is-open .fs8-caret{transform:rotate(180deg)}
+.fs8-item__body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+.fs8-item.is-open .fs8-item__body{grid-template-rows:1fr}
+.fs8-item__inner{overflow:hidden;min-height:0}
+.fs8-item__pad{padding:4px 18px 20px 66px}
+.fs8-q{font:italic 400 18px/1.4 var(--f-head);color:var(--c-title);margin-bottom:10px}
+.fs8-desc{font-size:15px;line-height:1.65}
+.fs8-h4{font:600 11px/1 var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--c-muted);margin:18px 0 8px}
+.fs8-chips{display:flex;flex-wrap:wrap;gap:6px}
+.fs8-chip{font-size:13px;line-height:1.3;padding:5px 11px;border-radius:30px;background:rgba(45,43,95,.07);color:var(--c-ink)}
+.fs8-prog li{position:relative;padding:3px 0 3px 18px;font-size:14.5px}
+.fs8-prog li::before{content:"";position:absolute;left:0;top:11px;border:5px solid transparent;border-left:7px solid var(--c-gold);border-right:0}
+.fs8-prog a{color:var(--c-title);text-underline-offset:3px;text-decoration-color:var(--c-gold);text-decoration-thickness:2px}
+.fs8-masters{font-size:14px;color:var(--c-muted)}
+.fs8-masters b{font-weight:600;color:var(--c-ink)}
+.fs8-stepbox{margin-top:16px;padding:12px 14px;border-left:3px solid var(--c-gold);background:rgba(242,207,74,.14);font-size:14.5px}
+.fs8-stepbox b{display:block;font:600 11px/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--c-muted);margin-bottom:5px}
+.fs8-astro{margin-top:16px;border-top:1px dashed var(--c-line);padding-top:12px}
+.fs8-astro summary{cursor:pointer;font:600 13.5px/1.4 var(--f-body);color:var(--c-title);list-style:none;display:flex;align-items:center;gap:8px}
+.fs8-astro summary::-webkit-details-marker{display:none}
+.fs8-astro summary::before{content:"✦";color:var(--c-gold);font-size:15px;text-shadow:0 0 0 var(--c-indigo)}
+.fs8-astro[open] summary{margin-bottom:8px}
+.fs8-astro p{font-size:14px;color:var(--c-muted)}
+.fs8-astro .fs8-chips{margin-top:8px}
+.fs8-astro .fs8-chip{background:var(--c-indigo);color:#fff}
+.fs8-astro .fs8-chip b{color:var(--c-gold);font-weight:700;margin-right:4px}
+
+/* ── Шаг 2: оценка ── */
+.fs8-assess{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:44px;align-items:start}
+.fs8-rows{display:flex;flex-direction:column;gap:6px}
+.fs8-row{display:grid;grid-template-columns:36px minmax(0,1fr) 34px;gap:4px 12px;align-items:center;padding:10px 14px;background:var(--c-card);border:1px solid var(--c-line)}
+.fs8-row .fs8-badge{width:32px;height:32px;font:700 15px var(--f-head)}
+.fs8-row.is-set .fs8-badge{background:var(--c-indigo);color:var(--c-gold)}
+.fs8-row label{font:600 14.5px/1.3 var(--f-body);color:var(--c-title)}
+.fs8-row__v{font:700 20px/1 var(--f-head);color:var(--c-title);text-align:right}
+.fs8-row__s{grid-column:2 / 4}
+.fs8-range{-webkit-appearance:none;appearance:none;width:100%;height:28px;background:transparent;margin:0;cursor:pointer;--p:44%}
+.fs8-range::-webkit-slider-runnable-track{height:6px;border-radius:6px;background:linear-gradient(90deg,var(--c-gold) var(--p),rgba(45,43,95,.14) var(--p))}
+.fs8-range::-moz-range-track{height:6px;border-radius:6px;background:rgba(45,43,95,.14)}
+.fs8-range::-moz-range-progress{height:6px;border-radius:6px;background:var(--c-gold)}
+.fs8-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;margin-top:-9px;border-radius:50%;background:var(--c-indigo);border:3px solid var(--c-gold);box-shadow:0 2px 6px rgba(31,29,69,.3)}
+.fs8-range::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--c-indigo);border:3px solid var(--c-gold)}
+.fs8-scale{display:flex;justify-content:space-between;font-size:12px;color:var(--c-muted);margin:2px 2px 0}
+.fs8-radar{background:var(--c-card);border:1px solid var(--c-line);padding:18px 16px 14px;position:sticky;top:90px}
+.fs8-radar svg{width:100%;height:auto;max-width:380px;margin:0 auto;overflow:visible}
+.fs8-radar .rg{fill:none;stroke:rgba(45,43,95,.14);stroke-width:1}
+.fs8-radar .ra{stroke:rgba(45,43,95,.14);stroke-width:1}
+.fs8-radar .rp{fill:rgba(242,207,74,.45);stroke:var(--c-indigo);stroke-width:2.5;stroke-linejoin:round;transition:d .2s}
+.fs8-radar .rd{fill:var(--c-indigo);stroke:var(--c-gold);stroke-width:2}
+.fs8-radar .rb{fill:var(--c-indigo)}
+.fs8-radar .rn{fill:var(--c-gold);font:700 13px var(--f-head);text-anchor:middle;dominant-baseline:central}
+.fs8-radar .rv{fill:var(--c-title);font:700 11px var(--f-body);text-anchor:middle}
+.fs8-radar__hint{font-size:13px;color:var(--c-muted);text-align:center;margin-top:8px}
+.fs8-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:20px}
+
+/* кнопки: как на сайте — золотая «пилюля» */
+.fs8-btn{display:inline-block;background:var(--c-btn);color:var(--c-btn-ink);border:2px solid transparent;border-radius:40px;
+  padding:13px 34px;font:700 14px/1.2 var(--f-body);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;text-align:center;
+  transition:background .2s,transform .15s,color .2s,border-color .2s}
+.fs8-btn:hover{transform:translateY(-1px);background:#ffd24a}
+.fs8-btn--line{background:transparent;border-color:var(--c-indigo);color:var(--c-indigo)}
+.fs8-btn--line:hover{background:var(--c-indigo);color:#fff}
+.fs8-btn--sm{padding:10px 22px;font-size:12.5px}
+.fs8-btn--quiet{background:none;border:0;border-radius:0;padding:6px 2px;text-transform:none;letter-spacing:0;font-weight:500;font-size:14px;color:var(--c-muted);text-decoration:underline;text-underline-offset:3px}
+.fs8-btn--quiet:hover{background:none;color:var(--c-title);transform:none}
+
+/* ── Выводы ── */
+.fs8-res{margin-top:28px;scroll-margin-top:90px}
+.fs8-res[hidden]{display:none}
+.fs8-res__head{font:700 24px/1.2 var(--f-head);color:var(--c-title);margin-bottom:6px;outline:none}
+.fs8-res__sum{font-size:15px;color:var(--c-muted);max-width:760px}
+.fs8-res__cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px;margin-top:18px}
+.fs8-card{position:relative;background:var(--c-indigo);color:#fff;padding:32px 24px 22px}
+.fs8-card::before{content:"";position:absolute;top:0;left:24px;border:9px solid transparent;border-top:12px solid var(--c-gold)}
+.fs8-card__k{font:600 11px/1 var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.62);margin-bottom:8px}
+.fs8-card__t{font:700 22px/1.2 var(--f-head);color:var(--c-gold);margin-bottom:4px}
+.fs8-card__s{font-size:13px;color:rgba(255,255,255,.7);margin-bottom:12px}
+.fs8-card p{font-size:14.5px;line-height:1.55}
+.fs8-card ul{margin-top:10px}
+.fs8-card li{position:relative;padding:2px 0 2px 16px;font-size:14px}
+.fs8-card li::before{content:"";position:absolute;left:0;top:10px;border:4px solid transparent;border-left:6px solid var(--c-gold);border-right:0}
+.fs8-card .fs8-h4{color:rgba(255,255,255,.62)}
+.fs8-card .fs8-more{display:inline-block;margin-top:14px;color:var(--c-gold);font-size:13.5px;font-weight:600;text-underline-offset:3px;cursor:pointer;background:none;border:0;padding:0;text-decoration:underline}
+.fs8-card--soft{background:var(--c-card);color:var(--c-ink);border:1px solid var(--c-line)}
+.fs8-card--soft .fs8-more{color:var(--c-title)}
+.fs8-card--soft .fs8-card__k,.fs8-card--soft .fs8-card__s{color:var(--c-muted)}
+.fs8-card--soft .fs8-card__t{color:var(--c-title)}
+.fs8-balance{margin-top:16px;padding:14px 18px;border-left:3px solid var(--c-gold);background:rgba(242,207,74,.14);font-size:14.5px}
+
+/* ── Шаг 3: DARSHAN ── */
+.fs8-dark{position:relative;background:var(--c-indigo);color:#fff;padding:44px 36px 40px}
+.fs8-dark::before{content:"";position:absolute;top:0;left:36px;border:11px solid transparent;border-top:15px solid var(--c-gold)}
+.fs8-dark__grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:44px;align-items:start}
+.fs8-dark__k{font:600 12px/1 var(--f-body);letter-spacing:.2em;text-transform:uppercase;color:var(--c-gold);margin-bottom:12px}
+.fs8-dark h4{font:700 clamp(22px,2.6vw,28px)/1.2 var(--f-head);color:#fff;margin:0 0 14px;letter-spacing:0}
+.fs8-dark p{font-size:15.5px;line-height:1.65;color:rgba(255,255,255,.88)}
+.fs8-dark p+p{margin-top:10px}
+.fs8-how{counter-reset:s;margin:20px 0 0}
+.fs8-how li{counter-increment:s;position:relative;padding:0 0 12px 40px;font-size:14.5px;line-height:1.5;color:rgba(255,255,255,.92)}
+.fs8-how li::before{content:counter(s);position:absolute;left:0;top:-2px;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--c-gold);color:var(--c-gold);display:grid;place-items:center;font:700 14px var(--f-head)}
+.fs8-trust{margin-top:8px;padding-top:16px;border-top:1px solid rgba(255,255,255,.18)}
+.fs8-trust li{position:relative;padding:3px 0 3px 18px;font-size:13.5px;color:rgba(255,255,255,.78);line-height:1.5}
+.fs8-trust li::before{content:"✦";position:absolute;left:0;top:3px;color:var(--c-gold);font-size:11px}
+.fs8-bridge{margin-top:14px;padding:12px 14px;background:rgba(255,255,255,.08);border-left:3px solid var(--c-gold);font-size:14px;color:#fff}
+.fs8-bridge[hidden]{display:none}
+.fs8-gifts{display:flex;flex-direction:column;gap:16px}
+.fs8-gift{background:#fff;color:var(--c-ink);padding:24px 22px 22px;position:relative}
+.fs8-gift__tag{display:inline-block;font:700 11px/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;background:var(--c-gold);color:var(--c-indigo);padding:6px 10px;margin-bottom:12px}
+.fs8-gift h5{font:700 21px/1.2 var(--f-head);color:var(--c-title);margin:0 0 8px;letter-spacing:0}
+.fs8-gift p{font-size:14px;line-height:1.55;color:var(--c-ink)}
+.fs8-gift .fs8-btn{margin-top:14px}
+.fs8-gift small{display:block;margin-top:10px;font-size:12px;line-height:1.5;color:var(--c-muted)}
+.fs8-gift--soon{background:rgba(255,255,255,.1);color:#fff;border:1px dashed rgba(255,255,255,.4)}
+.fs8-gift--soon h5{color:var(--c-gold)}
+.fs8-gift--soon p{color:rgba(255,255,255,.88)}
+.fs8-gift--soon small{color:rgba(255,255,255,.65)}
+
+/* ── Финал ── */
+.fs8-cta{margin-top:64px;text-align:center}
+.fs8-cta h3{font:700 clamp(22px,2.6vw,28px)/1.2 var(--f-head);color:var(--c-title);margin-bottom:10px;letter-spacing:0}
+.fs8-cta p{max-width:620px;margin:0 auto 22px;font-size:15.5px;color:var(--c-muted)}
+.fs8-cta .fs8-actions{justify-content:center;margin-top:0}
+.fs8-fine{max-width:820px;margin:36px auto 0;text-align:center;font-size:12px;line-height:1.6;color:var(--c-muted)}
+.fs8 noscript{display:block;padding:16px;background:#fff;border:1px solid var(--c-line);margin-top:24px;font-size:14px}
+
+@media (max-width:1000px){
+  .fs8-explore,.fs8-assess,.fs8-dark__grid{grid-template-columns:minmax(0,1fr);gap:28px}
+  .fs8-radar{position:static}
+  .fs8-wheel{max-width:420px}
+}
+@media (max-width:600px){
+  .fs8{padding:56px 16px 76px}
+  .fs8-step{margin-top:52px}
+  .fs8-lead{font-size:16px}
+  .fs8-sec-g .fs8-lbl{display:none}
+  .fs8-sec-g .fs8-num{font-size:26px}
+  .fs8-item__pad{padding:2px 16px 18px 16px}
+  .fs8-item__btn{padding:12px 12px;gap:12px}
+  .fs8-item__name{font-size:18px}
+  .fs8-dark{padding:40px 20px 28px}
+  .fs8-dark::before{left:20px}
+  .fs8-row{padding:10px 12px}
+  .fs8-btn{padding:13px 26px}
+  .fs8-actions .fs8-btn:not(.fs8-btn--quiet){width:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  .fs8 *,.fs8 *::before,.fs8 *::after{transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+
+<section class="fs8" id="spheres" aria-labelledby="fs8-h">
+  <div class="fs8__in">
+
+    <span class="fs8-eyebrow">Философия фестиваля</span>
+    <h2 class="fs8-title" id="fs8-h">8 сфер гармоничной жизни</h2>
+    <div class="fs8-lead">
+      <p><strong>Гармония — это не успех в одной области, а внимание ко всей жизни сразу.</strong></p>
+      <p>Можно построить карьеру и потерять контакт с собой. Создать материальную устойчивость — и остаться без близости. Годами практиковать медитацию — и не научиться воплощать свои идеи.</p>
+      <p>«Энергия Солнца» — пространство всестороннего развития человека. Здесь рядом живут разные традиции, практики и современные подходы, а вы сами выбираете, чему уделить внимание в этом году.</p>
+    </div>
+    <p class="fs8-note">Четыре темы программы — здоровье, отношения, финансы и духовность — раскрываются в восьми сферах жизни.</p>
+
+    <div class="fs8-step">
+      <span class="fs8-step__n" aria-hidden="true">1</span>
+      <div><h3>Познакомьтесь с восемью сферами</h3><p>Нажмите на сферу — увидите, что в ней происходит на фестивале</p></div>
+    </div>
+    <div class="fs8-explore">
+      <div class="fs8-wheel" id="fs8-wheel"></div>
+      <div class="fs8-list" id="fs8-list"></div>
+    </div>
+    <noscript>Для интерактивного колеса нужен включённый JavaScript. Восемь сфер: Я и моя личность · Здоровье и энергия · Любовь и семья · Деньги и ресурсы · Предназначение и реализация · Творчество и радость · Окружение и сообщество · Духовность и трансформация.</noscript>
+
+    <div class="fs8-step">
+      <span class="fs8-step__n" aria-hidden="true">2</span>
+      <div><h3>Оцените свою жизнь сейчас</h3><p>Две минуты наедине с собой. Оценки остаются только в вашем браузере</p></div>
+    </div>
+    <div class="fs8-assess">
+      <div>
+        <div class="fs8-rows" id="fs8-rows"></div>
+        <div class="fs8-scale" aria-hidden="true"><span>1 — совсем не устраивает</span><span>10 — полностью устраивает</span></div>
+      </div>
+      <div class="fs8-radar">
+        <div id="fs8-radar"></div>
+        <p class="fs8-radar__hint" id="fs8-radar-hint">Двигайте ползунки — колесо меняется на глазах</p>
+      </div>
+    </div>
+    <div class="fs8-actions">
+      <button type="button" class="fs8-btn" id="fs8-show">Показать выводы</button>
+      <button type="button" class="fs8-btn fs8-btn--quiet" id="fs8-reset">Сбросить</button>
+    </div>
+
+    <div class="fs8-res" id="fs8-res" hidden tabindex="-1" aria-live="polite"></div>
+
+    <div class="fs8-step">
+      <span class="fs8-step__n" aria-hidden="true">3</span>
+      <div><h3>Посмотрите на ту же жизнь глазами своей карты</h3><p>Продолжение самопознания — в DARSHAN</p></div>
+    </div>
+    <div class="fs8-dark fs8-dark-wrap">
+      <div class="fs8-dark__grid">
+        <div>
+          <div class="fs8-dark__k">DARSHAN · AI-астролог</div>
+          <h4>Ваша оценка — один взгляд. Карта рождения — второй.</h4>
+          <p>Колесо выше показывает, как вы сами чувствуете свою жизнь. DARSHAN добавляет второй слой: как те же сферы выглядят в вашей натальной карте — что заложено изначально, что разворачивается сейчас, где у вас встроенная поддержка, а где всё держится на личном усилии.</p>
+          <p>Самое интересное — расхождения между двумя картинами: именно там чаще всего находятся неожиданные открытия о себе.</p>
+          <ol class="fs8-how">
+            <li>Оцените восемь сфер выше — это займёт пару минут.</li>
+            <li>Откройте DARSHAN в Telegram и введите дату, время и место рождения.</li>
+            <li>Получите Колесо баланса по двенадцати сферам жизни и сравните со своей оценкой.</li>
+          </ol>
+          <div class="fs8-bridge" id="fs8-bridge" hidden></div>
+          <ul class="fs8-trust">
+            <li>Расчёты делает астрономический движок, а нейросеть объясняет готовые данные простым языком.</li>
+            <li>Астрология здесь — язык самопознания, а не приговор: карта показывает потенциал и ритмы, выбор остаётся за вами.</li>
+          </ul>
+        </div>
+        <div class="fs8-gifts" id="fs8-gifts"></div>
+      </div>
+    </div>
+
+    <div class="fs8-cta">
+      <h3>Увидимся у моря</h3>
+      <p>Участие в фестивале не зависит ни от колеса, ни от DARSHAN — это только способ лучше понять, что вам сейчас нужно, и выбрать свои практики.</p>
+      <div class="fs8-actions">
+        <a class="fs8-btn" id="fs8-reg" href="#prices">Участвую</a>
+        <a class="fs8-btn fs8-btn--line" id="fs8-prog" href="#programm">Смотреть программу</a>
+      </div>
+    </div>
+
+    <p class="fs8-fine">Колесо баланса — инструмент самонаблюдения, а не диагностика. Астрология — язык самопознания, а не медицинская, психологическая или финансовая рекомендация. Практики фестиваля не заменяют консультацию врача; если у вас есть противопоказания, обсудите их с организаторами. Ваши оценки хранятся только в вашем браузере и никуда не отправляются; дату рождения вы вводите уже внутри Telegram-бота DARSHAN.</p>
+  </div>
+</section>
+
+<script type="application/json" id="fs8-data">
+{
+  "festival": {"name": "Энергия Солнца", "dates": "3–10 января", "place": "Сочи, Вардане", "site": "fest-sun.ru"},
+  "houses": {
+    "1": "Личность и здоровье",
+    "2": "Деньги и ресурсы",
+    "3": "Навыки и смелость",
+    "4": "Дом и внутренний покой",
+    "5": "Творчество и дети",
+    "6": "Работа и преодоление",
+    "7": "Отношения и партнёрство",
+    "8": "Кризисы и глубина",
+    "9": "Удача и смысл",
+    "10": "Карьера и признание",
+    "11": "Доходы и круг",
+    "12": "Уединение и освобождение"
+  },
+  "gifts": {
+    "guest": {
+      "tag": "Каждому гостю сайта",
+      "title": "Колесо баланса по вашей карте — в подарок",
+      "text": "Разбор двенадцати сфер жизни по вашей натальной карте: где у вас встроенная поддержка, а где всё держится на личном усилии. Один раз на аккаунт Telegram.",
+      "button": "Получить подарок в Telegram",
+      "note": "Откроется Telegram-бот DARSHAN. Дату, время и место рождения вы вводите уже там."
+    },
+    "guests": {
+      "tag": "Гостям фестиваля",
+      "title": "Календарь года — на фестивале",
+      "text": "Персональный календарь на 12 месяцев вперёд: ритм каждого дня и разбор любой даты по вашей карте. Подарок для тех, кто приедет на «Энергию Солнца».",
+      "button": "Получить подарок",
+      "note": "QR-код — у организаторов на месте."
+    }
+  },
+  "spheres": [
+    {
+      "id": "self", "icon": "core",
+      "name": "Я и моя личность", "short": "Я и личность", "wheel": ["Я и моя", "личность"],
+      "tagline": "Познай себя",
+      "question": "Кто я и на что могу опереться?",
+      "text": "Исследуйте свою индивидуальность: природные качества, сильные стороны, привычные реакции и внутренние опоры. Это основа, из которой растут все остальные сферы.",
+      "topics": ["психология личности", "астрология и типологии", "самопознание", "практики принятия себя"],
+      "program": ["Трансформационные практики"],
+      "masters": [["Александр Давудов", "астролог, технологии самопознания"]],
+      "step": "Запишите три качества, за которые вы благодарны себе в этом году.",
+      "houses": [1],
+      "astro": "Первый дом — это вы сами: характер, тело и стартовая жизненная сила. С него начинается любая карта."
+    },
+    {
+      "id": "health", "icon": "leaf",
+      "name": "Здоровье и энергия", "short": "Здоровье", "wheel": ["Здоровье", "и энергия"],
+      "tagline": "Почувствуй силу жизни",
+      "question": "Как поддерживать своё тело и жизненные силы?",
+      "text": "Возвращайте контакт с телом, развивайте осознанность и учитесь поддерживать жизненный тонус — не на износ, а в том ритме, который подходит именно вам.",
+      "topics": ["йога и три-йога", "дыхательные практики", "движение и расслабление", "баня", "питание и восстановление", "активное долголетие"],
+      "program": ["Йога и Три-йога на раскрытие позвоночника", "Телесные и дыхательные практики", "Банная мистерия", "Походы к водопадам и дольменам", "Знания об активном долголетии"],
+      "masters": [["Павитра", "три йога, тантра, гонг"], ["Марина Давудова", "телесные практики и трансформация"]],
+      "step": "Выберите одну привычку тела — сон, воду или движение — и закрепите её на семь дней.",
+      "houses": [6, 1],
+      "astro": "Тело и тонус смотрят по первому дому, а повседневные привычки, режим и умение справляться с нагрузкой — по шестому."
+    },
+    {
+      "id": "love", "icon": "heart",
+      "name": "Любовь и семья", "short": "Любовь и семья", "wheel": ["Любовь", "и семья"],
+      "tagline": "Создавай гармоничные отношения",
+      "question": "Как строить близость, доверие и тёплый дом?",
+      "text": "Исследуйте искусство близости: как слышать другого, говорить о чувствах и оставаться собой рядом с самыми близкими — партнёром, детьми, родителями.",
+      "topics": ["психология отношений", "женские и мужские круги", "практики для пар", "сердечная тантра", "семья и дети"],
+      "program": ["Женский круг", "Мужской клуб", "Сердечная тантра", "Программы для пар", "Детская программа"],
+      "masters": [["Даная (DJ Lakshmi)", "ведущая женских кругов"], ["Павитра", "три йога, тантра, гонг"]],
+      "step": "Скажите близкому человеку одну тёплую вещь, которую обычно оставляете «про себя».",
+      "houses": [4, 7],
+      "astro": "Четвёртый дом — внутренний покой и эмоциональный тыл, седьмой — партнёрство и близость с другим человеком."
+    },
+    {
+      "id": "money", "icon": "coin",
+      "name": "Деньги и ресурсы", "short": "Деньги", "wheel": ["Деньги", "и ресурсы"],
+      "tagline": "Создавай материальную устойчивость",
+      "question": "Как расширять свои возможности и опираться на ресурсы?",
+      "text": "Смотрите на деньги как на часть жизни, а не как на цель: навыки, предпринимательство, личные ресурсы и убеждения, которые влияют на ваши финансовые решения.",
+      "topics": ["финансовая грамотность", "предпринимательство", "психология денег", "личные ресурсы", "ИИ и автоматизация"],
+      "program": ["Поток «Бизнес и успех»", "Трансформационные практики"],
+      "masters": [["Екатерина Черных", "продюсер, «Формула Денег»"], ["Юра Ра", "богатырские практики и финансовое мышление"]],
+      "step": "Запишите одно финансовое решение, которое вы откладываете, и первый маленький шаг к нему.",
+      "houses": [2, 11],
+      "note": "Фестиваль не обещает финансовых результатов: они зависят от ваших решений и действий.",
+      "astro": "Второй дом — ресурсы, накопления и ценности; одиннадцатый — доходы и то, как исполняются желания."
+    },
+    {
+      "id": "purpose", "icon": "star",
+      "name": "Предназначение и реализация", "short": "Предназначение", "wheel": ["Предназначение", "и реализация"],
+      "tagline": "Раскрой свой потенциал",
+      "question": "В чём мои сильные стороны и как воплотить их в мире?",
+      "text": "Узнайте больше о своих талантах, ценностях и способах их воплощения: от профессионального выбора до личных проектов и вклада, который вам по-настоящему важен.",
+      "topics": ["исследование талантов", "астрология и типологии", "профессиональный выбор", "личные проекты", "наставничество"],
+      "program": ["Поток «Бизнес и успех»", "Актёрское мастерство", "Трансформационные практики"],
+      "masters": [["Александр Давудов", "астролог, создатель DARSHAN"]],
+      "step": "Назовите дело, ради которого вы готовы вставать рано, — и один шаг к нему на этой неделе.",
+      "houses": [9, 10],
+      "astro": "Девятый дом — смысл, учителя и мировоззрение; десятый — дело, статус и вклад в мир."
+    },
+    {
+      "id": "creative", "icon": "note",
+      "name": "Творчество и радость", "short": "Творчество", "wheel": ["Творчество", "и радость"],
+      "tagline": "Разреши себе творить",
+      "question": "Что наполняет мою жизнь вдохновением?",
+      "text": "Верните в жизнь игру, спонтанность и удовольствие от самовыражения — через музыку, танец, голос и творчество, вместе с детьми и без них.",
+      "topics": ["музыка и звук", "танец", "арт-практики", "сказкотерапия", "театр", "творчество для детей и взрослых"],
+      "program": ["Экстатичные танцы", "Этно-концерты", "Актёрское мастерство", "Детская программа: творческая мастерская, сказкотерапия, танцевальная студия"],
+      "masters": [["TEYA", "live ecstatic dance"], ["Карина Клавихо", "Fusion Dance"], ["Павел Правин", "композитор, мультиинструменталист"], ["Андрей Танзю", "рамочные барабаны"]],
+      "step": "Выделите пятнадцать минут на то, что делаете ради удовольствия, а не ради результата.",
+      "houses": [5],
+      "astro": "Пятый дом — самовыражение, игра, влюблённость и дети: всё, что делается «ради радости»."
+    },
+    {
+      "id": "circle", "icon": "circle",
+      "name": "Окружение и сообщество", "short": "Окружение", "wheel": ["Окружение", "и сообщество"],
+      "tagline": "Найди свой круг",
+      "question": "С кем я иду по жизни?",
+      "text": "Встречайте единомышленников, находите новых друзей и создавайте связи, основанные на общих ценностях: общие практики, разговоры у моря, совместное творчество.",
+      "topics": ["живое общение", "круги и клубы", "совместные практики", "сотрудничество", "поддерживающее сообщество"],
+      "program": ["Женский круг", "Мужской клуб", "Банная мистерия", "Походы к водопадам и дольменам", "Чат фестиваля"],
+      "masters": [["Даная (DJ Lakshmi)", "ведущая женских кругов"]],
+      "step": "Напишите человеку, с которым давно хотели увидеться.",
+      "houses": [3, 11],
+      "astro": "Третий дом — общение, поездки и смелость делать шаги; одиннадцатый — друзья, единомышленники и «свой круг»."
+    },
+    {
+      "id": "spirit", "icon": "flame",
+      "name": "Духовность и трансформация", "short": "Духовность", "wheel": ["Духовность и", "трансформация"],
+      "tagline": "Открой глубину своего внутреннего мира",
+      "question": "Как обрести внутреннюю свободу и ясность?",
+      "text": "Исследуйте сознание, привычные жизненные сценарии и возможности внутренних изменений — в тишине, в звуке и в живом общении.",
+      "topics": ["медитация", "гонг и звуковые практики", "сатсанги", "духовные традиции", "работа с убеждениями"],
+      "program": ["Сатсанги", "Звуковые и гонг-медитации", "Ночь гонга", "Мистерия звука", "Трансформационные практики"],
+      "masters": [["Павитра", "три йога, тантра, гонг"], ["Даная (DJ Lakshmi)", "гонг-медитация"], ["Марина Давудова", "работа с ограничивающими убеждениями"]],
+      "step": "Посидите пять минут в тишине без телефона — и заметьте, что приходит.",
+      "houses": [8, 12],
+      "astro": "Восьмой дом — кризисы и глубинные перемены; двенадцатый — тишина, уединение и освобождение."
+    }
+  ]
+}
+</script>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ───────────── НАСТРОЙКИ (меняются здесь, без правки остального кода) ───────────── */
+  var CFG = {
+    // Куда ведут кнопки. #prices и #programm — якоря страницы fest-sun.ru.
+    registerUrl: 'https://fest-sun.ru/#prices',
+    programUrl: 'https://fest-sun.ru/#programm',
+
+    // Подарки. Тексты — в JSON выше (gifts), здесь только ссылки и выключатели.
+    // guest — для любого гостя сайта: bonuskoleso уже работает в боте и один раз на
+    // аккаунт начисляет бесплатное «Колесо баланса» по 12 сферам.
+    // guests — для тех, кто приедет: публичной ссылки на странице нет намеренно,
+    // QR-код выдают на фестивале (см. README). Появится ссылка — появится и кнопка.
+    gifts: {
+      guest:  { enabled: true, url: 'https://t.me/vedic_astro_robot?start=bonuskoleso' },
+      guests: { enabled: true, url: '' }
+    },
+
+    metrikaId: null                 // номер счётчика Яндекс.Метрики, если нужны цели; иначе null
+  };
+
+  /* ───────────── ДАННЫЕ ───────────── */
+  var DATA;
+  try { DATA = JSON.parse(document.getElementById('fs8-data').textContent); }
+  catch (e) { return; }
+  var S = DATA.spheres, N = S.length;
+  var root = document.getElementById('spheres');
+
+  var ICONS = {
+    core:   '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/>',
+    leaf:   '<path d="M5 19c0-8 5-14 14-14 0 9-6 14-14 14z"/><path d="M5 19l8-8"/>',
+    heart:  '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',
+    coin:   '<circle cx="12" cy="12" r="8.5"/><path d="M9.5 17V7.5h3.6a2.6 2.6 0 0 1 0 5.2H9.5M8 14.8h5.2"/>',
+    star:   '<path d="M12 3l2.3 6.7L21 12l-6.7 2.3L12 21l-2.3-6.7L3 12l6.7-2.3z"/>',
+    note:   '<path d="M9 17.5V5.5l10-2v12"/><circle cx="6.8" cy="17.5" r="2.2"/><circle cx="16.8" cy="15.5" r="2.2"/>',
+    circle: '<circle cx="8" cy="9" r="3.2"/><circle cx="16" cy="9" r="3.2"/><circle cx="12" cy="16" r="3.2"/>',
+    flame:  '<path d="M12 3c.8 3.6 5 5 5 10a5 5 0 0 1-10 0c0-2.6 1.6-3.8 2.4-5.6.6 1 1.2 1.6 1.6 2.6.6-2 .4-4 1-7z"/>'
+  };
+  function icon(name, size) {
+    return '<svg viewBox="0 0 24 24" width="' + (size || 20) + '" height="' + (size || 20) +
+      '" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      (ICONS[name] || '') + '</svg>';
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+  }
+  function $(id) { return document.getElementById(id); }
+  function track(goal) {
+    try { if (CFG.metrikaId && window.ym) window.ym(CFG.metrikaId, 'reachGoal', goal); } catch (e) {}
+  }
+  var reduce = false;
+  try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+
+  /* ───────────── СОСТОЯНИЕ ───────────── */
+  var KEY = 'fs8.balance.v1';
+  var state = { open: -1, scores: [], touched: [], results: false };
+  for (var i = 0; i < N; i++) { state.scores.push(5); state.touched.push(false); }
+  try {
+    var saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (saved && saved.s && saved.s.length === N) { state.scores = saved.s.map(Number); state.touched = saved.t.map(Boolean); }
+  } catch (e) {}
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify({ s: state.scores, t: state.touched })); } catch (e) {} }
+  function ratedCount() { return state.touched.filter(Boolean).length; }
+
+  /* ───────────── ШАГ 1: КОЛЕСО ───────────── */
+  var ang = function (i) { return -90 + i * 45; };
+  function pt(r, a) { var t = a * Math.PI / 180; return [r * Math.cos(t), r * Math.sin(t)]; }
+  function f(n) { return Math.round(n * 100) / 100; }
+  function sectorPath(r1, r2, a0, a1) {
+    var p1 = pt(r2, a0), p2 = pt(r2, a1), p3 = pt(r1, a1), p4 = pt(r1, a0);
+    return 'M' + f(p1[0]) + ' ' + f(p1[1]) + 'A' + r2 + ' ' + r2 + ' 0 0 1 ' + f(p2[0]) + ' ' + f(p2[1]) +
+      'L' + f(p3[0]) + ' ' + f(p3[1]) + 'A' + r1 + ' ' + r1 + ' 0 0 0 ' + f(p4[0]) + ' ' + f(p4[1]) + 'Z';
+  }
+  function rayPath(a, r1, r2, half) {
+    var b1 = pt(r1, a - half), b2 = pt(r1, a + half), t = pt(r2, a);
+    return 'M' + f(b1[0]) + ' ' + f(b1[1]) + 'L' + f(t[0]) + ' ' + f(t[1]) + 'L' + f(b2[0]) + ' ' + f(b2[1]) + 'Z';
+  }
+
+  function buildWheel() {
+    var out = '<svg viewBox="-320 -320 640 640" role="img" aria-label="Колесо из восьми сфер жизни. Выберите сферу в списке рядом.">';
+    // лучи: большие на стыках секторов, малые по центрам
+    for (var i = 0; i < N; i++) {
+      out += '<path class="fs8-ray" d="' + rayPath(ang(i) + 22.5, 262, 308, 3.4) + '"/>';
+      out += '<path class="fs8-ray" opacity=".55" d="' + rayPath(ang(i), 262, 286, 2.4) + '"/>';
+    }
+    for (i = 0; i < N; i++) {
+      var s = S[i], a = ang(i);
+      out += '<g class="fs8-sec-g" data-i="' + i + '" aria-hidden="true">';
+      out += '<path class="fs8-sec" data-i="' + i + '" d="' + sectorPath(122, 252, a - 22.5 + 1.2, a + 22.5 - 1.2) + '"/>';
+      // иконка и подпись — столбиком в середине сектора, номер — у внешнего края
+      var pc = pt(180, a), pn = pt(238, a);
+      out += '<g class="fs8-ico" transform="translate(' + f(pc[0] - 19.2) + ' ' + f(pc[1] - 36) + ') scale(1.6)">' +
+        '<g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + ICONS[s.icon] + '</g></g>';
+      out += '<text class="fs8-num" x="' + f(pn[0]) + '" y="' + f(pn[1] + 5) + '" text-anchor="middle">' + (i + 1) + '</text>';
+      out += '<text class="fs8-lbl" text-anchor="middle" x="' + f(pc[0]) + '" y="' + f(pc[1] + 18) + '">' +
+        '<tspan x="' + f(pc[0]) + '" dy="0">' + esc(s.wheel[0]) + '</tspan>' +
+        '<tspan x="' + f(pc[0]) + '" dy="14">' + esc(s.wheel[1]) + '</tspan></text>';
+      out += '</g>';
+    }
+    out += '<circle class="fs8-hub" r="106"/><circle class="fs8-hub-ring" r="98"/>';
+    out += '<g id="fs8-hub-text"></g>';
+    out += '</svg>';
+    $('fs8-wheel').innerHTML = out;
+    hub();
+    var secs = $('fs8-wheel').querySelectorAll('.fs8-sec');
+    for (var k = 0; k < secs.length; k++) {
+      secs[k].addEventListener('click', function (e) { toggle(+e.currentTarget.getAttribute('data-i'), true); });
+    }
+  }
+  function hub() {
+    var g = $('fs8-hub-text'), i = state.open;
+    if (i < 0) {
+      // маленькое солнце: диск и двенадцать лучей
+      var sun = '<circle r="17" cx="0" cy="-36" fill="#f2cf4a"/>';
+      for (var k = 0; k < 12; k++) {
+        var a0 = k * 30, p1 = pt(24, a0), p2 = pt(32, a0);
+        sun += '<line x1="' + f(p1[0]) + '" y1="' + f(p1[1] - 36) + '" x2="' + f(p2[0]) + '" y2="' + f(p2[1] - 36) +
+          '" stroke="#f2cf4a" stroke-width="3" stroke-linecap="round"/>';
+      }
+      g.innerHTML = sun +
+        '<text class="fs8-hub-t2" y="26">Нажмите</text><text class="fs8-hub-t2" y="48">на сферу</text>' +
+        '<text class="fs8-hub-t3" y="72">всего восемь</text>';
+    } else {
+      var s = S[i];
+      g.innerHTML = '<text class="fs8-hub-t1" y="-14">' + (i + 1) + '</text>' +
+        '<text class="fs8-hub-t2" y="22">' + esc(s.wheel[0]) + '</text><text class="fs8-hub-t2" y="44">' + esc(s.wheel[1]) + '</text>' +
+        (s.tagline.length <= 24 ? '<text class="fs8-hub-t3" y="70">' + esc(s.tagline) + '</text>' : '');
+    }
+  }
+
+  function buildList() {
+    var out = '';
+    S.forEach(function (s, i) {
+      var chips = s.topics.map(function (t) { return '<span class="fs8-chip">' + esc(t) + '</span>'; }).join('');
+      var prog = s.program.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('');
+      var masters = s.masters.map(function (m) { return '<b>' + esc(m[0]) + '</b> — ' + esc(m[1]); }).join('; ');
+      var hs = s.houses.map(function (h) { return '<span class="fs8-chip"><b>' + h + '</b>' + esc(DATA.houses[h]) + '</span>'; }).join('');
+      out += '<div class="fs8-item" data-i="' + i + '">' +
+        '<button type="button" class="fs8-item__btn" id="fs8-b' + i + '" aria-expanded="false" aria-controls="fs8-p' + i + '">' +
+          '<span class="fs8-badge">' + icon(s.icon) + '</span>' +
+          '<span class="fs8-item__t"><span class="fs8-item__name">' + (i + 1) + '. ' + esc(s.name) + '</span><span class="fs8-item__tag">' + esc(s.tagline) + '</span></span>' +
+          '<svg class="fs8-caret" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8l5 5 5-5"/></svg>' +
+        '</button>' +
+        '<div class="fs8-item__body" id="fs8-p' + i + '" role="region" aria-labelledby="fs8-b' + i + '"><div class="fs8-item__inner"><div class="fs8-item__pad">' +
+          '<p class="fs8-q">' + esc(s.question) + '</p>' +
+          '<p class="fs8-desc">' + esc(s.text) + '</p>' +
+          (s.note ? '<p class="fs8-masters" style="margin-top:8px"><i>' + esc(s.note) + '</i></p>' : '') +
+          '<h4 class="fs8-h4">Темы и подходы</h4><div class="fs8-chips">' + chips + '</div>' +
+          '<h4 class="fs8-h4">В программе фестиваля</h4><ul class="fs8-prog">' + prog + '</ul>' +
+          '<p class="fs8-masters" style="margin-top:8px">Ведут: ' + masters + '. <a href="' + esc(CFG.programUrl) + '" style="color:inherit">Вся программа</a></p>' +
+          '<div class="fs8-stepbox"><b>Маленький шаг уже сегодня</b>' + esc(s.step) + '</div>' +
+          '<details class="fs8-astro"><summary>Как эту сферу видит астрология</summary><p>' + esc(s.astro) + '</p>' +
+            '<div class="fs8-chips"><span class="fs8-chip" style="background:none;color:var(--c-muted);padding-left:0">Дома карты в DARSHAN:</span>' + hs + '</div></details>' +
+        '</div></div></div></div>';
+    });
+    $('fs8-list').innerHTML = out;
+    var btns = $('fs8-list').querySelectorAll('.fs8-item__btn');
+    for (var k = 0; k < btns.length; k++) {
+      btns[k].addEventListener('click', function (e) { toggle(+e.currentTarget.parentNode.getAttribute('data-i'), false); });
+    }
+  }
+
+  function toggle(i, fromWheel) {
+    var closing = state.open === i && !fromWheel;
+    state.open = closing ? -1 : i;
+    sync();
+    if (!closing) {
+      track('fs8_open_' + S[i].id);
+      if (fromWheel) {
+        var it = $('fs8-list').children[i];
+        if (it && it.scrollIntoView) { try { it.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' }); } catch (e) {} }
+      }
+    }
+  }
+  function sync() {
+    var items = $('fs8-list').children, secs = $('fs8-wheel').querySelectorAll('.fs8-sec-g');
+    for (var k = 0; k < N; k++) {
+      var on = state.open === k;
+      items[k].className = 'fs8-item' + (on ? ' is-open' : '');
+      items[k].querySelector('.fs8-item__btn').setAttribute('aria-expanded', on ? 'true' : 'false');
+      secs[k].setAttribute('class', 'fs8-sec-g' + (on ? ' is-on' : ''));
+      secs[k].querySelector('.fs8-sec').setAttribute('class', 'fs8-sec' + (on ? ' is-on' : ''));
+    }
+    hub();
+  }
+
+  /* ───────────── ШАГ 2: ОЦЕНКА И РАДАР ───────────── */
+  function buildRows() {
+    var out = '';
+    S.forEach(function (s, i) {
+      out += '<div class="fs8-row' + (state.touched[i] ? ' is-set' : '') + '" data-i="' + i + '">' +
+        '<span class="fs8-badge" aria-hidden="true">' + (i + 1) + '</span>' +
+        '<label for="fs8-r' + i + '">' + esc(s.name) + '</label>' +
+        '<span class="fs8-row__v" id="fs8-v' + i + '" aria-hidden="true">' + (state.touched[i] ? state.scores[i] : '—') + '</span>' +
+        '<div class="fs8-row__s"><input class="fs8-range" type="range" min="1" max="10" step="1" value="' + state.scores[i] + '" id="fs8-r' + i + '" ' +
+          'aria-valuetext="' + (state.touched[i] ? state.scores[i] + ' из 10' : 'не оценено') + '" style="--p:' + (state.scores[i] - 1) / 9 * 100 + '%"></div>' +
+        '</div>';
+    });
+    $('fs8-rows').innerHTML = out;
+    var inputs = $('fs8-rows').querySelectorAll('input');
+    for (var k = 0; k < inputs.length; k++) {
+      inputs[k].addEventListener('input', onRate);
+      inputs[k].addEventListener('change', function () { track('fs8_rate'); });
+    }
+  }
+  function onRate(e) {
+    var el = e.currentTarget, i = +el.id.replace('fs8-r', ''), v = +el.value;
+    state.scores[i] = v; state.touched[i] = true;
+    el.style.setProperty('--p', (v - 1) / 9 * 100 + '%');
+    el.setAttribute('aria-valuetext', v + ' из 10');
+    $('fs8-v' + i).textContent = v;
+    el.closest('.fs8-row').classList.add('is-set');
+    persist(); drawRadar();
+    if (state.results) renderResults();
+  }
+
+  var RC = 150; // радиус радара в единицах viewBox
+  function rpt(i, v) { var p = pt(RC * v / 10, ang(i)); return [f(p[0]), f(p[1])]; }
+  function drawRadar() {
+    var out = '<svg viewBox="-215 -215 430 430" role="img" aria-label="Радар баланса по восьми сферам">';
+    [2, 4, 6, 8, 10].forEach(function (v) {
+      var d = '';
+      for (var i = 0; i < N; i++) { var p = rpt(i, v); d += (i ? 'L' : 'M') + p[0] + ' ' + p[1]; }
+      out += '<path class="rg" d="' + d + 'Z"/>';
+    });
+    for (var i = 0; i < N; i++) { var e = rpt(i, 10); out += '<line class="ra" x1="0" y1="0" x2="' + e[0] + '" y2="' + e[1] + '"/>'; }
+    var poly = '';
+    for (i = 0; i < N; i++) { var q = rpt(i, state.scores[i]); poly += (i ? 'L' : 'M') + q[0] + ' ' + q[1]; }
+    out += '<path class="rp" d="' + poly + 'Z"' + (ratedCount() ? '' : ' style="opacity:.35"') + '/>';
+    for (i = 0; i < N; i++) {
+      var d2 = rpt(i, state.scores[i]);
+      if (state.touched[i]) out += '<circle class="rd" cx="' + d2[0] + '" cy="' + d2[1] + '" r="5"/>';
+      var b = pt(RC + 34, ang(i));
+      out += '<circle class="rb" cx="' + f(b[0]) + '" cy="' + f(b[1]) + '" r="15"/><text class="rn" x="' + f(b[0]) + '" y="' + f(b[1]) + '">' + (i + 1) + '</text>';
+    }
+    out += '</svg>';
+    $('fs8-radar').innerHTML = out;
+    $('fs8-radar-hint').textContent = ratedCount() === 0
+      ? 'Двигайте ползунки — колесо меняется на глазах'
+      : 'Оценено сфер: ' + ratedCount() + ' из ' + N;
+  }
+
+  /* ───────────── ВЫВОДЫ ───────────── */
+  function rated() {
+    var r = [];
+    for (var i = 0; i < N; i++) if (state.touched[i]) r.push({ i: i, v: state.scores[i] });
+    return r;
+  }
+  function card(kind, idx, v, focus) {
+    var s = S[idx];
+    var prog = s.program.slice(0, 3).map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('');
+    return '<div class="fs8-card' + (focus ? '' : ' fs8-card--soft') + '">' +
+      '<div class="fs8-card__k">' + kind + ' · ' + v + ' из 10</div>' +
+      '<div class="fs8-card__t">' + (idx + 1) + '. ' + esc(s.name) + '</div>' +
+      '<div class="fs8-card__s">' + esc(s.tagline) + '</div>' +
+      (focus
+        ? '<p>' + esc(s.step) + '</p><h4 class="fs8-h4">На фестивале</h4><ul>' + prog + '</ul>'
+        : '<p>' + esc(s.question) + '</p>') +
+      '<button type="button" class="fs8-more" data-open="' + idx + '">Подробнее о сфере</button></div>';
+  }
+  function renderResults() {
+    var r = rated(), box = $('fs8-res');
+    box.hidden = false;
+    if (r.length < 4) {
+      box.innerHTML = '<h3 class="fs8-res__head" tabindex="-1">Оцените ещё несколько сфер</h3><p class="fs8-res__sum">Для выводов нужно хотя бы четыре оценки — сейчас их ' +
+        r.length + '. Остальные можно пропустить: тогда они не попадут в выводы.</p>';
+      bridge(null); return;
+    }
+    var asc = r.slice().sort(function (a, b) { return a.v - b.v || a.i - b.i; });
+    var desc = r.slice().sort(function (a, b) { return b.v - a.v || a.i - b.i; });
+    var spread = asc[asc.length - 1].v - asc[0].v;
+    var low = asc.slice(0, 2), high = desc.slice(0, 2);
+    var even = spread <= 1;
+    var avg = r.reduce(function (s, x) { return s + x.v; }, 0) / r.length;
+    var sum = even
+      ? 'Ваше колесо получилось ровным: все сферы вы оцениваете почти одинаково. Это не плохо и не хорошо — спросите себя, где вам хочется чуть больше.'
+      : 'Разброс между самой «тихой» и самой наполненной сферой — ' + spread + ' ' + (spread < 5 ? 'балла' : 'баллов') +
+        '. Ровное колесо — не цель, а способ увидеть, куда сейчас уходит ваша энергия, а где её не хватает.';
+    if (even && asc[0].v >= 8) {
+      sum = 'Вы оцениваете все сферы очень высоко — это здорово. Попробуйте найти ту, где хочется глубины или нового опыта: выбор сферы — уже способ расти.';
+    } else if (avg <= 3.5) {
+      sum += ' Если сейчас трудно почти во всём, начните с самой доступной сферы и одного маленького шага. Если тяжесть держится долго — поддержка специалиста это нормально и полезно, а не слабость.';
+    }
+    var html = '<h3 class="fs8-res__head" tabindex="-1">Ваше колесо баланса</h3><p class="fs8-res__sum">' + sum + '</p><div class="fs8-res__cols">';
+    if (!even) {
+      low.forEach(function (x) { html += card('Зона внимания', x.i, x.v, true); });
+      html += card('Опора', high[0].i, high[0].v, false);
+    } else {
+      html += card('Одна из сфер', asc[0].i, asc[0].v, true);
+      html += card('Одна из сфер', desc[0].i, desc[0].v, false);
+    }
+    html += '</div><div class="fs8-balance">Это ваш взгляд на жизнь сегодняшним днём — он меняется. Сохраните картинку и сравните её с результатом в DARSHAN: карта рождения покажет второй слой.</div>' +
+      '<div class="fs8-actions"><button type="button" class="fs8-btn fs8-btn--sm" id="fs8-save">Сохранить картинкой</button>' +
+      '<a class="fs8-btn fs8-btn--line fs8-btn--sm" href="#fs8-dark">К подарку от DARSHAN</a></div>';
+    box.innerHTML = html;
+    bridge(asc[0].i);
+    $('fs8-save').addEventListener('click', saveImage);
+    var more = box.querySelectorAll('.fs8-more');
+    for (var k = 0; k < more.length; k++) {
+      more[k].addEventListener('click', function (e) {
+        var idx = +e.currentTarget.getAttribute('data-open');
+        state.open = idx; sync();
+        var it = $('fs8-list').children[idx];
+        if (it) { it.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }); }
+      });
+    }
+    var a = box.querySelector('a[href="#fs8-dark"]');
+    if (a) a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var t = root.querySelector('.fs8-dark-wrap');
+      if (t) t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    });
+  }
+  function bridge(idx) {
+    var b = $('fs8-bridge');
+    if (idx === null) { b.hidden = true; return; }
+    var s = S[idx], hs = s.houses.map(function (h) { return '«' + DATA.houses[h] + '»'; }).join(' и ');
+    b.hidden = false;
+    b.innerHTML = 'Вы оценили сферу «<b>' + esc(s.name) + '</b>» на ' + state.scores[idx] + ' из 10. В карте рождения её описывают ' +
+      (s.houses.length > 1 ? 'дома ' : 'дом ') + hs + ' — в DARSHAN можно посмотреть, что там заложено.';
+  }
+
+  /* ───────────── КАРТИНКА ДЛЯ СОХРАНЕНИЯ ───────────── */
+  function saveImage() {
+    track('fs8_save_image');
+    var W = 1080, H = 1350, c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    var x = c.getContext('2d');
+    var HEAD = '"Philosopher", Georgia, serif', BODY = '"Montserrat", Arial, sans-serif';
+    var paint = function () {
+      var g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#2d2b5f'); g.addColorStop(1, '#1f1d45');
+      x.fillStyle = g; x.fillRect(0, 0, W, H);
+      x.textAlign = 'center'; x.fillStyle = '#f2cf4a';
+      x.font = '700 62px ' + HEAD; x.fillText('МОЁ КОЛЕСО БАЛАНСА', W / 2, 108);
+      x.fillStyle = 'rgba(255,255,255,.72)'; x.font = '500 26px ' + BODY;
+      x.fillText('8 сфер гармоничной жизни · фестиваль «' + DATA.festival.name + '»', W / 2, 156);
+      var cx = W / 2, cy = 565, R = 285;
+      var P = function (i, v) { var t = ang(i) * Math.PI / 180; return [cx + R * v / 10 * Math.cos(t), cy + R * v / 10 * Math.sin(t)]; };
+      x.strokeStyle = 'rgba(255,255,255,.2)'; x.lineWidth = 2;
+      [2, 4, 6, 8, 10].forEach(function (v) {
+        x.beginPath();
+        for (var i = 0; i < N; i++) { var p = P(i, v); i ? x.lineTo(p[0], p[1]) : x.moveTo(p[0], p[1]); }
+        x.closePath(); x.stroke();
+      });
+      for (var i = 0; i < N; i++) { var e = P(i, 10); x.beginPath(); x.moveTo(cx, cy); x.lineTo(e[0], e[1]); x.stroke(); }
+      x.beginPath();
+      for (i = 0; i < N; i++) { var q = P(i, state.scores[i]); i ? x.lineTo(q[0], q[1]) : x.moveTo(q[0], q[1]); }
+      x.closePath(); x.fillStyle = 'rgba(242,207,74,.45)'; x.fill(); x.strokeStyle = '#f2cf4a'; x.lineWidth = 5; x.lineJoin = 'round'; x.stroke();
+      for (i = 0; i < N; i++) {
+        if (state.touched[i]) { var d = P(i, state.scores[i]); x.beginPath(); x.arc(d[0], d[1], 9, 0, 7); x.fillStyle = '#f2cf4a'; x.fill(); }
+        var t = ang(i) * Math.PI / 180, bx = cx + (R + 50) * Math.cos(t), by = cy + (R + 50) * Math.sin(t);
+        x.beginPath(); x.arc(bx, by, 24, 0, 7); x.fillStyle = '#f2cf4a'; x.fill();
+        x.fillStyle = '#2d2b5f'; x.font = '700 28px ' + HEAD; x.textBaseline = 'middle'; x.fillText(String(i + 1), bx, by + 1);
+      }
+      x.textBaseline = 'alphabetic'; x.textAlign = 'left';
+      var top = 990, colW = 440;
+      for (i = 0; i < N; i++) {
+        var col = i % 2, row = Math.floor(i / 2), px = 70 + col * 520, py = top + row * 62;
+        x.fillStyle = '#f2cf4a'; x.font = '700 30px ' + HEAD; x.fillText(String(i + 1) + '.', px, py);
+        x.fillStyle = '#fff'; x.font = '500 27px ' + BODY;
+        var label = S[i].short, w = colW - 110;
+        while (x.measureText(label).width > w && label.length > 3) label = label.slice(0, -2);
+        x.fillText(label, px + 44, py);
+        x.textAlign = 'right'; x.fillStyle = '#f2cf4a'; x.font = '700 30px ' + HEAD;
+        x.fillText(state.touched[i] ? String(state.scores[i]) : '—', px + colW, py); x.textAlign = 'left';
+      }
+      x.textAlign = 'center'; x.fillStyle = 'rgba(255,255,255,.8)'; x.font = '500 26px ' + BODY;
+      x.fillText(DATA.festival.dates + ' · ' + DATA.festival.place, W / 2, 1262);
+      x.fillStyle = '#f2cf4a'; x.font = '700 30px ' + BODY; x.fillText(DATA.festival.site, W / 2, 1306);
+      c.toBlob(function (blob) {
+        if (!blob) return;
+        var url = URL.createObjectURL(blob), a = document.createElement('a');
+        a.href = url; a.download = 'koleso-balansa.png';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      }, 'image/png');
+    };
+    // шрифты сайта должны успеть загрузиться, иначе в картинке будет запасной
+    try {
+      Promise.all([document.fonts.load('700 40px Philosopher'), document.fonts.load('500 20px Montserrat')]).then(paint, paint);
+    } catch (e) { paint(); }
+  }
+
+  /* ───────────── ПОДАРКИ И ССЫЛКИ ───────────── */
+  function buildGifts() {
+    var out = '';
+    ['guest', 'guests'].forEach(function (key, k) {
+      var c = CFG.gifts[key], g = DATA.gifts[key];
+      if (!c || !c.enabled || !g) return;
+      var live = !!c.url;
+      out += '<div class="fs8-gift' + (live ? '' : ' fs8-gift--soon') + '">' +
+        '<span class="fs8-gift__tag">' + esc(g.tag) + '</span>' +
+        '<h5>' + esc(g.title) + '</h5><p>' + esc(g.text) + '</p>' +
+        (live ? '<a class="fs8-btn fs8-btn--sm" data-gift="' + k + '" href="' + esc(c.url) + '" target="_blank" rel="noopener">' + esc(g.button) + '</a>' : '') +
+        '<small>' + esc(g.note) + '</small></div>';
+    });
+    $('fs8-gifts').innerHTML = out;
+    var links = $('fs8-gifts').querySelectorAll('a[data-gift]');
+    for (var i = 0; i < links.length; i++) links[i].addEventListener('click', function () { track('fs8_gift_click'); });
+    $('fs8-reg').setAttribute('href', CFG.registerUrl);
+    $('fs8-prog').setAttribute('href', CFG.programUrl);
+    $('fs8-reg').addEventListener('click', function () { track('fs8_register_click'); });
+  }
+
+  /* ───────────── ЗАПУСК ───────────── */
+  buildWheel(); buildList(); buildRows(); buildGifts(); drawRadar();
+  $('fs8-show').addEventListener('click', function () {
+    state.results = true; renderResults(); track('fs8_results');
+    var h = $('fs8-res').querySelector('.fs8-res__head');
+    try { $('fs8-res').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); } catch (e) {}
+    if (h) h.focus({ preventScroll: true });
+  });
+  $('fs8-reset').addEventListener('click', function () {
+    for (var i = 0; i < N; i++) { state.scores[i] = 5; state.touched[i] = false; }
+    state.results = false; $('fs8-res').hidden = true; bridge(null);
+    persist(); buildRows(); drawRadar();
+  });
+  // Ссылка вида …/?sphere=money открывает нужную сферу — удобно для рекламы под каждую тему.
+  try {
+    var m = /[?&]sphere=([a-z]+)/.exec(location.search);
+    if (m) for (var k = 0; k < N; k++) if (S[k].id === m[1]) {
+      state.open = k; sync();
+      setTimeout(function () { root.scrollIntoView({ behavior: 'auto', block: 'start' }); }, 400);
+    }
+  } catch (e) {}
+})();
+</script>

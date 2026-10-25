@@ -111,6 +111,16 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 <script src="https://xenaja.github.io/fest-sun-blocks/fs.js"></script>
 ```
 
+**8 сфер** – два блока. На лендинге ЭС тизер (`text`, `data-name="spheres"`): восемь сфер «таблетками» и кнопка на отдельную страницу. Отдельная страница Тильды `fest-sun.ru/spheres` – интерактивное колесо от DARSHAN (`shared/embeds/8-spheres.html`, блок `embed`); его кнопки ведут на `fest-sun.ru/#prices` и `#programm`.
+
+```html
+<!-- лендинг ЭС, после «Программы» -->
+<div class="fs-block" data-block="text" data-name="spheres" data-event="energiya-solntsa"></div>
+<!-- страница fest-sun.ru/spheres -->
+<div class="fs-block" data-block="embed" data-name="8-spheres" data-event="energiya-solntsa"></div>
+<script src="https://xenaja.github.io/fest-sun-blocks/fs.js"></script>
+```
+
 **Кнопка меню «Участвую» → к стоимости.** В настройках меню Тильды поставьте кнопке ссылку `#prices` (у блока prices в сниппете есть `id="prices"`). Скрипт плавно прокрутит к блоку с отступом под закреплённое меню (80 px; меняется переменной темы `--fs-anchor-offset`). Ссылки `#prices` reflinks не трогает.
 
 **rooms** – проживание с питанием, переключатель длительностей, галереи номеров:
