@@ -48,7 +48,7 @@
   "garlands": ["prices"],
 
   "masters_block": { "title": "Мастера и артисты" },
-  "masters": ["teya", "pavitra", "zakharevich", "nollendorf", "danaya", "yura-ra", "telminov", "davudov", "shcherbakova"],
+  "masters": ["teya", "pavitra", "zakharevich", "nollendorf", "danaya", "yura-ra", "telminov", "davudov", "shcherbakova", "chernyh"],
 
   "hero": {
     "eyebrow": "Ретрит-центр «Энергия Солнца» · Сочи",

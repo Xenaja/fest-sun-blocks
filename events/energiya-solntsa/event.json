@@ -74,7 +74,7 @@
 
   "specials": {
     "title": "",
-    "items": ["gong-night", "sound-mystery", "banya-ceremony"],
+    "items": ["gong-night", "banya-ceremony"],
     "prices": [5000, 7000, 8000]
   },
 
