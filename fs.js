@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.25-11';
+  var VERSION = '2026.10.25-12';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -813,13 +813,13 @@
     return mastersFor(c, c.ev.alumni).then(function (list) {
       if (!list.length) throw new Error('нет alumni в event.json');
       var items = list.map(function (m, i) {
-        return '<li><button type="button" class="fs-alum" data-master="' + i + '">' + photo(m, 'fs-alum__ph') +
-          '<span class="fs-alum__name">' + esc(m.name) + '</span></button></li>';
+        // только фото и имя, без окна с описанием (заказчик, 25.10.2026)
+        return '<li><div class="fs-alum">' + photo(m, 'fs-alum__ph') +
+          '<span class="fs-alum__name">' + esc(m.name) + '</span></div></li>';
       }).join('');
       return {
         html: section(title(c.el.getAttribute('data-title') || 'У нас уже выступали') +
-          '<ul class="fs-alumni">' + items + '</ul>', 'fs-alumni-section'),
-        after: bindMasters(c, list)
+          '<ul class="fs-alumni">' + items + '</ul>', 'fs-alumni-section')
       };
     });
   };
@@ -1777,7 +1777,7 @@
       '.fs-alumni{list-style:none;display:flex;flex-wrap:wrap;gap:32px 28px;justify-content:center;margin:36px 0 0;padding:0 0 8px}',
       '@media (max-width:600px){.fs-alumni{flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x proximity;justify-content:flex-start;gap:20px;scrollbar-width:thin;scrollbar-color:var(--fs-highlight) transparent}}',
       '.fs-alumni li{flex:0 0 auto;scroll-snap-align:start}',
-      '.fs-alum{display:flex;flex-direction:column;align-items:center;gap:12px;width:140px;background:none;border:0;padding:0;font:inherit;color:var(--fs-fg);cursor:pointer}',
+      '.fs-alum{display:flex;flex-direction:column;align-items:center;gap:12px;width:140px;background:none;border:0;padding:0;font:inherit;color:var(--fs-fg)}',
       '.fs-alum__ph{position:relative;left:auto;top:auto;transform:none;width:120px;height:120px;border:2px solid var(--fs-gold)}',
       '.fs-alum__ph.fs-ph--empty{font-size:30px}',
       '.fs-alum__name{font-size:15px;line-height:1.35;text-align:center}',
