@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.25-9';
+  var VERSION = '2026.10.25-10';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -935,7 +935,7 @@
 
     function seed() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
-      w = box.clientWidth; h = box.clientHeight;
+      w = cv.clientWidth || box.clientWidth; h = cv.clientHeight || box.clientHeight;
       if (!w || !h) { stars = []; return; }
       cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
       // звёзды по кругу на всю диагональ – при вращении углы не пустеют
@@ -1522,6 +1522,8 @@
       '.fs-root .fs-chips>.fs-list>li{margin:0;padding:9px 18px;border:1px solid var(--fs-gold);border-radius:40px;font-size:15px;line-height:1.3;background:var(--fs-bg)}.fs-root .fs-chips>.fs-list>li::before{content:none;display:none}',
       // Гирлянда: блок без высоты, рисунок висит поверх стыка соседних блоков
       '.fs-section>.fs-galaxy~.fs-inner{position:relative;z-index:1}',
+      // в секции с фигурным краем звёзды и в клиньях – без прямой линии на границе
+      '.fs-section>.fs-galaxy{top:calc(-1 * var(--fs-edge-t,0px))!important;height:calc(100% + var(--fs-edge-t,0px) + var(--fs-edge-b,0px))!important}',
       '.fs-garland{position:relative;z-index:5;height:0;pointer-events:none}',
       '.fs-garland>svg{position:absolute;left:0;top:-8px;overflow:visible}',
       '@keyframes fs-twinkle{0%,100%{opacity:.15}50%{opacity:1}}@keyframes fs-twinkle-b{0%,100%{opacity:.6}50%{opacity:1}}',
