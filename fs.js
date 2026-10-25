@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.25-6';
+  var VERSION = '2026.10.25-7';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -1303,6 +1303,11 @@
       resolveLinks(el, ctx.ev);
       if (res.after) res.after(el);
       flattenSoon();
+      // живые звёзды поверх фона секции – event.json → galaxy: ["masters", …] (тип блока или data-name)
+      if ((ctx.ev.galaxy || []).indexOf(el.getAttribute('data-name') || type) >= 0) {
+        var gsec = el.querySelector('.fs-section');
+        if (gsec) starfield(gsec, { density: 0.5, shooting: true });
+      }
       // гирлянда над блоком – event.json → garlands: ["prices", "program", …] (тип блока или data-name)
       if ((ctx.ev.garlands || []).indexOf(el.getAttribute('data-name') || type) >= 0 &&
           !(el.previousElementSibling && el.previousElementSibling.classList.contains('fs-garland'))) {
@@ -1493,6 +1498,7 @@
       '.fs-acc__body{padding:0 2px 18px;font-size:16px;line-height:1.6}',
       '@media (max-width:600px){.fs-acc>summary{font-size:16px;padding:13px 2px}.fs-acc__body{font-size:15px}}',
       // Гирлянда: блок без высоты, рисунок висит поверх стыка соседних блоков
+      '.fs-section>.fs-galaxy~.fs-inner{position:relative;z-index:1}',
       '.fs-garland{position:relative;z-index:5;height:0;pointer-events:none}',
       '.fs-garland>svg{position:absolute;left:0;top:-8px;overflow:visible}',
       '@keyframes fs-twinkle{0%,100%{opacity:.15}50%{opacity:1}}@keyframes fs-twinkle-b{0%,100%{opacity:.6}50%{opacity:1}}',
