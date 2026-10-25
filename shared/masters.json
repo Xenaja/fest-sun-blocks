@@ -215,5 +215,13 @@
     "short": "Голос древней традиции Тувы.",
     "photo": "img/masters/mongush.webp",
     "photo_full": "img/masters/full/mongush.webp"
+  },
+  {
+    "id": "guryanov",
+    "name": "Евгений Гурьянов",
+    "regalia": "Доктор остеопрактики, основатель Академии Остеокоррекции",
+    "short": "Работа с первопричиной: остеопрактика, психосоматика и биодинамика.",
+    "photo": "img/masters/guryanov.webp",
+    "photo_full": "img/masters/full/guryanov.webp"
   }
 ]
