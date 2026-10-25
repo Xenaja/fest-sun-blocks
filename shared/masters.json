@@ -223,5 +223,132 @@
     "short": "Мастер-класс «PRO_Здоровье»: устранение последствий травм и операций.",
     "photo": "img/masters/guryanov.webp",
     "photo_full": "img/masters/full/guryanov.webp"
+  },
+  {
+    "id": "kalmykova",
+    "name": "Татьяна Калмыкова",
+    "regalia": "Этнический вокал",
+    "short": "Концерт, «Мистерия звука» и раскрытие голоса.",
+    "photo": "img/masters/kalmykova.webp",
+    "photo_full": "img/masters/full/kalmykova.webp"
+  },
+  {
+    "id": "mayman",
+    "name": "Валентина Майман",
+    "photo": "img/masters/mayman.webp"
+  },
+  {
+    "id": "bochkarev",
+    "name": "Валерий Бочкарёв",
+    "regalia": "Рекордсмен по стоянию на гвоздях",
+    "short": "7 рекордов, в том числе рекорд Гиннесса.",
+    "photo": "img/masters/bochkarev.webp",
+    "photo_full": "img/masters/full/bochkarev.webp"
+  },
+  {
+    "id": "sati",
+    "name": "Сати",
+    "regalia": "Женские круги и практики",
+    "short": "Танец-мандала, Кали-медитация, родовая практика.",
+    "photo": "img/masters/sati.webp",
+    "photo_full": "img/masters/full/sati.webp"
+  },
+  {
+    "id": "kolupanov",
+    "name": "Александр Колупанов",
+    "regalia": "Саундхилинг-мастер, автор песен",
+    "short": "Концерты осознанного слушания и «Голос. Магия Звука».",
+    "photo": "img/masters/kolupanov.webp"
+  },
+  {
+    "id": "yunak",
+    "name": "Николай Юнак",
+    "regalia": "Мастер Тантры, коуч",
+    "short": "Мастер-класс «Тантра – путь к мечте».",
+    "photo": "img/masters/yunak.webp"
+  },
+  {
+    "id": "naumova",
+    "name": "Анастасия Наумова",
+    "photo": "img/masters/naumova.webp"
+  },
+  {
+    "id": "osherov",
+    "name": "Кирилл Ошеров",
+    "photo": "img/masters/osherov.webp"
+  },
+  {
+    "id": "jivanmukta",
+    "name": "Дживанмукта Кайвалья",
+    "regalia": "Мастер звукотерапии",
+    "short": "Основатель проекта «Священные Звуки Вселенной».",
+    "photo": "img/masters/jivanmukta.webp",
+    "photo_full": "img/masters/full/jivanmukta.webp"
+  },
+  {
+    "id": "chakaberiya",
+    "name": "Паата Чакаберия",
+    "photo": "img/masters/chakaberiya.webp"
+  },
+  {
+    "id": "pokrov-etno",
+    "name": "Покров Этно",
+    "photo": "img/masters/pokrov-etno.webp"
+  },
+  {
+    "id": "shakti-loka",
+    "name": "Shakti Loka",
+    "regalia": "Дуэт, экстатический шаманизм",
+    "short": "Русские стихи и мантры, электроника и инди-рок.",
+    "photo": "img/masters/shakti-loka.webp",
+    "photo_full": "img/masters/full/shakti-loka.webp"
+  },
+  {
+    "id": "aura-ra",
+    "name": "Aura Ra",
+    "regalia": "Медитативный перформанс",
+    "short": "Живой концерт с 3D-проекционным шоу.",
+    "photo": "img/masters/aura-ra.webp",
+    "photo_full": "img/masters/full/aura-ra.webp"
+  },
+  {
+    "id": "karnash",
+    "name": "Karnash",
+    "regalia": "Мультиинструменталист, live-looping",
+    "short": "Шаманский сет и мастер-класс по диджериду.",
+    "photo": "img/masters/karnash.webp",
+    "photo_full": "img/masters/full/karnash.webp"
+  },
+  {
+    "id": "zelenkov",
+    "name": "Денис Зеленков",
+    "regalia": "Цигун и здоровое долголетие",
+    "short": "Практикует цигун с 2006 года.",
+    "photo": "img/masters/zelenkov.webp",
+    "photo_full": "img/masters/full/zelenkov.webp"
+  },
+  {
+    "id": "ikarushka",
+    "name": "Ikarushka",
+    "regalia": "Этно-электроника",
+    "short": "Народное пение под современные биты.",
+    "photo": "img/masters/ikarushka.webp",
+    "photo_full": "img/masters/full/ikarushka.webp"
+  },
+  {
+    "id": "slyusarchuk",
+    "name": "Ольга Слюсарчук",
+    "regalia": "Мастер звука, гонги и чаши",
+    "short": "Одна из самых больших коллекций гонгов в России.",
+    "photo": "img/masters/slyusarchuk.webp",
+    "photo_full": "img/masters/full/slyusarchuk.webp"
+  },
+  {
+    "id": "yasyrev",
+    "name": "Михаил Ясырев",
+    "regalia": "Йогатерапевт",
+    "short": "Автор методики «Йога 108 прикосновений».",
+    "photo": "img/masters/yasyrev.webp",
+    "photo_full": "img/masters/full/yasyrev.webp"
   }
 ]
