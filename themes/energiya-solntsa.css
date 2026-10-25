@@ -84,4 +84,5 @@
     radial-gradient(ellipse 80% 45% at 50% 100%, rgba(80, 90, 220, .38), transparent 70%),
     linear-gradient(180deg, #0f0e1c 0%, #1b1a40 40%, #2b2c76 100%);
   background-color: var(--fs-dark-bg);
+  background-origin: border-box; /* фон – с учётом фигурного края, без повтора низа градиента в клине */
 }
