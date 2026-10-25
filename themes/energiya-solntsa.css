@@ -72,3 +72,16 @@
   letter-spacing: .02em;
 }
 .fs-theme-energiya-solntsa .fs-hero__lead { text-transform: uppercase; letter-spacing: .04em; font-size: clamp(12px, 3.3vw, 16px); white-space: nowrap; }
+
+/* Космический фон, как на первом экране сайта: звёзды (плитка 600 px), туманности, переход
+   от ночного к фиолетовому. Пока – только у блока «Артисты и мастера» */
+.fs-theme-energiya-solntsa.fs-b-masters > .fs-section {
+  background:
+    url("../shared/img/space-stars.webp") 0 0 / 700px repeat,
+    repeating-radial-gradient(circle at 50% 30%, transparent 0 139px, rgba(242, 207, 74, .07) 140px 141px, transparent 142px 190px),
+    radial-gradient(ellipse 60% 35% at 80% 12%, rgba(130, 100, 210, .32), transparent 70%),
+    radial-gradient(ellipse 45% 30% at 15% 45%, rgba(255, 196, 90, .10), transparent 70%),
+    radial-gradient(ellipse 80% 45% at 50% 100%, rgba(80, 90, 220, .38), transparent 70%),
+    linear-gradient(180deg, #0f0e1c 0%, #1b1a40 40%, #2b2c76 100%);
+  background-color: var(--fs-dark-bg);
+}
