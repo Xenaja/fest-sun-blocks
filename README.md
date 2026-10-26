@@ -83,6 +83,8 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 <div class="fs-block" data-block="partner-cta" data-event="novogodnyaya-misteriya" data-variant="soft"></div>
 ```
 
+**Кнопки Тильды с формой** (`#popup:myform`, формы ВК, WhatsApp) с 26.10.2026 ведут в бота события автоматически, если на странице есть хоть один наш блок с `data-event` – отдельный `reflinks` не обязателен. Оставить форму: `data-reflinks="off"` у любого блока.
+
 **redirect** – для старых партнёрских страниц (`soundmystery.ru/newyear_fe`, `fest-sun.ru/fe`): сразу уводит на общий лендинг, сохраняя всю строку запроса (`?ref=…`, utm). `data-to` – путь на том же сайте. В настройках страницы – запрет индексации. Демо: `newyear-fe.html`.
 
 ```html

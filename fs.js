@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.26-20';
+  var VERSION = '2026.10.26-21';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -1390,6 +1390,12 @@
       enhanceAccordions(el);
       enhanceMore(el);
       resolveLinks(el, ctx.ev);
+      // Кнопки Тильды с формой (#popup:myform) – в бота события, даже без блока reflinks на странице.
+      // Отключить: data-reflinks="off" у любого блока страницы
+      if (!reflinkUrl && ctx.ev.bot && !document.querySelector('[data-reflinks="off"]')) {
+        var rl = botLink(ctx.ev);
+        if (rl) startReflinks(rl);
+      }
       if (res.after) res.after(el);
       flattenSoon();
       // живые звёзды поверх фона секции – event.json → galaxy: ["masters", …] (тип блока или data-name)
