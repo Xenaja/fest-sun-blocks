@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.26-16';
+  var VERSION = '2026.10.26-18';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -410,7 +410,7 @@
       return '<a class="fs-btn" href="#" data-fs-link="' + esc(b.link || 'bot') + '">' + esc(b.text) + '</a>';
     }).join('');
     return '<section class="fs-section fs-hero' + (h.image ? ' fs-hero--img' : '') + '"' + bg + '><div class="fs-inner fs-hero__inner">' +
-      (h.eyebrow ? '<p class="fs-hero__eyebrow">' + inline(h.eyebrow) + '</p>' : '') +
+      (h.eyebrow ? '<p class="fs-hero__eyebrow">' + [].concat(h.eyebrow).map(inline).join('<br>') + '</p>' : '') +
       '<h1 class="fs-hero__title">' + (h.kicker ? '<span class="fs-hero__kicker">' + inline(h.kicker) + '</span> ' : '') +
         '<span class="fs-hero__main">' + inline(h.title) + '</span></h1>' +
       (h.lead ? '<p class="fs-hero__lead">' + inline(h.lead) + '</p>' : '') +

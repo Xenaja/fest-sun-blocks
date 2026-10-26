@@ -53,10 +53,9 @@
   "masters": ["teya", "pavitra", "zakharevich", "nollendorf", "danaya", "yura-ra", "telminov", "davudov", "shcherbakova", "chernyh", "guryanov"],
 
   "hero": {
-    "eyebrow": "Ретрит-центр «Энергия Солнца» · Сочи",
+    "eyebrow": ["31 декабря – 3 января, Сочи", "Ретрит-центр «Энергия Солнца»"],
     "title": "Новогодняя Мистерия",
-    "lead": "Живая музыка · Ecstatic Dance · Гонг-медитация",
-    "dates": ["31 декабря – 3 января"],
+    "tags": "Живая музыка · Гонг-медитация · Ecstatic Dance",
     "image": "img/hero.webp"
   },
 
@@ -84,7 +83,8 @@
       "cta": "Оставить заявку",
       "blocks": [
         {
-          "block": "hero"
+          "block": "hero",
+          "buttons": "none"
         },
         {
           "block": "text",
