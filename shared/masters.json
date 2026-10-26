@@ -22,7 +22,7 @@
     "id": "yura-ra",
     "name": "Юра Ра",
     "regalia": "Создатель сети ретрит-центров, миллиардер",
-    "short": "Богатырские практики и финансовое мышление.",
+    "short": "Богатырские практики и «22 привычки миллиардера» по своей книге.",
     "photo": "img/masters/yura-ra.webp",
     "photo_full": "img/masters/full/yura-ra.webp",
     "pos": "30% 12%",
@@ -69,7 +69,7 @@
     "id": "chernyh",
     "name": "Екатерина Черных",
     "regalia": "Продюсер, автор фестиваля «МаниФест»",
-    "short": "«Формула Денег»: продукт, который продаётся.",
+    "short": "«Формула денег» и нетворкинг о деньгах.",
     "photo": "img/masters/chernyh.webp",
     "photo_full": "img/masters/full/chernyh.webp",
     "pos": "50% 28%",
@@ -350,5 +350,11 @@
     "short": "Автор методики «Йога 108 прикосновений».",
     "photo": "img/masters/yasyrev.webp",
     "photo_full": "img/masters/full/yasyrev.webp"
+  },
+  {
+    "id": "belyaeva",
+    "name": "Наталья Беляева",
+    "regalia": "Мастер пара",
+    "short": "Банная церемония. Опыт школы Александра Марченко, главного судьи чемпионата по парению."
   }
 ]

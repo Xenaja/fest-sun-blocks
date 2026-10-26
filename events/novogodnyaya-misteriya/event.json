@@ -31,6 +31,8 @@
     ],
     "current_wave": 1,
     "new_note": "Базовый пакет Full Energy – в подарок.",
+    "partner_page_note": "Ваши приглашённые оплачивают тариф участника и получают базовый пакет в подарок.",
+    "after_note": "В каждой волне 33 места. Когда они заканчиваются, открывается следующая цена.",
     "partner_note": "Для тех, кто уже партнёр Full Energy на момент заявки. Менеджер проверит ID.",
     "extras": {
       "title": "Также оплачивается",
@@ -58,6 +60,11 @@
     "image": "img/hero.webp"
   },
 
+  "hero_partner": {
+    "badge": "Партнёрам Full Energy первые 33 места – участие в подарок",
+    "buttons": [{ "text": "Получить свою ссылку", "link": "partner" }, { "text": "Участвую сам", "link": "bot" }]
+  },
+
   "video": { "title": "Мистерия звука", "rutube": "64bffe00ab2103b0a9dad2854e417003", "cover": "img/video-cover.webp" },
 
   "galleries": {
@@ -76,24 +83,140 @@
     "main": {
       "cta": "Оставить заявку",
       "blocks": [
-        { "block": "hero" },
-        { "block": "text", "name": "benefits", "variant": "soft" },
-        { "block": "masters" },
-        { "block": "text", "name": "program" },
-        { "block": "prices" },
-        { "block": "text", "name": "stay" },
-        { "block": "gallery", "name": "rooms" },
-        { "block": "gallery", "name": "territory" },
-        { "block": "gallery", "name": "food" },
-        { "block": "text", "name": "gift", "variant": "soft" }
+        {
+          "block": "hero"
+        },
+        {
+          "block": "text",
+          "name": "intro"
+        },
+        {
+          "block": "text",
+          "name": "about"
+        },
+        {
+          "block": "text",
+          "name": "benefits",
+          "variant": "soft"
+        },
+        {
+          "block": "text",
+          "name": "audience",
+          "variant": "dark"
+        },
+        {
+          "block": "masters"
+        },
+        {
+          "block": "text",
+          "name": "program"
+        },
+        {
+          "block": "text",
+          "name": "jump",
+          "variant": "soft"
+        },
+        {
+          "block": "text",
+          "name": "community",
+          "variant": "soft"
+        },
+        {
+          "block": "prices"
+        },
+        {
+          "block": "text",
+          "name": "combo"
+        },
+        {
+          "block": "text",
+          "name": "stay"
+        },
+        {
+          "block": "gallery",
+          "name": "rooms"
+        },
+        {
+          "block": "gallery",
+          "name": "territory"
+        },
+        {
+          "block": "gallery",
+          "name": "food"
+        },
+        {
+          "block": "faq"
+        }
       ]
     },
     "partner": {
+      "cta": "Получить свою ссылку",
+      "cta_link": "partner",
       "blocks": [
-        { "block": "text", "name": "invite", "show": "partner" },
-        { "block": "prices", "cols": "partner", "title": "Условия для партнёров" },
-        { "block": "text", "name": "partner-terms", "show": "partner", "variant": "soft" },
-        { "block": "text", "name": "community", "show": "partner", "if": "partner_club" }
+        {
+          "block": "hero"
+        },
+        {
+          "block": "text",
+          "name": "intro"
+        },
+        {
+          "block": "text",
+          "name": "about"
+        },
+        {
+          "block": "text",
+          "name": "get",
+          "variant": "soft"
+        },
+        {
+          "block": "text",
+          "name": "invite"
+        },
+        {
+          "block": "text",
+          "name": "bot",
+          "variant": "dark"
+        },
+        {
+          "block": "text",
+          "name": "partner-terms",
+          "variant": "soft"
+        },
+        {
+          "block": "text",
+          "name": "benefits"
+        },
+        {
+          "block": "masters"
+        },
+        {
+          "block": "text",
+          "name": "program"
+        },
+        {
+          "block": "text",
+          "name": "jump",
+          "variant": "soft"
+        },
+        {
+          "block": "prices"
+        },
+        {
+          "block": "text",
+          "name": "combo"
+        },
+        {
+          "block": "text",
+          "name": "stay"
+        },
+        {
+          "block": "gallery",
+          "name": "rooms"
+        },
+        {
+          "block": "faq"
+        }
       ]
     }
   }

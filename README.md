@@ -209,6 +209,8 @@ soundmystery.ru/newyear («Новогодняя Мистерия») и след�
 
 ## Мини-лендинг в мессенджерах (m/)
 
+**Две версии (26.10.2026, тексты – texts-new/, в репо не публикуются):** для всех – сайт на Тильде и мини-лендинг (`mini.main`, тот же состав блоков, что на сайте); для партнёров – пока только мини-лендинг (`mini.partner`, порядок «комбо»: бизнес-блоки, сразу за ними мастера и вечера). Адреса: go.fest-sun.ru/es/ и /es/fe/, /newyear/ и /newyear/fe/ (копии m/energiya-solntsa/, m/energiya-solntsa/fe/, m/newyear/, m/partner/). На странице партнёров: куски `::: partner` вместо `::: new`, `hero_partner` (плашка `badge`, кнопки), партнёрская колонка цен первой и подпись `fee.partner_page_note`, мастера с `"audience": "partner"` видны, кнопка `[[…]](partner)` и `mini.partner.cta_link: "partner"` ведут в раздел партнёра бота (`?start=partner__s_mini`). Новые поля: `hero.tags`, `fee.after_note` (строка под колонками цен), `side_event` + блок `side` (10 января: Live Ecstatic). Новые тексты ЭС: audience, bot, evenings, masters-income, tech, combo, faq; Мистерии: get, bot, jump, combo, faq. В вопросах ответы «Заглушка…» не выводятся.
+
 Короткая версия страницы события на GitHub Pages – из тех же блоков и данных. Бот выдаёт на неё ссылки.
 
 | Страница | Адрес | Что это |

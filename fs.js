@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.26-3';
+  var VERSION = '2026.10.26-11';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -100,6 +100,7 @@
         return '<a class="fs-btn" href="#" data-fs-link="' + u + '">' + t + '</a>';
       })
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/(^|[^*\w])\*([^*\n]+?)\*(?![*\w])/g, '$1<em>$2</em>')
       .replace(/\[([^\]]+)\]\(((?:https?:\/\/|\/|#|mailto:|tel:)[^\s)]+)\)/g, function (_, t, u) {
         var ext = /^https?:/.test(u);
         return '<a href="' + u + '"' + (ext ? ' target="_blank" rel="noopener"' : '') + '>' + t + '</a>';
@@ -111,10 +112,10 @@
   var LIST_LINE = /^\s*([-*]|\d+[.)])\s+/;
   var STRUCT = /^(cards|cards-2|center|features|steps|buttons|bar|icons|accordion|more|chips)$/;
 
-  // Страница одна на событие – для новичков (с 23.10.2026, data-audience больше нет).
-  // ::: new – показываем (абзацы выделяются карточкой, одиночные пункты списка
-  // просто продолжают список); ::: partner и любые другие – на сайте не показываем:
-  // этот текст читает бот в разделе партнёра. ::: cards – сетка карточек.
+  // Две версии (с 26.10.2026): для всех – сайт и мини-лендинг, показываются куски ::: new;
+  // для партнёров – пока только мини-лендинг data-page="partner" (или data-audience="partner" у блока),
+  // там показываются ::: partner, а ::: new скрываются. Общий текст – вне fences – виден всем.
+  // Абзацы внутри fence выделяются карточкой, карточки и списки – нет. ::: cards – сетка карточек.
   var SITE_FENCE = 'new';
   // show – какие куски ::: показывать: на сайте 'new', на странице партнёров мини-лендинга – 'partner'
   function fences(src, show) {
@@ -126,7 +127,8 @@
     }
     function release(f) {
       var t = target();
-      var onlyList = f.buf.every(function (l) { return !l.trim() || LIST_LINE.test(l); });
+      // карточки, плитки и списки (::: features и т. п.) рамкой не обводим – только абзацы
+      var onlyList = f.buf.every(function (l) { return !l.trim() || LIST_LINE.test(l) || l.charAt(0) === '\u0000'; });
       var whole = f.buf.some(function (l) { return /^##\s/.test(l); });
       var box = !onlyList && !whole;
       if (box) t.push(CALLOUT_OPEN);
@@ -370,12 +372,21 @@
 
   var DEFAULT_VARIANT = { masters: 'dark', alumni: 'dark', hero: 'dark', footer: 'dark' };
 
-  // data-fs-link у кнопок: bot / bot:master → ссылка на бота события, остальное как есть
+  function partnerLink(ev) {
+    return ev.bot && ev.bot.telegram ? ev.bot.telegram + '?start=partner__s_' + SOURCE : null;
+  }
+  // Страница для партнёров: мини-лендинг data-page="partner" или data-audience="partner" у блока
+  function isPartnerPage(el) {
+    return !!(el.closest && el.closest('[data-page="partner"]')) || el.getAttribute('data-audience') === 'partner';
+  }
+
+  // data-fs-link у кнопок: bot / bot:master → ссылка на бота события, partner → раздел партнёра, остальное как есть
   function resolveLinks(el, ev) {
     [].forEach.call(el.querySelectorAll('[data-fs-link]'), function (a) {
       var t = a.getAttribute('data-fs-link');
       var m = t.match(/^bot(?::([\w-]+))?$/);
-      var url = m ? botLink(ev, m[1]) : t;
+      // partner – раздел партнёра в боте («Получить свою ссылку»)
+      var url = t === 'partner' ? partnerLink(ev) : m ? botLink(ev, m[1]) : t;
       if (!url) return;
       a.setAttribute('href', url);
       if (/^https?:/.test(url)) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
@@ -386,6 +397,12 @@
   BLOCKS.hero = function (c) {
     var h = c.ev.hero;
     if (!h) throw new Error('нет hero в event.json');
+    if (c.partner && c.ev.hero_partner) {
+      var hp = {}, k;
+      for (k in h) hp[k] = h[k];
+      for (k in c.ev.hero_partner) hp[k] = c.ev.hero_partner[k];
+      h = hp;
+    }
     var bg = h.image ? ' style="--fs-hero-img:url(\'' + esc(asset(c.ev._dir, h.image)) + '\')"' : '';
     var dates = (h.dates || []).map(function (d) { return '<li>' + inline(d) + '</li>'; }).join('');
     var btns = (h.buttons || []).map(function (b) {
@@ -396,7 +413,9 @@
       '<h1 class="fs-hero__title">' + (h.kicker ? '<span class="fs-hero__kicker">' + inline(h.kicker) + '</span> ' : '') +
         '<span class="fs-hero__main">' + inline(h.title) + '</span></h1>' +
       (h.lead ? '<p class="fs-hero__lead">' + inline(h.lead) + '</p>' : '') +
+      (h.tags ? '<p class="fs-hero__tags">' + inline(h.tags) + '</p>' : '') +
       (dates ? '<ul class="fs-hero__dates">' + dates + '</ul>' : '') +
+      (h.badge ? '<p class="fs-hero__badge">' + inline(h.badge) + '</p>' : '') +
       (btns ? '<div class="fs-buttons fs-hero__btns">' + btns + '</div>' : '') +
     '</div></section>';
   };
@@ -446,9 +465,9 @@
     return '<div class="fs-md fs-split"><div class="fs-split__left">' + left + '</div><div class="fs-split__right">' + right + '</div></div>';
   }
 
-  function faqItems(src) {
+  function faqItems(src, show) {
     if (!src) return [];
-    var lines = fences(src), items = [], cur = null;
+    var lines = fences(src, show), items = [], cur = null;
     lines.forEach(function (l) {
       var m = l.match(/^##\s+(.+)$/);
       if (m) { cur = { q: m[1], a: [] }; items.push(cur); } else if (cur) cur.a.push(l);
@@ -461,7 +480,10 @@
       opt(load(c.ev._dir + 'content/faq.md', 'text')),
       opt(load('shared/content/faq-common.md', 'text'))
     ]).then(function (r) {
-      var items = faqItems(r[0]).concat(faqItems(r[1]));
+      // ::: new / ::: partner – как в текстах: на странице партнёров свои вопросы
+      var items = faqItems(r[0], c.show).concat(faqItems(r[1], c.show));
+      // вопросы без ответа («Заглушка: …») не показываем
+      items = items.filter(function (it) { return !STUB.test(it.a.join(' ').trim()); });
       if (!items.length) throw new Error('нет вопросов');
       return section(
         title(c.el.getAttribute('data-title') || 'Вопросы и ответы') +
@@ -479,8 +501,9 @@
     var labels = fee.labels || {};
     // Обе колонки рядом: «Участие» первой, партнёрская – второй (и на телефоне ниже)
     // data-cols="partner" – только партнёрская колонка (страница партнёров мини-лендинга)
-    var auds = c.el.getAttribute('data-cols') === 'partner' ? ['partner'] : ['new', 'partner'];
-    var notes = { new: fee.new_note, partner: fee.partner_note };
+    // у партнёров их колонка первой (на телефоне – сверху) и своя подпись под ней
+    var auds = c.el.getAttribute('data-cols') === 'partner' ? ['partner'] : c.partner ? ['partner', 'new'] : ['new', 'partner'];
+    var notes = { new: fee.new_note, partner: (c.partner && fee.partner_page_note) || fee.partner_note };
     // Без бота кнопка ведёт на fee.link (например, #popup:myform – попап Тильды)
     var link = botLink(c.ev) || fee.link || '#';
 
@@ -520,6 +543,7 @@
       (fee.gift ? '<p class="fs-gift">' + inline(fee.gift) + '</p>' : '') +
       '<div class="fs-plans fs-plans--' + auds.length + '">' + plans + '</div>' + extras +
       '<div class="fs-after">' +
+        (fee.after_note ? '<p class="fs-after__note">' + inline(fee.after_note) + '</p>' : '') +
         (fee.installment ? '<p class="fs-after__note">' + inline(fee.installment) + '</p>' : '') +
         // на странице партнёров (только партнёрская колонка) кнопки нет – там «Вернуться в бота»
         (auds.length > 1 ? '<a class="fs-btn" href="' + esc(link) + '"' + (/^https?:/.test(link) ? ' target="_blank" rel="noopener"' : '') + '>' + esc(fee.button || 'Участвую') + '</a>' : '') +
@@ -715,7 +739,7 @@
         var id = typeof e === 'string' ? e : e.id;
         // audience: "partner" – мастер только для партнёров: на общем лендинге не показываем
         var audience = (typeof e === 'object' && e.audience) || 'all';
-        if (audience === 'partner') return null;
+        if (audience === 'partner' && !c.partner) return null;
         return byId[id] ? noStub(byId[id]) : null;
       }).filter(Boolean);
     });
@@ -807,6 +831,23 @@
         after: bindMasters(c, list)
       };
     });
+  };
+
+  // Отдельное событие рядом с основным (event.json → side_event): заголовок, текст (md), волны цен,
+  // приписка, место под иллюстрацию. <div class="fs-block" data-block="side" data-event="…">
+  BLOCKS.side = function (c) {
+    var se = c.ev.side_event;
+    if (!se) throw new Error('нет side_event в event.json');
+    var waves = (se.waves || []).map(function (w, i) {
+      return '<li' + (i === 0 ? ' class="is-current"' : '') + '><span>' + esc(w.label) + (w.places ? ' · ' + w.places + ' мест' : '') + '</span><b>' + money(w.price) + '</b></li>';
+    }).join('');
+    return section(
+      (se.image ? '<img class="fs-side__img" src="' + esc(asset(c.ev._dir, se.image)) + '" alt="" loading="lazy">' : '') +
+      title(se.title) + '<div class="fs-side__text">' + md(se.text || '') + '</div>' +
+      (waves ? '<ul class="fs-sp-card__prices fs-side__waves">' + waves + '</ul>' : '') +
+      (se.note ? '<p class="fs-note">' + inline(se.note) + '</p>' : '') +
+      (se.button ? '<div class="fs-buttons"><a class="fs-btn" href="#" data-fs-link="' + esc(se.link || 'bot') + '">' + esc(se.button) + '</a></div>' : ''),
+      'fs-side');
   };
 
   BLOCKS.alumni = function (c) {
@@ -1235,6 +1276,18 @@
           else if (/^https?:/.test(h)) { e.preventDefault(); e.stopImmediatePropagation(); tg.openLink(h); }
         }, true);
       }
+      // Якоря Тильды (#programm, #prices) на мини-лендинге – к нашим блокам
+      var ANCHORS = { programm: '[data-name="program"]', program: '[data-name="program"]', prices: '[data-block="prices"]' };
+      root.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a[href^="#"]');
+        if (!a) return;
+        var id = a.getAttribute('href').slice(1);
+        if (!id || document.getElementById(id) || !ANCHORS[id]) return;
+        var t = root.querySelector(ANCHORS[id]);
+        if (!t) return;
+        e.preventDefault();
+        t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
       // Мосты ВК и MAX – подготовлены, включаются флагом bridges в config.json
       if (cfg.bridges && platform === 'vk') {
         loadScript('https://unpkg.com/@vkontakte/vk-bridge@2.15.2/dist/browser.min.js').then(function () {
@@ -1257,6 +1310,12 @@
       var back = page === 'partner';
       var text = spec.cta || (back ? 'Вернуться в бота' : 'Оставить заявку');
       var act = function () {
+        // cta_link: "partner" – «Получить свою ссылку» в разделе партнёра бота
+        if (spec.cta_link === 'partner') {
+          if (tg) return openInTelegram(partnerLink(ev));
+          location.href = partnerLink(ev);
+          return;
+        }
         if (back) {
           if (tg) return tg.close();
           location.href = ev.bot.telegram + '?start=partner';
@@ -1302,7 +1361,7 @@
     var evId = el.getAttribute('data-event');
     if (!BLOCKS[type]) return fail(el, new Error('неизвестный блок ' + type));
     // data-show – какие куски ::: показывать (страница партнёров мини-лендинга – partner)
-    var ctx = { el: el, show: el.getAttribute('data-show') || null };
+    var ctx = { el: el, show: el.getAttribute('data-show') || (isPartnerPage(el) ? 'partner' : null), partner: isPartnerPage(el) };
 
     loadEvent(evId).then(function (ev) {
       ctx.ev = ev;
@@ -1582,6 +1641,9 @@
       '.fs-hero__main{display:block;font-size:var(--fs-hero-main-size,clamp(32px,4.6vw,54px));line-height:1.15}',
       '.fs-hero__lead{max-width:760px;margin:26px auto 0;font-size:18px;line-height:1.65;opacity:.92}',
       '.fs-hero__dates{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:34px 0 0;padding:0}',
+      '.fs-hero__tags{margin:18px auto 0;font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--fs-gold)}',
+      '.fs-hero__badge{display:inline-block;margin:26px auto 0;padding:10px 22px;border-radius:40px;background:var(--fs-highlight);color:var(--fs-highlight-fg);font-weight:700;font-size:15px;line-height:1.4}',
+      '.fs-side__waves{max-width:620px;margin:26px auto 0}.fs-side__img{display:block;max-width:100%;margin:0 auto 26px;border-radius:var(--fs-radius)}.fs-side__text{max-width:760px;margin:0 auto}',
       '.fs-hero__dates li{padding:9px 18px;border:1px solid var(--fs-line);border-radius:40px;font-size:15px;font-weight:500;white-space:nowrap}',
       '.fs-hero__btns{margin-top:38px}',
       '.fs-bar{max-width:980px;margin:0 auto;padding:0 0 26px;border-bottom:1px solid var(--fs-gold);text-align:center}',

@@ -13,11 +13,29 @@
   "bot": { "telegram": "https://t.me/fest_sun_bot", "start": "e_fest" },
 
   "hero": {
-    "eyebrow": "Ретрит-центр «Энергия Солнца» · Сочи",
+    "eyebrow": "Семейный фестиваль-ретрит · Сочи, Вардане · 3–10 января",
     "title": "Энергия Солнца",
-    "lead": "Здоровье · Саморазвитие · Творчество",
-    "dates": ["3 – 10 января"],
-    "image": "img/hero.webp"
+    "lead": "Семь дней у моря: практики, живая музыка, баня и люди, рядом с которыми хочется расти",
+    "tags": "Здоровье · саморазвитие · творчество",
+    "image": "img/hero.webp",
+    "buttons": [{ "text": "Участвую", "link": "bot" }]
+  },
+
+  "hero_partner": {
+    "lead": "Неделя у моря для вас и тёплый повод позвать людей в структуру",
+    "badge": "Партнёрам Full Energy первые 50 мест – участие в подарок",
+    "buttons": [{ "text": "Получить свою ссылку", "link": "partner" }, { "text": "Участвую сам", "link": "bot" }]
+  },
+
+  "side_event": {
+    "title": "10 января: Live Ecstatic и звуковая медитация",
+    "text": "Финал каникул – отдельный вечер в пансионате «Светлана». Четыре-пять часов живого танца и звука с Андреем Танзю, Михаилом Ноллендорфом, Павлом Правиным, Кариной и Павитрой. Сначала танец по пяти ритмам, в конце – звуковая медитация со всеми инструментами.",
+    "waves": [
+      { "label": "Первая волна", "places": 33, "price": 3000 },
+      { "label": "Вторая волна", "places": 33, "price": 4000 },
+      { "label": "Третья волна", "places": 33, "price": 5000 }
+    ],
+    "note": "Оплачивается отдельно."
   },
 
   "galleries": {
@@ -36,19 +54,199 @@
     "main": {
       "cta": "Оставить заявку",
       "blocks": [
-        { "block": "hero" },
-        { "block": "text", "name": "benefits", "variant": "soft" },
-        { "block": "masters" },
-        { "block": "text", "name": "program" },
-        { "block": "text", "name": "business", "variant": "dark" },
-        { "block": "prices" },
-        { "block": "specials" },
-        { "block": "text", "name": "stay" },
-        { "block": "gallery", "name": "rooms" },
-        { "block": "gallery", "name": "territory" },
-        { "block": "gallery", "name": "food" },
-        { "block": "text", "name": "kids", "variant": "soft" },
-        { "block": "text", "name": "gift" }
+        {
+          "block": "hero"
+        },
+        {
+          "block": "text",
+          "name": "about"
+        },
+        {
+          "block": "text",
+          "name": "benefits",
+          "variant": "soft"
+        },
+        {
+          "block": "text",
+          "name": "audience",
+          "variant": "dark"
+        },
+        {
+          "block": "masters"
+        },
+        {
+          "block": "text",
+          "name": "evenings",
+          "variant": "dark"
+        },
+        {
+          "block": "text",
+          "name": "program"
+        },
+        {
+          "block": "text",
+          "name": "spheres"
+        },
+        {
+          "block": "specials"
+        },
+        {
+          "block": "text",
+          "name": "masters-income",
+          "variant": "soft"
+        },
+        {
+          "block": "text",
+          "name": "tech"
+        },
+        {
+          "block": "text",
+          "name": "kids",
+          "variant": "soft"
+        },
+        {
+          "block": "text",
+          "name": "company"
+        },
+        {
+          "block": "prices"
+        },
+        {
+          "block": "text",
+          "name": "combo",
+          "variant": "soft"
+        },
+        {
+          "block": "side",
+          "variant": "dark"
+        },
+        {
+          "block": "text",
+          "name": "stay"
+        },
+        {
+          "block": "gallery",
+          "name": "rooms"
+        },
+        {
+          "block": "gallery",
+          "name": "territory"
+        },
+        {
+          "block": "gallery",
+          "name": "food"
+        },
+        {
+          "block": "text",
+          "name": "route",
+          "variant": "soft"
+        },
+        {
+          "block": "alumni"
+        },
+        {
+          "block": "faq"
+        }
+      ]
+    },
+    "partner": {
+      "cta": "Получить свою ссылку",
+      "cta_link": "partner",
+      "blocks": [
+        {
+          "block": "hero"
+        },
+        {
+          "block": "text",
+          "name": "about"
+        },
+        {
+          "block": "text",
+          "name": "benefits",
+          "variant": "soft"
+        },
+        {
+          "block": "text",
+          "name": "bot",
+          "variant": "dark"
+        },
+        {
+          "block": "text",
+          "name": "business",
+          "variant": "dark"
+        },
+        {
+          "block": "text",
+          "name": "invite"
+        },
+        {
+          "block": "masters"
+        },
+        {
+          "block": "text",
+          "name": "evenings",
+          "variant": "dark"
+        },
+        {
+          "block": "text",
+          "name": "company"
+        },
+        {
+          "block": "text",
+          "name": "program"
+        },
+        {
+          "block": "text",
+          "name": "spheres"
+        },
+        {
+          "block": "specials"
+        },
+        {
+          "block": "text",
+          "name": "tech"
+        },
+        {
+          "block": "text",
+          "name": "kids",
+          "variant": "soft"
+        },
+        {
+          "block": "prices"
+        },
+        {
+          "block": "text",
+          "name": "combo",
+          "variant": "soft"
+        },
+        {
+          "block": "side",
+          "variant": "dark"
+        },
+        {
+          "block": "text",
+          "name": "stay"
+        },
+        {
+          "block": "gallery",
+          "name": "rooms"
+        },
+        {
+          "block": "gallery",
+          "name": "territory"
+        },
+        {
+          "block": "gallery",
+          "name": "food"
+        },
+        {
+          "block": "text",
+          "name": "route",
+          "variant": "soft"
+        },
+        {
+          "block": "faq"
+        }
       ]
     }
   },
@@ -61,6 +259,8 @@
     ],
     "labels": { "new": "Участие", "partner": "Для партнёров Full Energy" },
     "partner_note": "Для тех, кто уже партнёр Full Energy на момент заявки. Менеджер проверит ID.",
+    "partner_page_note": "Ваши приглашённые оплачивают тариф участника и получают базовый пакет в подарок.",
+    "after_note": "В каждой волне 50 мест. Когда они заканчиваются, открывается следующая цена.",
     "waves": [
       { "label": "Первые 50 мест", "short": "1-я волна", "partner": 0, "new": 10000 },
       { "label": "Вторые 50 мест", "short": "2-я волна", "partner": 10000, "new": 20000 },
@@ -80,7 +280,7 @@
 
   "masters_block": {
     "title": "Артисты и мастера",
-    "lead": "Прямо сейчас мы создаём для вас яркую насыщенную программу со звездным составом."
+    "lead": "Наставники с 10–30-летним опытом и музыканты известных проектов. Состав пополняется."
   },
   "galaxy": ["masters"],
 
@@ -97,7 +297,8 @@
     "telminov",
     "davudov",
     "shcherbakova",
-    "guryanov"
+    "guryanov",
+    "belyaeva"
   ],
   "alumni": ["odnono", "bittu-mallik", "uutai", "alizbar", "nadishana", "fulvari", "sage", "ivan-nikto", "pokrov-etno", "kalmykova", "shakti-loka", "aura-ra", "jivanmukta", "karnash", "mayman", "slyusarchuk", "ikarushka", "osherov", "chakaberiya", "kolupanov", "bochkarev", "naumova", "sati", "yunak", "yasyrev", "zelenkov"]
 }
