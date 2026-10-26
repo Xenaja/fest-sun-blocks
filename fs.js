@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.26-13';
+  var VERSION = '2026.10.26-14';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -839,13 +839,15 @@
   BLOCKS.side = function (c) {
     var se = c.ev.side_event;
     if (!se) throw new Error('нет side_event в event.json');
+    function places(n) { var m10 = n % 10, m100 = n % 100; return n + ' ' + (m10 === 1 && m100 !== 11 ? 'место' : m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20) ? 'места' : 'мест'); }
     var waves = (se.waves || []).map(function (w, i) {
-      return '<li' + (i === 0 ? ' class="is-current"' : '') + '><span>' + esc(w.label) + (w.places ? ' · ' + w.places + ' мест' : '') + '</span><b>' + money(w.price) + '</b></li>';
+      return '<li' + (i === 0 ? ' class="is-current"' : '') + '><span class="fs-side__wave">' + esc(w.label) + (w.places ? ' · ' + places(w.places) : '') + '</span>' +
+        '<b class="fs-side__price">' + money(w.price) + '</b></li>';
     }).join('');
     return section(
       (se.image ? '<img class="fs-side__img" src="' + esc(asset(c.ev._dir, se.image)) + '" alt="" loading="lazy">' : '') +
       title(se.title) + '<div class="fs-side__text">' + md(se.text || '') + '</div>' +
-      (waves ? '<ul class="fs-sp-card__prices fs-side__waves">' + waves + '</ul>' : '') +
+      (waves ? '<ul class="fs-side__waves">' + waves + '</ul>' : '') +
       (se.note ? '<p class="fs-note">' + inline(se.note) + '</p>' : '') +
       (se.button ? '<div class="fs-buttons"><a class="fs-btn" href="#" data-fs-link="' + esc(se.link || 'bot') + '">' + esc(se.button) + '</a></div>' : ''),
       'fs-side');
@@ -1646,7 +1648,11 @@
       '.fs-hero__place{margin:22px 0 0;font-family:var(--fs-font-head);font-weight:var(--fs-head-weight);text-transform:uppercase;font-size:clamp(15px,2vw,20px);line-height:1.5;color:var(--fs-title)}.fs-hero__place p{margin:0}',
       '.fs-hero__tags{margin:18px auto 0;font-size:14px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--fs-gold)}',
       '.fs-hero__badge{display:inline-block;margin:26px auto 0;padding:10px 22px;border-radius:40px;background:var(--fs-highlight);color:var(--fs-highlight-fg);font-weight:700;font-size:15px;line-height:1.4}',
-      '.fs-side__waves{max-width:620px;margin:26px auto 0}.fs-side__img{display:block;max-width:100%;margin:0 auto 26px;border-radius:var(--fs-radius)}.fs-side__text{max-width:760px;margin:0 auto}',
+      '.fs-side__img{display:block;max-width:100%;margin:0 auto 26px;border-radius:var(--fs-radius)}.fs-side__text{max-width:760px;margin:0 auto;text-align:center}',
+      '.fs-side__waves{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:12px;max-width:760px;margin:30px auto 0;padding:0}',
+      '.fs-side__waves>li{flex:1 1 200px;max-width:240px;margin:0;padding:14px 18px;border:1px solid var(--fs-line);border-radius:var(--fs-radius);text-align:center}.fs-side__waves>li::before{content:none;display:none}',
+      '.fs-side__waves>li.is-current{border-color:var(--fs-highlight)}.fs-side__waves>li.is-current .fs-side__wave{color:var(--fs-highlight)}',
+      '.fs-side__wave{display:block;font-size:14px;color:var(--fs-muted)}.fs-side__price{display:block;margin-top:4px;font-size:22px;font-weight:700;color:var(--fs-title)}',
       '.fs-hero__dates li{padding:9px 18px;border:1px solid var(--fs-line);border-radius:40px;font-size:15px;font-weight:500;white-space:nowrap}',
       '.fs-hero__btns{margin-top:38px}',
       '.fs-bar{max-width:980px;margin:0 auto;padding:0 0 26px;border-bottom:1px solid var(--fs-gold);text-align:center}',
