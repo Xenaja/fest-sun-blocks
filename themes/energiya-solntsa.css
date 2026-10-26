@@ -85,3 +85,18 @@
   background-color: var(--fs-dark-bg);
   background-origin: border-box; /* фон – с учётом фигурного края, без повтора низа градиента в клине */
 }
+
+/* Первый экран мини-лендинга – как на сайте: логотип на фоне сверху, текст под ним */
+.fs-theme-energiya-solntsa .fs-hero {
+  display: flex;
+  align-items: flex-end;
+  min-height: min(calc(100svh - 70px), 980px);
+  background-position: center 28%;
+  padding-bottom: calc(var(--fs-pad-y) + 30px);
+}
+.fs-theme-energiya-solntsa .fs-hero .fs-hero__inner { width: 100%; }
+.fs-theme-energiya-solntsa .fs-hero__lead { font-size: clamp(15px, 1.8vw, 18px); }
+@media (max-width: 600px) {
+  .fs-theme-energiya-solntsa .fs-hero { min-height: calc(100svh - 70px); background-position: center 16%; padding-top: 58svh; }
+  .fs-theme-energiya-solntsa .fs-hero__main { font-size: clamp(30px, 9vw, 40px); }
+}

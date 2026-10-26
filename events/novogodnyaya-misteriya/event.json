@@ -62,7 +62,7 @@
 
   "hero_partner": {
     "badge": "Партнёрам Full Energy первые 33 места – участие в подарок",
-    "buttons": [{ "text": "Получить свою ссылку", "link": "partner" }, { "text": "Участвую сам", "link": "bot" }]
+    "buttons": [{ "text": "Участвую сам", "link": "bot" }]
   },
 
   "video": { "title": "Мистерия звука", "rutube": "64bffe00ab2103b0a9dad2854e417003", "cover": "img/video-cover.webp" },
