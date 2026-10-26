@@ -86,17 +86,47 @@
   background-origin: border-box; /* фон – с учётом фигурного края, без повтора низа градиента в клине */
 }
 
-/* Первый экран мини-лендинга – как на сайте: логотип на фоне сверху, текст под ним */
+/* Первый экран мини-лендинга – как на сайте (Zero-блок Тильды): логотип впечатан в фон
+   1680×900. Фон привязан к экрану (ширина = max(100vw, 186.7svh), центр картинки – на середине
+   экрана), поэтому низ логотипа всегда на 50svh + 12% высоты картинки – текст начинается ниже.
+   Шрифты и размеры – как у элементов Тильды: Philosopher 700, название 59 px #ffcc00,
+   теги 20 px, место и даты 18 px белым. */
 .fs-theme-energiya-solntsa .fs-hero {
-  display: flex;
-  align-items: flex-end;
-  min-height: min(calc(100svh - 70px), 980px);
-  background-position: center 28%;
+  --fs-hero-overlay: rgba(0, 0, 0, .12);
+  min-height: 100svh;
+  background-color: #2b2e77;
+  background-size: max(100vw, 186.7svh) auto;
+  background-position: center calc(50svh - max(26.8vw, 50svh));
+  padding-top: calc(50svh + max(7.6vw, 14svh));
   padding-bottom: calc(var(--fs-pad-y) + 30px);
 }
-.fs-theme-energiya-solntsa .fs-hero .fs-hero__inner { width: 100%; }
-.fs-theme-energiya-solntsa .fs-hero__lead { font-size: clamp(15px, 1.8vw, 18px); }
-@media (max-width: 600px) {
-  .fs-theme-energiya-solntsa .fs-hero { min-height: calc(100svh - 70px); background-position: center 16%; padding-top: 58svh; }
-  .fs-theme-energiya-solntsa .fs-hero__main { font-size: clamp(30px, 9vw, 40px); }
+.fs-theme-energiya-solntsa .fs-hero--img {
+  background-repeat: no-repeat;
 }
+.fs-theme-energiya-solntsa .fs-hero__main {
+  font-weight: 700;
+  font-size: clamp(34px, 4.6vw, 59px);
+  line-height: 1.2;
+  color: #ffcc00;
+  letter-spacing: 0;
+}
+.fs-theme-energiya-solntsa .fs-hero__tags {
+  margin-top: 14px;
+  font-family: var(--fs-font-head);
+  font-weight: 700;
+  font-size: clamp(14px, 1.6vw, 20px);
+  letter-spacing: 0;
+  color: #ffcc00;
+}
+.fs-theme-energiya-solntsa .fs-hero__sun {
+  width: 20px;
+  height: 19px;
+  margin: 0 .55em;
+  vertical-align: -3px;
+  border-radius: 0;
+  background: url("../shared/img/hero-sun.png") center / contain no-repeat;
+  -webkit-mask: none;
+  mask: none;
+}
+.fs-theme-energiya-solntsa .fs-hero__place { font-size: clamp(15px, 1.5vw, 18px); color: #ffffff; }
+.fs-theme-energiya-solntsa .fs-hero__lead { margin-top: 16px; font-size: clamp(15px, 1.6vw, 18px); }
