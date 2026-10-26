@@ -150,6 +150,12 @@
         }
       ]
     },
+    "spheres": {
+      "cta": "Оставить заявку",
+      "blocks": [
+        { "block": "embed", "name": "8-spheres" }
+      ]
+    },
     "partner": {
       "cta": "Получить свою ссылку",
       "cta_link": "partner",
@@ -284,6 +290,10 @@
     "lead": "Наставники с 10–30-летним опытом и музыканты известных проектов. Состав пополняется."
   },
   "galaxy": ["masters", "hero"],
+
+  "links": {
+    "spheres": { "site": "https://fest-sun.ru/spheres", "mini": "https://go.fest-sun.ru/es/spheres/" }
+  },
 
   "masters": [
     { "id": "pavitra", "audience": "all" },

@@ -18,5 +18,5 @@
 :::
 
 ::: buttons
-[[Оценить свою жизнь]](https://fest-sun.ru/spheres)
+[[Оценить свою жизнь]](spheres)
 :::

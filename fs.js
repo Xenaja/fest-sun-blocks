@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.26-15';
+  var VERSION = '2026.10.26-16';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -386,7 +386,8 @@
       var t = a.getAttribute('data-fs-link');
       var m = t.match(/^bot(?::([\w-]+))?$/);
       // partner – раздел партнёра в боте («Получить свою ссылку»)
-      var url = t === 'partner' ? partnerLink(ev) : m ? botLink(ev, m[1]) : t;
+      var own = ev.links && ev.links[t];
+      var url = own ? (SOURCE === 'mini' ? own.mini || own.site : own.site) : t === 'partner' ? partnerLink(ev) : m ? botLink(ev, m[1]) : t;
       if (!url) return;
       a.setAttribute('href', url);
       if (/^https?:/.test(url)) { a.setAttribute('target', '_blank'); a.setAttribute('rel', 'noopener'); }
@@ -1275,12 +1276,18 @@
           if (!a) return;
           var h = a.getAttribute('href');
           if (isFormLink(h)) h = botLink(ev);
+          if (a.origin === location.origin) return;
           if (/^https?:\/\/t\.me\//.test(h)) { e.preventDefault(); e.stopImmediatePropagation(); openInTelegram(h); }
           else if (/^https?:/.test(h)) { e.preventDefault(); e.stopImmediatePropagation(); tg.openLink(h); }
         }, true);
       }
       // Якоря Тильды (#programm, #prices) на мини-лендинге – к нашим блокам
       var ANCHORS = { programm: '[data-name="program"]', program: '[data-name="program"]', prices: '[data-block="prices"]' };
+      var hashId = location.hash.slice(1);
+      if (ANCHORS[hashId]) setTimeout(function () {
+        var t = root.querySelector(ANCHORS[hashId]);
+        if (t) t.scrollIntoView({ block: 'start' });
+      }, 1500);
       root.addEventListener('click', function (e) {
         var a = e.target.closest && e.target.closest('a[href^="#"]');
         if (!a) return;

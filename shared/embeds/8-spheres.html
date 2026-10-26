@@ -466,8 +466,8 @@
   /* ───────────── НАСТРОЙКИ (меняются здесь, без правки остального кода) ───────────── */
   var CFG = {
     // Куда ведут кнопки. #prices и #programm — якоря страницы fest-sun.ru.
-    registerUrl: 'https://fest-sun.ru/#prices',
-    programUrl: 'https://fest-sun.ru/#programm',
+    registerUrl: (window.FS8_LINKS && window.FS8_LINKS.register) || 'https://fest-sun.ru/#prices',
+    programUrl: (window.FS8_LINKS && window.FS8_LINKS.program) || 'https://fest-sun.ru/#programm',
 
     // Подарки. Тексты — в JSON выше (gifts), здесь только ссылки и выключатели.
     // guest — для любого гостя сайта: bonuskoleso уже работает в боте и один раз на
