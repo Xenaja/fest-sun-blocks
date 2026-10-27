@@ -50,7 +50,7 @@
   "garlands": ["prices"],
 
   "masters_block": { "title": "Мастера и артисты" },
-  "masters": ["teya", "pavitra", "zakharevich", "nollendorf", "danaya", "yura-ra", "telminov", "davudov", "shcherbakova", "chernyh", "guryanov"],
+  "masters": ["teya", "pavitra", { "id": "valeeva", "short": "Энергосессии. Трансформационный поток.", "text": "event" }, "zakharevich", "nollendorf", "danaya", "yura-ra", "telminov", "davudov", "shcherbakova", "chernyh", "guryanov"],
 
   "hero": {
     "eyebrow": ["31 декабря – 3 января, Сочи", "Ретрит-центр «Энергия Солнца»"],
