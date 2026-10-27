@@ -50,7 +50,7 @@
   "garlands": ["prices"],
 
   "masters_block": { "title": "Мастера и артисты" },
-  "masters": ["pavitra", "danaya", { "id": "valeeva", "short": "Онлайн: энергосессии и трансформационный поток.", "text": "event" }, "yura-ra", "teya", "nollendorf", "chernyh", "guryanov", "zakharevich", "telminov", "davudov", "shcherbakova"],
+  "masters": ["pavitra", { "id": "valeeva", "short": "Онлайн: энергосессии и трансформационный поток.", "text": "event" }, "yura-ra", "teya", "nollendorf", "danaya", "chernyh", "guryanov", "zakharevich", "telminov", "davudov", "shcherbakova"],
 
   "hero": {
     "eyebrow": ["31 декабря – 3 января, Сочи", "Ретрит-центр «Энергия Солнца»"],
