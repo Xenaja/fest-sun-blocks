@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.27-1';
+  var VERSION = '2026.10.27-2';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -742,7 +742,12 @@
         // audience: "partner" – мастер только для партнёров: на общем лендинге не показываем
         var audience = (typeof e === 'object' && e.audience) || 'all';
         if (audience === 'partner' && !c.partner) return null;
-        return byId[id] ? noStub(byId[id]) : null;
+        if (!byId[id]) return null;
+        var m = noStub(byId[id]);
+        // своё для события: { "id": …, "short": …, "regalia": … };
+        // "text": "event" – в «Подробнее» только текст события (events/<id>/content/masters/<мастер>.md)
+        if (typeof e === 'object') ['short', 'regalia', 'text'].forEach(function (k) { if (e[k]) m[k] = e[k]; });
+        return m;
       }).filter(Boolean);
     });
   }
@@ -788,9 +793,11 @@
     ]).then(function (r) {
       // Имя уже в шапке окна – первый заголовок ## с именем не повторяем
       var src = r[0].replace(/^\s*##\s+.+\n/, '');
-      if (STUB.test(src)) throw new Error('заглушка');
-      if (r[1]) src += '\n\n' + r[1];
-      modal.querySelector('.fs-modal__text').innerHTML = md(src);
+      if (m.text === 'event' && r[1]) src = r[1];
+      else if (STUB.test(src)) throw new Error('заглушка');
+      else if (r[1]) src += '\n\n' + r[1];
+      // на странице партнёров – куски ::: partner, на остальных – ::: new
+      modal.querySelector('.fs-modal__text').innerHTML = md(src, c.show);
     }, function () {
       modal.querySelector('.fs-modal__text').innerHTML = m.short ? '<div class="fs-md"><p>' + inline(m.short) + '</p></div>' : '';
     });
