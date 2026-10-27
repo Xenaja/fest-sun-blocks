@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.26-21';
+  var VERSION = '2026.10.27-1';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -963,7 +963,7 @@
     var cv = document.createElement('canvas');
     cv.className = 'fs-galaxy';
     cv.setAttribute('aria-hidden', 'true');
-    cv.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none;mix-blend-mode:screen';
+    cv.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none';
     if (getComputedStyle(box).position === 'static') box.style.position = 'relative';
     var filter = box.querySelector('.t396__filter');
     box.insertBefore(cv, filter ? filter.nextSibling : box.firstChild);
@@ -982,6 +982,8 @@
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       w = cv.clientWidth || box.clientWidth; h = cv.clientHeight || box.clientHeight;
       if (!w || !h) { stars = []; return; }
+      // Safari на iPhone не рисует слишком большой холст (и может спрятать весь блок) – держим ≤ 3 Мп
+      dpr = Math.min(dpr, Math.sqrt(3e6 / (w * h)));
       cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
       // звёзды по кругу на всю диагональ – при вращении углы не пустеют
       var R = Math.sqrt(w * w + h * h) / 2;
@@ -1399,7 +1401,9 @@
       if (res.after) res.after(el);
       flattenSoon();
       // живые звёзды поверх фона секции – event.json → galaxy: ["masters", …] (тип блока или data-name)
-      if ((ctx.ev.galaxy || []).indexOf(el.getAttribute('data-name') || type) >= 0) {
+      // в длинной секции на телефоне – только статичный фон: живые звёзды на высоком холсте
+      // в мобильном Safari ломают отрисовку блока
+      if ((ctx.ev.galaxy || []).indexOf(el.getAttribute('data-name') || type) >= 0 && !(type !== 'hero' && window.innerWidth < 760)) {
         var gsec = el.querySelector('.fs-section');
         if (gsec) starfield(gsec, { density: 0.5, shooting: true });
       }
