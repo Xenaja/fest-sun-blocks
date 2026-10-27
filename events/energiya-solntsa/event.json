@@ -297,7 +297,7 @@
 
   "masters": [
     { "id": "pavitra", "audience": "all" },
-    { "id": "valeeva", "short": "Энергосессии. Трансформационный поток.", "text": "event" },
+    { "id": "valeeva", "short": "Энергосессии. Трансформационный поток.", "short_partner": "Энергосессии. Трансформационный поток. Тренинг по бизнесу для партнёров Full Energy.", "text": "event" },
     "pravin",
     "tanzu",
     "teya",

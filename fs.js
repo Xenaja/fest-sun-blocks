@@ -9,7 +9,7 @@
   'use strict';
 
   // Меняется при каждом обновлении данных: по нему сбрасывается кэш JSON и MD
-  var VERSION = '2026.10.27-2';
+  var VERSION = '2026.10.27-3';
 
   if (window.FestSun) { window.FestSun.scan(); return; }
 
@@ -747,6 +747,8 @@
         // своё для события: { "id": …, "short": …, "regalia": … };
         // "text": "event" – в «Подробнее» только текст события (events/<id>/content/masters/<мастер>.md)
         if (typeof e === 'object') ['short', 'regalia', 'text'].forEach(function (k) { if (e[k]) m[k] = e[k]; });
+        // "short_partner" – короткое описание на странице партнёров
+        if (c.partner && typeof e === 'object' && e.short_partner) m.short = e.short_partner;
         return m;
       }).filter(Boolean);
     });
